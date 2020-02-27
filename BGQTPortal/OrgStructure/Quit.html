@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div class="container" ng-init="GetDeleteOrgTree()">
+        <div class="row page-row" style="padding: 24px; position: relative;min-height:800px;">
+            <div class="first-col">
+                <form role="form" class="form-inline clearfix" style="float: left; width: 100%; margin-bottom: 8px;">
+                    <div class="form-group" style="margin-bottom: 0; width: 100%;height:32px;">
+                        <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 268px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                        <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;width:70px;" ng-click="SearchDelOrgTree()">搜索</button>
+                        <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                    </div>
+                </form>
+                <ul id="DelOrgTree" class="ztree scroll_bar" style="padding-left: 10px; clear: both;padding-bottom:20px;"></ul>
+            </div>
+            <div class="last-col" id="HelpInstruction">
+                <span style="width:480px;display:block;margin-top:10px;font-weight:700;">
+                    说明：<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    1.&nbsp;&nbsp;在组织与用户中离职的用户放到该节点下；<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    2.&nbsp;&nbsp;恢复：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;需指定恢复位置，重置默认密码，可创建新邮箱； <br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    3.&nbsp;&nbsp;在组织与用户中移动并禁用用户，如果离职OU存在同名账户，则将删除账户改名为账户+下划线删除时间（精确到秒）；<br />
+                </span>
+            </div>
+            <div class="last-col" id="userPanel">
+                <div class="panel panel-default org-panel" style="margin-bottom:0;">
+                    <div class="panel-heading clearfix userinfohead">
+                        <ul class="nav nav-tabs pull-left">
+                            <li class="active">
+                                <a data-toggle="tab">基本属性</a>
+                            </li>
+                        </ul>
+                        <!--<span class="pull-right right-oprate-btn">
+                    <a class="abtn" ng-click="ChangeUser('edit')" href="javascript:void(0);">保存</a>
+                </span>-->
+                    </div>
+                    <div class="panel-body scroll_bar" style="overflow: auto;padding-bottom:0;padding:0;">
+                        <div class="tab-content">
+                            <div class="tab-pane active" style="margin-top:18px;">
+                                <div class="block userinfo">
+                                    <form class="validate" style="width: 360px;">
+                                        <div class="form-group">
+                                            <div id="user_Avatar" class="user_Avatar">
+                                                <img src="img/users/system_headphoto.png" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="position: absolute; margin-left: 85px; margin-top: -84px; height: 30px; line-height: 30px;">
+                                            <span class="user_account" ng-model="UserAccounts" style="white-space: nowrap;">{{UserAccounts}}</span>
+                                        </div>
+                                        <div class="form-group" style="margin-top: -54px; height: 30px; line-height: 30px; margin-bottom: 0;">
+                                            <span ng-click="ResumeUserPanel();" style="color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">恢复</span>
+                                            <div style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+                                        </div>
+                                        <div class="form-group" style="clear: both;margin-top:24px;">
+                                            <label class="control-label" style="display:block">所属 OU</label>
+                                            <label class="control-label">{{ParentOu}}</label>
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px; margin-top: 24px;">
+                                            <label class="control-label">姓</label>
+                                            <input type="text" ng-model="ULastName" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -76px;">
+                                            <label class="control-label">名</label>
+                                            <input ng-model="UFirstName" type="text" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label">显示名称</label>
+                                            <input ng-model="UDisplayName" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px; margin-top: 24px;">
+                                            <label class="control-label">电话号码</label>
+                                            <input type="text" ng-model="UPhone" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -76px;">
+                                            <label class="control-label">移动号码</label>
+                                            <input ng-model="UMobile" type="text" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="control-label">办公室</label>
+                                            <input ng-model="UOffice" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="control-label">公司</label>
+                                            <input ng-model="UCompany" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px; margin-top: 24px;">
+                                            <label class="control-label">部门</label>
+                                            <input type="text" ng-model="UDepartment" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -76px;">
+                                            <label class="control-label">职务</label>
+                                            <input ng-model="UPost" type="text" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 0;">
+                                            <label class="control-label" style="position: relative;">描述</label>
+                                            <textarea ng-model="UDesc" class="form-control" style="height: 90px; resize: none;"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择恢复到 OU-->
+        <div class="modal fade" id="chooseOU_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseOUModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:32px;">
+                                <input type="text" ng-model="seachOrgNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchOrgTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachOrgNode!=''" ng-click="clearSearchOrgInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide">
+                                <ul class="ztree scroll_bar" id="OrgTree" style="margin: 0; padding:12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                            <div class="form-group" style="clear: both;">
+                                <div class="checkbox" style="line-height: 1.1;">
+                                    <input id="UseDefaultPassword" ng-model="UseDefaultPassword" class="chk_1" type="checkbox" />
+                                    <label for="UseDefaultPassword" style="margin-right:10px;"></label>重置默认密码
+                                </div>
+                            </div>
+                            <div class="form-group" style="clear: both;display:none;">
+                                <div class="checkbox" style="line-height: 1.1;">
+                                    <input id="IsCreateMail" ng-model="IsCreateMail" class="chk_1" type="checkbox" />
+                                    <label for="IsCreateMail" style="margin-right:10px;"></label>同时创建新邮箱
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="ResumeUser()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

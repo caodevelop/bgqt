@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div class="container" ng-init="GetHabGroupTree()" style="padding:0 24px;">
+        <div class="row page-row" style="margin-top: 24px; position: relative;min-height:800px;">
+            <div class="first-col">
+                <form role="form" class="form-inline clearfix" style="float: left; width: 100%; margin-bottom: 8px;">
+                    <div class="form-group" style="margin-bottom: 0; width: 100%;height:32px;">
+                        <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 268px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                        <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;width:70px;" ng-click="SearchHabGroupTree()">搜索</button>
+                        <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                    </div>
+                </form>
+                <ul id="HabGroupTree" class="ztree scroll_bar" style="padding-left: 10px; clear: both;padding-bottom:20px;"></ul>
+            </div>
+            <div class="last-col" id="HelpInstruction">
+                <span style="width:480px;display:block;margin-top:10px;font-weight:700;">
+                    说明：<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    1.&nbsp;&nbsp;排序等级 100 至 1，优先级 100 最高，1 最低；<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    2.&nbsp;&nbsp;批量恢复默认编号：列表上选中的对象默认编号恢复为 1； <br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    3.&nbsp;&nbsp;编辑成员：管理树上选中节点下的用户和通讯组（默认 HAB 通讯组不能被删除）<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    4.&nbsp;&nbsp;用户：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;邮箱属性：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（a）邮箱开启状态：邮箱用户可使用邮箱 ；<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（b）邮箱关闭状态：用户不能使用邮箱<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;停用：在 AD 中停用用户，邮箱数据保留；<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;移动并禁用：在 AD 中禁用用户并移动至对应的离职人员节点下；<br />
+                </span>
+            </div>
+            <div class="last-col scroll_bar" id="HABList">
+                <div class="panel panel-default org-panel" style="margin-bottom:0;">
+                    <div class="panel-heading clearfix" style="border-bottom:none;">
+                        <span style="font-weight: 700;">排序对象</span>
+                        <span class="pull-right right-oprate-btn">
+                            <a class="abtn pull-left" ng-click="EditMemberPanel()" href="javascript:void(0);" style="margin-top:0;">编辑成员</a>
+                            <a class="abtn pull-right" ng-disabled="BatchSetupClick == false" ng-click="BatchSetup()" href="javascript:void(0);" style="margin-left:20px;margin-top:0;">批量恢复默认编号</a>
+                        </span>
+                    </div>
+                    <div class="panel-body" style="padding-bottom:0;padding:0;">
+                        <div class="tab-content">
+                            <div class="tab-pane active">
+                                <div style="clear:both;">
+                                    <table class="table dtable lcnp smallTable" id="HabTable" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 12px;">
+                                                    <div class="checkbox" style="line-height: 1;">
+                                                        <input id="chkall" class="chk_1" type="checkbox" ng-click="CheckAll($event)" />
+                                                        <label for="chkall"></label>
+                                                    </div>
+                                                </th>
+                                                <th style="width: auto">显示名称</th>
+                                                <th style="width: auto">邮箱</th>
+                                                <th style="width: 90px">类型</th>
+                                                <th style="width: 165px">排序编号</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="m in Lists">
+                                                <td style="width: 12px;">
+                                                    <div class="checkbox" style="line-height: 1;">
+                                                        <input id="{{m.ID}}" GroupID="{{m.ID}}" class="chk_1" type="checkbox" name="HabGroupCheckBox" ng-click="ToggleCheckThis($event)" />
+                                                        <label for="{{m.ID}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{m.DisplayName}}</td>
+                                                <td>{{m.Account}}</td>
+                                                <td>{{m.TypeName}}</td>
+                                                <td><input type="text" value="{{m.Index}}" ng-blur="SingleSetup($event,m.ID)" style="width:128px;height:32px;border:1px solid #d8d8d8;" tooltip-placement="left" uib-tooltip="说明：排序等级 100 至 1，优先级 100 最高，1 最低。" tooltip-trigger="'outsideClick'" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--<ul uib-pagination total-items="bigTotalItems" ng-model="currentPage" ng-change="pageChanged()" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm marginTop" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--右键菜单-->
+        <div id="rMenu" class="rMenu">
+            <ul>
+                <li id="r_habgroupuser" ng-click="SyncAllHabDataPanel();">全量同步 HAB 通讯组和成员</li>
+                <li id="r_hab" ng-click="SyncHabMembersPanel();">增量同步 HAB 成员</li>
+                <li id="r_ouhab" ng-click="SyncAppointHabDataPanel();">同步指定 OU HAB</li>
+            </ul>
+        </div>
+        <!--编辑成员-->
+        <div class="modal fade" id="EditMembers_Modal" tabindex="-1" role="dialog" aria-labelledby="EditMembersModalLabel">
+            <div class="modal-dialog especial" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">编辑成员</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <form class="ml_form" ng-click="checkTips=true;">
+                                <div class="form-group" style="width: 260px;height:32px;display:block">
+                                    <input type="text" ng-model="seachHabGroupNode" class="form-control search_user" style="width: 182px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                    <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchHabGroupTreeModal()">搜索</button>
+                                    <a class="clear_search" ng-show="seachHabGroupNode!=''" ng-click="clearHabGroupInput()" href="javascript:void(0);"></a>
+                                </div>
+                                <div class="form-group clearfix left" style="height:280px;float:left">
+                                    <div class="scroll_bar" style="width:260px;height:280px;border:1px solid #d8d8d8;overflow:auto;">
+                                        <ul id="HabGroupTreeModal" class="ztree" style="padding: 12px; clear: both;"></ul>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix middle" style="height:139px;display:inline-table;margin-top:147px;position:absolute;width:16px;left:260px;">
+                                    <img src="img/icon_right_gray.png" ng-click="AddMembers()" />
+                                </div>
+                                <div class="form-group clearfix right" style="height:280px;margin-left:16px;">
+                                    <div class="scroll_bar" style="width:360px;height:280px;border:1px solid #d8d8d8;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <thead>
+                                                <tr><th style="height:32px;line-height:32px;background-color:#d4d4d4;padding:0 12px;width:250px">成员</th><th style="height:30px;line-height:30px;background-color:#d4d4d4;padding:0 12px;"></th><th style="height:30px;line-height:30px;background-color:#d4d4d4;padding:0 12px;"></th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="d in HabGroupMembers" id="{{d.ID}}">
+                                                    <td><span style="width: 250px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;height: 30px;line-height: 30px;">{{d.DisplayName}}({{d.Account}})</span></td>
+                                                    <td><span style="width: 70px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;height: 30px;line-height: 30px;">{{d.TypeName}}</span></td>
+                                                    <td><img src="img/icon_close.png" ng-if="d.Type!=4" ng-click="removeThis(d.ID)" style="float:right;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="ChangeHabGroupMembers()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--添加联系人-->
+        <div class="modal fade" id="AddMembers_Modal" tabindex="-1" role="dialog" aria-labelledby="AddMembersModalLabel">
+            <div class="modal-dialog especial" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">添加联系人</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <form class="ml_form" ng-click="checkTips=true;">
+                                <div class="form-group" style="width: 260px;height:32px;display:block">
+                                    <input type="text" ng-model="seachHabGroupMembersNode" class="form-control search_user" style="width: 182px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                    <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchHabGroupMembersTreeModal()">搜索</button>
+                                    <a class="clear_search" ng-show="seachHabGroupMembersNode!=''" ng-click="clearHabGroupMembersInput()" href="javascript:void(0);"></a>
+                                </div>
+                                <div class="form-group clearfix left" style="height:280px;float:left">
+                                    <div class="scroll_bar" style="width:260px;height:280px;border:1px solid #d8d8d8;overflow:auto">
+                                        <ul id="HabGroupMembersTreeModal" class="ztree" style="padding: 12px; clear: both;"></ul>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix middle" style="height:139px;display:inline-table;margin-top:147px;position:absolute;width:16px;left:260px;">
+                                    <img src="img/icon_right_gray.png" ng-click="AddMembers('')" />
+                                </div>
+                                <div class="form-group clearfix right" style="height:280px;margin-left:16px;">
+                                    <div class="scroll_bar" style="width:360px;height:280px;border:1px solid #d8d8d8;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <thead>
+                                                <tr><th style="height:32px;line-height:32px;background-color:#d4d4d4;padding:0 12px;">已选择的成员</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="d in HabGroupMembers" id="{{d.ID}}">
+                                                    <td><span>{{d.DisplayName}}({{d.Account}})</span><img src="img/icon_close.png" ng-click="removeThisMembers(d.ID)" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="ChangeHabGroupMembers()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--再次确认-->
+        <div class="modal fade" id="Reconfirm_Modal" tabindex="-1" role="dialog" aria-labelledby="ReconfirmModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="delOULabel">同步</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div id="delbox1" class="row">
+                                <div class="col-md-12">
+                                    <div>点击确定后：</div>
+                                    <div>1. 将同步Hab通讯组或成员。</div>
+                                    <div>2. 操作将立即执行并无法终止和恢复。</div>
+                                    <div>3. 该操作执行时间可能较长。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="Execute()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

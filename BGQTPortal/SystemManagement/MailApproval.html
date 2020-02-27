@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div style="padding:24px;">
+        <div class="LogTable" ng-show="ViewOrAdd" ng-init="GetMailAuditList(1)">
+            <div class="searchBox clearfix" style="line-height:0;">
+                <div style="display:inline-block">
+                    <form role="form" class="form-inline clearfix">
+                        <div class="form-group margin20">
+                            <input ng-model="Searchstr" type="text" class="form-control" name="search_code" placeholder="显示名称 / 邮箱" />
+                        </div>
+                        <div class="oprate-butons form-group">
+                            <button type="reset" class="btn btn-theme secondary" ng-click="clearSearch()">清除</button>
+                            <button type="button" class="btn btn-theme primary" ng-click="GetMailAuditList(1)">查询</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="pull-right opright">
+                    <a class="abtn" href="javascript:void(0);" ng-click="gotoMailAuditModal('add','')">添加</a>
+                </div>
+            </div>
+            <div class="data-fluid">
+                <div class="scroll_bar log">
+                    <table class="table dtable lcnp largeTable" id="MailApprovalTable" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width: auto">对象</th>
+                                <th style="width: auto">审批人</th>
+                                <th style="width: 180px">创建时间</th>
+                                <th style="width: 100px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in Lists">
+                                <td>{{x.GroupObj}}</td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.AuditUsers}}" tooltip-trigger="'outsideClick'">{{x.AuditUsers}}</span></td>
+                                <td>{{x.CreateTimeName}}</td>
+                                <td>
+                                    <div class="pull-left oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="gotoMailAuditModal('edit',x.ID)">编辑</a>
+                                    </div>
+                                    <div class="pull-right oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="delMailAuditModal(x.ID)">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="position:relative;height:48px;margin-bottom:60px;">
+                    <ul uib-pagination total-items="bigTotalItems" items-per-page="pSize" ng-model="currentPage" ng-change="pageChanged(currentPage)" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>
+                    <ul style="width:90px;float:right;margin-top:23px;">
+                        <li><select ng-model="pSize" ng-change="changePageSize()" style="width:90px;background: url(../img/down.png) no-repeat scroll 64px center #fff;"><option ng-repeat="y in PageSizes" value="{{y.value}}">{{y.text}}</option></select></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="addRole page-row" ng-hide="ViewOrAdd" style="margin:0;">
+            <div class="panel panel-default org-panel">
+                <div class="panel-heading clearfix">
+                    <span style="font-weight: 700;">{{OpTitle}}</span>
+                    <div class="pull-right opright">
+                        <a class="abtn" href="javascript:void(0);" ng-if="op=='add'" ng-click="AddMailAudit()">保存</a>
+                        <a class="abtn" href="javascript:void(0);" ng-if="op=='edit'" ng-click="ModifyMailAudit()">保存</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="block orginfo">
+                        <div class="first-col" id="first-col" style="width:360px;padding-left:0;padding-right:0;">
+                            <!--<div class="form-group" style="display:block;clear:both;">
+                            <label class="control-label" style="display:block;">对象<span class="required">*</span></label>
+                            <select class="form-control selectNomal" ng-model="GroupID" ng-change="GetGetMailAuditInfoByExchange(GroupID)">
+                                <option ng-repeat="x in ExchangeGroupLists" value="{{x.value}}">{{x.text}}</option>
+                            </select>
+                        </div>-->
+                            <div class="form-group" style="height:auto;margin-bottom:18px;">
+                                <label class="control-label" style="display:inline-block;float:left">对象<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoChooseObject()">选择</a></label>
+                                <input type="text" ng-model="GroupName" readonly class="form-control" style="background-color:#fff;" value="" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" style="display:inline-block;float:left">审批人<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddReviewers()">添加</a></label>
+                                <div style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both">
+                                    <table class="Editable" style="width:100%">
+                                        <tbody>
+                                            <tr ng-repeat="d in Audits" id="d.UserID">
+                                                <td><span>{{d.DisplayName}}({{d.UserAccount}})</span><img src="img/icon_close.png" ng-click="removeThis(d.UserID)" style="float:right;margin-top:-24px;" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择-->
+        <div class="modal fade" id="chooseObject_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseObjectModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择对象</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:32px;">
+                                <input type="text" ng-model="seachHabGroupNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchHabGroupTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachHabGroupNode!=''" ng-click="clearHabGroupInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="HabGroupTree" style="margin: 0; padding:12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="chooseObject()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择-->
+        <div class="modal fade" id="chooseUser_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseUserModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:32px;">
+                                <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchCompanyTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="OUAndUserTree" style="margin: 0; padding:12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="AddReviewers()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--删除-->
+        <div class="modal fade" id="delMailAudit_Modal" tabindex="-1" role="dialog" aria-labelledby="delMailAuditModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">删除</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>删除邮件审计后：</div>
+                                    <div>1. 相关数据会被全部删除并且无法恢复。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelMailAudit()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+﻿var storage = window.sessionStorage;
+var thisNodeLength = 0;
+var regSpacesAndSpecial = /^[\u4e00-\u9fa5a-zA-Z0-9.]+$/;
+var regSpecial = /^[\（\(\)\）\ \u4e00-\u9fa5a-zA-Z0-9._-]+$/;
+var regAccount = /^(?!_)(?!.*?_$)[a-zA-Z0-9_.]+$/;
+var regPhone = /^((0\d{2,3}-\d{7,8})|((\+86)|(86))?(1[35784]\d{9}))$/;
+var regPwd = /^[^&<\ \u4e00-\u9fa5]+$/;
+var regName = /^[\（\(\)\）\ \u4e00-\u9fa5a-zA-Z0-9._-]+$/;
+var contactPhotoUrl;
+var userPhotoUrl;

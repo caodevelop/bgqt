@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div style="padding:24px;">
+        <div class="LogTable">
+            <div class="searchBox clearfix" style="line-height:0;" ng-init="GetStaticGroupList(1)">
+                <div style="display:inline-block">
+                    <form role="form" class="form-inline clearfix">
+                        <div class="form-group margin20">
+                            <input ng-model="Searchstr" type="text" class="form-control" placeholder="名称" />
+                        </div>
+                        <div class="oprate-butons form-group">
+                            <button type="reset" class="btn btn-theme secondary" ng-click="clearSearch()">清除</button>
+                            <button type="button" class="btn btn-theme primary" ng-click="GetStaticGroupList(1)">查询</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="data-fluid">
+                <div class="scroll_bar">
+                    <table class="table dtable lcnp largeTable" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th style="width: auto">组名</th>
+                                <th style="width: auto">邮箱</th>
+                                <th style="width: 180px">管理员</th>
+                                <th style="width: 90px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in Lists">
+                                <td>{{x.DisplayName}}</td>
+                                <td>{{x.Account}}</td>
+                                <td>{{x.AdminsCount}}</td>
+                                <td>
+                                    <div class="pull-left oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="gotoStaticGroupModal(x.ID)">编辑</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="position:relative;height:48px;margin-bottom:60px;">
+                    <ul uib-pagination total-items="bigTotalItems" items-per-page="pSize" ng-model="currentPage" ng-change="pageChanged(currentPage)" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>
+                    <ul style="width:90px;float:right;margin-top:23px;">
+                        <li><select ng-model="pSize" ng-change="changePageSize()" style="width:90px;background: url(../img/down.png) no-repeat scroll 64px center #fff;"><option ng-repeat="y in PageSizes" value="{{y.value}}">{{y.text}}</option></select></li>
+                    </ul>
+                </div>            
+            </div>
+        </div>
+        <!--编辑-->
+        <div class="modal fade" id="chooseAdmin_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseAdminModalLabel">
+            <div class="modal-dialog especial" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">编辑</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <form class="ml_form" ng-click="checkTips=true;">
+                                <div class="form-group" style="width: 260px;display:block">
+                                    <label class="control-label clearfix" style="display:block;">管理员<span class="required">*</span></label>
+                                    <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 182px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                    <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchCompanyTree()">搜索</button>
+                                    <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                                </div>
+                                <div class="form-group clearfix left" style="height:280px;float:left">
+                                    <div style="width:260px;height:auto;border:1px solid #d8d8d8;">
+                                        <ul id="CompanyTree" class="ztree scroll_bar" style="padding-left: 10px; clear: both;padding-bottom:20px;height:280px;"></ul>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix middle" style="height:139px;display:inline-table;margin-top:147px;position:absolute;width:16px;left:260px;">
+                                    <img src="img/icon_right_gray.png" ng-click="AddAdmins('')" />
+                                </div>
+                                <div class="form-group clearfix right" style="height:280px;margin-left:16px;">
+                                    <div class="scroll_bar" style="width:360px;height:280px;border:1px solid #d8d8d8;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <thead>
+                                                <tr><th style="height:32px;line-height:30px;background-color:#d4d4d4;padding:0 12px;">已选择的管理员</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="d in Admins" UserID="{{d.UserID}}">
+                                                    <td><span>{{d.DisplayName}}({{d.UserAccount}})</span><img src="img/icon_close.png" ng-click="removeThis(d.UserID)" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="ChangeStaticGroupInfo()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

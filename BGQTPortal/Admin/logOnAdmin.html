@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div class="ab-div">
+        <div style="font-size:36px;color:#003F8F;background-color:transparent;position:absolute;left:calc(50% - 126px);top:calc(46% - 390px);">AD管理平台</div>
+        <div class="resetAndLogin" style="width:860px;">
+            <div class="login-div" style="float:left;background-image: linear-gradient(to bottom, #d8d8d8 100%,#dcdcdc 100%);background-size: 1px 70%;background-repeat: no-repeat;background-position:center right;">
+                <form ng-click="focusResetPwd()">
+                    <div class="form-title">员工自助修改密码</div>
+                    <div class="input-group">
+                        <input type="text" placeholder="账号" ng-focus="checkTips2=true" ng-model="resetUser.Account" ng-change="checkSubmit()" />
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="原密码" ng-focus="checkTips2=true" ng-model="resetUser.OldPwd" ng-change="checkSubmit()" />
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="新密码" ng-model="resetUser.NewPwd" ng-change="checkSubmit()" ng-focus="shownametips=true" ng-blur="shownametips=false" />
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="确认新密码" ng-focus="checkTips2=true" ng-model="resetUser.RePwd" ng-change="checkSubmit()" />
+                    </div>
+                    <div class="input-group nomargin">
+                        <input type="text" class="VCode floatleft" autocomplete="new-password" placeholder="验证码" ng-model="resetUser.VCode" ng-change="checkSubmit()" ng-focus="checkTips2=true" />
+                        <input type="button" class="code floatright" id="resetUser-code" ng-focus="checkTips2=true" ng-click="RefreshCodeResetUser()" ng-model="resetUser.loginCode" />
+                    </div>
+                    <div class="errorMsg" ng-model="errorMsg2" ng-hide="checkTips2" ng-class="opResult2">{{errorMsg2}}</div>
+                    <button class="login-btn" ng-click="ChangeUserPassword()" ng-disabled="!RePwdBtn">修改密码</button>
+                    <div class="input-group nomargin" style="margin-top:8px;">
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">密码复杂性说明：</label>
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">1、密码必须 8 位以上</label>
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">2、必须同时包含字母（区分大小写）、数字、特殊符号三种</label>
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">3、密码不能与上一次密码相同</label>
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">4、密码不能包含用户名部分连续或全部字符</label>
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">5、修改后新密码约 20 分钟后生效。</label>
+                    </div>
+                </form>
+            </div>
+            <div class="login-div">
+                <form ng-click="focusLogOn()">
+                    <div class="form-title">管理员登录</div>
+                    <div>
+                        <div class="input-group">
+                            <input type="text" placeholder="账号" ng-focus="checkTips1=true" ng-model="logOnUser.Account" ng-change="InputChange()" />
+                        </div>
+                        <div class="input-group">
+                            <input type="password" placeholder="密码" ng-model="logOnUser.Password" ng-change="InputChange()" ng-focus="checkTips1=true" />
+                        </div>
+                        <div class="input-group nomargin">
+                            <input type="text" class="VCode floatleft" autocomplete="new-password" placeholder="验证码" ng-model="logOnUser.VCode" ng-change="InputChange()" ng-focus="checkTips1=true" />
+                            <input type="button" class="code floatright" id="loginUser-code" ng-focus="checkTips1=true" ng-click="RefreshCodeLogOnUser()" ng-model="logOnUser.loginCode" />
+                        </div>
+                        <div class="errorMsg" ng-model="errorMsg1" ng-hide="checkTips1" ng-class="opResult1">{{errorMsg1}}</div>
+                        <button class="login-btn" ng-click="SignIn()" ng-disabled="!SignInBtn">登 录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="sgp-logo" style="border-right:0;"><img src="img/logo.png" style="height:60px;" /></div>
+        <!--<div class="company"><a href="">佳兆业集团控股有限公司</a></div>-->
+        <div class="recordnum"><span></span></div>
+    </div>
+</body>
+</html>

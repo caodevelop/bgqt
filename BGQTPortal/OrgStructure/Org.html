@@ -1,0 +1,956 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body style="overflow:auto;">
+    <div class="container" ng-init="GetCompanyTree()" style="padding:0 24px;">
+        <div class="row page-row" style="margin-top: 24px; position: relative;min-height:800px;">
+            <div class="first-col" id="first-col">
+                <form role="form" class="form-inline clearfix" style="float: left; width: 100%; margin-bottom: 8px;">
+                    <div class="form-group" style="margin-bottom: 0; width: 100%;height:32px;">
+                        <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 268px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                        <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;width:70px;" ng-click="SearchCompanyTree()">搜索</button>
+                        <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                    </div>
+                </form>
+                <ul id="CompanyTree" class="ztree scroll_bar" style="padding-left: 10px; clear: both;padding-bottom:20px;"></ul>
+            </div>
+            <div class="last-col" id="HelpInstruction">
+                <span style="width:480px;display:block;margin-top:10px;font-weight:700;">
+                    说明：<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    1.&nbsp;&nbsp;在根节点上右键可对组织下用户和通讯组进行批量移动；<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    2.&nbsp;&nbsp;OU：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;显示名称支持格式： 字母、数字、中文名称； <br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    3.&nbsp;&nbsp;通讯组：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;管理员： 管理员可在 OWA 中直接管理通讯组的成员 <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;成员：可为用户和通讯组<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;删除：在 AD 中删除通讯组<br />
+                </span>
+                <span style="width:480px;display:block;margin-top:10px;line-height:2;">
+                    4.&nbsp;&nbsp;用户：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;邮箱属性：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（a）邮箱开启状态：邮箱用户可使用邮箱 ；<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（b）邮箱关闭状态：用户不能使用邮箱<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;停用：在 AD 中停用用户，邮箱数据保留；<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;移动并禁用：在 AD 中禁用用户并移动至离职人员节点下；<br />
+                </span>
+            </div>
+            <div class="last-col" id="addOUPanel">
+                <div class="panel panel-default org-panel">
+                    <div class="panel-heading clearfix">
+                        <span style="font-weight: 700;">添加 OU</span>
+                        <span id="addgroupbtnbox" class="pull-right right-oprate-btn">
+                            <a ng-click="AddOU()" class="abtn" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="block orginfo">
+                            <form class="validate" style="width: 360px">
+                                <div class="form-group clearfix">
+                                    <label class="control-label clearfix">显示名称<span class="required">*</span></label>
+                                    <input ng-model="addOUName" type="text" class="form-control" />
+                                </div>
+                                <div class="form-group clearfix" style="height:auto">
+                                    <label class="control-label clearfix">描述</label>
+                                    <textarea ng-model="addOUDesc" class="form-control" style="height: 70px; resize: none;"></textarea>
+                                </div>
+                                <div class="form-group" style="clear: both;margin-top:18px;display: none;" ng-if="ModifyProfessionalGroup">
+                                    <div class="checkbox" style="line-height: 1.1;">
+                                        <input id="addIsProfessionalGroups" ng-model="$parent.addIsProfessionalGroups" class="chk_1" type="checkbox" />
+                                        <label for="addIsProfessionalGroups" style="margin-right:10px;"></label>是否为专业集团
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="ouPanel">
+                <div class="panel panel-default org-panel">
+                    <div class="panel-heading clearfix">
+                        <span style="font-weight: 700;">基本信息</span>
+                        <span class="pull-right right-oprate-btn">
+                            <a ng-click="ModifyOu()" class="abtn" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="block">
+                            <form class="validate" style="width: 360px">
+                                <div class="form-group">
+                                    <label class="control-label">显示名称<span class="required">*</span></label>
+                                    <input ng-model="OUName" type="text" class="form-control" />
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label clearfix">描述</label>
+                                    <textarea ng-model="OUDesc" class="form-control" style="height: 70px; resize: none;"></textarea>
+                                </div>
+                                <div class="form-group" style="clear: both;display: none;" ng-if="ModifyProfessionalGroup">
+                                    <div class="checkbox" style="line-height: 1.1;">
+                                        <input id="IsProfessionalGroups" ng-model="$parent.IsProfessionalGroups" class="chk_1" type="checkbox" />
+                                        <label for="IsProfessionalGroups" style="margin-right:10px;"></label>是否为专业集团
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="moveOUPanel">
+                <div class="panel panel-default org-panel">
+                    <div class="panel-heading clearfix">
+                        <span style="font-weight: 700;">{{MoveObjTitle}}</span>
+                        <span class="pull-right right-oprate-btn">
+                            <a ng-click="MoveOu()" ng-if="moveOp=='moveou'" class="abtn" href="javascript:void(0);">保存</a>
+                            <a ng-click="MoveUser()" ng-if="moveOp=='moveuser'" class="abtn" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="block">
+                            <form class="validate" style="width: 360px">
+                                <div class="form-group" style="width: 600px">
+                                    <label class="control-label">显示名称</label>
+                                    <input ng-model="MoveObjName" type="text" class="form-control" readonly />
+                                </div>
+                                <div class="form-group" style="height:auto;width: 600px;margin-top:18px;">
+                                    <label class="control-label" style="display:inline-block;float:left">移动到<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoChooseTargetNode('single')">选择目标节点</a></label>
+                                    <input ng-model="MoveTargetNodeName" type="text" class="form-control" readonly />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="addGroupPanel">
+                <div class="panel panel-default org-panel">
+                    <div class="panel-heading clearfix">
+                        <span style="font-weight: 700;">添加通讯组</span>
+                        <span class="pull-right right-oprate-btn">
+                            <a ng-click="AddGroup()" class="abtn" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="block orginfo">
+                            <form class="validate" style="width: 360px">
+                                <div class="form-group">
+                                    <label class="control-label">显示名称<span class="required">*</span></label>
+                                    <input ng-model="addGroupName" type="text" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">通讯组类型<span class="required">*</span></label>
+                                    <select ng-model="addGroupType" class="form-control selectNomal">
+                                        <option ng-repeat="x in DistributionGroupTypes" value="{{x.value}}">{{x.text}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" ng-show="addGroupType==1||addGroupType==3">
+                                    <label class="control-label" style="display: block;">账号<span class="required">*</span></label>
+                                    <input type="text" ng-model="addGroupText" class="form-control half-form-control" value="" style="margin-right: 12px;" />
+                                    <select ng-model="addGdomain" class="form-control half-form-control selectHalf">
+                                        <option ng-repeat="x in orgDomains" value="{{x.text}}">{{x.text}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="height:auto" ng-show="addGroupType==1||addGroupType==3">
+                                    <label class="control-label" style="display:inline-block;float:left">管理员</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddGroupAdmins('add')">选择管理员</a></label>
+                                    <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <tbody>
+                                                <tr ng-repeat="d in addGroupAdmins" id="d.UserID">
+                                                    <td><span>{{d.DisplayName}}({{d.UserAccount}})</span><img src="img/icon_close.png" ng-click="removeGroupAdmins(d.UserID,'add')" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="height:auto;margin-top:18px;">
+                                    <label class="control-label" style="display:inline-block;float:left">成员</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddGroupMembers('add')">选择成员</a></label>
+                                    <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <tbody>
+                                                <tr ng-repeat="d in addGroupMembers" id="d.ID">
+                                                    <td><span>{{d.DisplayName}}({{d.Account}})</span><img src="img/icon_close.png" ng-click="removeGroupMembers(d.ID,'add')" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="height: 132px;margin-top:18px;">
+                                    <label class="control-label">描述</label>
+                                    <textarea ng-model="addGroupDesc" class="form-control" style="height: 70px; resize: none;"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="groupPanel">
+                <div class="panel panel-default org-panel">
+                    <div class="panel-heading clearfix">
+                        <span style="font-weight: 700;">基本信息</span>
+                        <span class="pull-right right-oprate-btn">
+                            <a ng-click="ModifyGroup()" class="abtn" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="block orginfo">
+                            <form class="validate" style="width: 360px">
+                                <div class="form-group">
+                                    <label class="control-label">显示名称<span class="required">*</span></label>
+                                    <input ng-model="GroupName" type="text" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">通讯组类型</label>
+                                    <select ng-model="GroupType" class="form-control selectNomal" disabled="disabled">
+                                        <option ng-repeat="x in DistributionGroupTypes" value="{{x.value}}">{{x.text}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group clearfix" ng-show="GroupType==1||GroupType==3">
+                                    <label class="control-label clearfix">账号</label>
+                                    <input ng-model="GroupAccount" type="text" class="form-control" disabled="disabled" />
+                                </div>
+                                <div class="form-group" style="height:auto" ng-show="GroupType==1||GroupType==3">
+                                    <label class="control-label" style="display:inline-block;float:left">管理员</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddGroupAdmins('edit')">选择管理员</a></label>
+                                    <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <tbody>
+                                                <tr ng-repeat="d in GroupAdmins" id="d.UserID">
+                                                    <td><span>{{d.DisplayName}}({{d.UserAccount}})</span><img src="img/icon_close.png" ng-click="removeGroupAdmins(d.UserID,'edit')" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="height:auto;margin-top:18px;">
+                                    <label class="control-label" style="display:inline-block;float:left">成员</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddGroupMembers('edit')">选择成员</a></label>
+                                    <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <tbody>
+                                                <tr ng-repeat="d in GroupMembers" id="d.ID">
+                                                    <td><span>{{d.DisplayName}}({{d.Account}})</span><img src="img/icon_close.png" ng-click="removeGroupMembers(d.ID,'edit')" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="height: 132px;margin-top:18px;">
+                                    <label class="control-label">描述</label>
+                                    <textarea ng-model="GroupDesc" class="form-control" style="height: 70px; resize: none;"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="addUserPanel">
+                <div class="panel panel-default org-panel" style="margin-bottom:0;">
+                    <div class="page-header" style="border-bottom: 0;">
+                        <h1>
+                            <span>添加用户</span>
+                            <span class="pull-right right-oprate-btn">
+                                <a class="abtn" ng-if="addUserStep==1" ng-click="AddUser()" href="javascript:void(0);">下一步</a>
+                                <a class="abtn" ng-if="addUserStep==2" ng-click="ChangeUser('add')" href="javascript:void(0);">下一步</a>
+                                <a class="abtn" ng-if="addUserStep==3" ng-click="ChangeUserMemberof('add')" href="javascript:void(0);">完成</a>
+                            </span>
+                        </h1>
+                    </div>
+                    <div class="block orginfo" id="divadduserbasic">
+                        <div class="panel-heading clearfix disabled" style="border-bottom: 0;clear:both;">
+                            <div class="nav nav-tabs pull-left row" style="margin: 0; width: 100%;">
+                                <div class="col-md-4 nav-user active">
+                                    <a href="javascript:void(0);" data-toggle="tab" id="newadd1">基本信息</a>
+                                </div>
+                                <div class="col-md-4 nav-user">
+                                    <a href="javascript:void(0);" data-toggle="tab" id="newadd2">联系信息</a>
+                                </div>
+                                <div class="col-md-4 nav-user">
+                                    <a href="javascript:void(0);" data-toggle="tab" id="newadd3">通讯组设置</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="overflow: auto;">
+                            <div class="tab-content" ng-switch="tabNum">
+                                <div class="tab-pane active" ng-switch-when="tab1">
+                                    <form id="validateForAddUser" class="validate validateForAddUser" style="width: 360px">
+                                        <div class="form-group" style="clear: both; width: 174px;">
+                                            <label class="control-label">姓<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.addULastName" class="form-control half-form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -72px;">
+                                            <label class="control-label">名<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.addUFirstName" class="form-control half-form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label">显示名称<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.addUDisplayName" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" style="display: block;">账号<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.addUText" class="form-control half-form-control" value="" style="margin-right: 12px;" />
+                                            <select ng-model="$parent.addUdomain" class="form-control half-form-control selectHalf">
+                                                <option ng-repeat="x in orgDomains" value="{{x.text}}">{{x.text}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label">邮箱别名<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.addUAliasName" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label" style="display: block;">密码<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.addUpwd" class="form-control half-form-control" style="width:222px;" />
+                                            <span class="randPassword" ng-click="randPassword('add', false, 8)">生成随机密码</span>
+                                        </div>
+                                        <div class="form-group" style="clear: both;height:32px;">
+                                            <div class="checkbox" style="line-height: 1.1;">
+                                                <input id="addUNextLoginChangePassword" ng-model="$parent.addUNextLoginChangePassword" class="chk_1" type="checkbox" />
+                                                <label for="addUNextLoginChangePassword" style="margin-right:10px;"></label>下一次登录必须修改密码
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <div class="checkbox" style="line-height: 1.1;">
+                                                <input id="IsCreateMail" ng-model="$parent.addUIsCreateMail" class="chk_1" type="checkbox" />
+                                                <label for="IsCreateMail" style="margin-right:10px;"></label>创建 MailBox 邮箱
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane active" ng-switch-when="tab2">
+                                    <form id="validateForAddUser" class="validate validateForAddUser" style="width: 360px">
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label" style="display:block">所属 OU</label>
+                                            <label class="control-label">{{ParentOu}}</label>
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px;">
+                                            <label class="control-label">电话号码</label>
+                                            <input type="text" ng-model="$parent.addUPhone" class="form-control half-form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -72px;">
+                                            <label class="control-label">移动号码</label>
+                                            <input type="text" ng-model="$parent.addUMobile" class="form-control half-form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label" style="display:block;">办公室</label>
+                                            <input type="text" ng-model="$parent.addUOffice" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label">公司</label>
+                                            <input type="text" ng-model="$parent.addUCompany" class="form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px;">
+                                            <label class="control-label">部门</label>
+                                            <input type="text" ng-model="$parent.addUDepartment" id="add_FirstName" class="form-control half-form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -72px;">
+                                            <label class="control-label">职务</label>
+                                            <input type="text" ng-model="$parent.addUPost" class="form-control half-form-control" value="" />
+                                        </div>
+                                        <div class="form-group" style="height: 132px;">
+                                            <label class="control-label">描述</label>
+                                            <textarea ng-model="$parent.addUDesc" class="form-control" style="height: 70px; resize: none;"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane active" ng-switch-when="tab3">
+                                    <form style="width:360px;">
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block">所属 OU</label>
+                                            <label class="control-label">{{ParentOu}}</label>
+                                        </div>
+                                        <div class="form-group" style="height:auto">
+                                            <label class="control-label" style="display:inline-block;float:left">通讯组</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddGroups()">选择通讯组</a></label>
+                                            <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                                <table class="Editable" style="width:100%">
+                                                    <tbody>
+                                                        <tr ng-repeat="d in addBelongGroups" id="d.GroupID">
+                                                            <td><span>{{d.DisplayName}}</span><img ng-if="d.GroupMold!=4" src="img/icon_close.png" ng-click="removeThis(d.GroupID,'add')" style="float:right;margin-top:-24px;" /></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="userPanel">
+                <div class="panel panel-default org-panel" style="margin-bottom:0;">
+                    <div class="panel-heading clearfix userinfohead">
+                        <ul class="nav nav-tabs pull-left">
+                            <li id="tab4">
+                                <a data-toggle="tab" ng-click="gotoTab(4)">基本属性</a>
+                            </li>
+                            <li id="tab5">
+                                <a data-toggle="tab" ng-click="gotoTab(5)">通讯组</a>
+                            </li>
+                            <li id="tab6">
+                                <a data-toggle="tab" ng-click="gotoTab(6);GetUserExchangeInfo()">邮箱属性</a>
+                            </li>
+                        </ul>
+                        <span class="pull-right right-oprate-btn">
+                            <a class="abtn" ng-if="editUserStep==1" ng-click="ChangeUser('edit')" href="javascript:void(0);">保存</a>
+                            <a class="abtn" ng-if="editUserStep==2" ng-click="ChangeUserMemberof('edit')" href="javascript:void(0);">保存</a>
+                            <a class="abtn" ng-if="editUserStep==3" ng-click="ChangeUserExchangeInfo()" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body scroll_bar" style="overflow: auto;padding-bottom:0;padding:0;">
+                        <div class="tab-content" ng-switch="tabNum">
+                            <div class="tab-pane active" ng-switch-when="tab4" style="margin-top:18px;">
+                                <div class="block userinfo">
+                                    <form class="validate" style="width: 360px;">
+                                        <div class="form-group">
+                                            <div id="user_Avatar" class="user_Avatar">
+                                                <img src="img/users/system_headphoto.png" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="position: absolute; margin-left: 85px; margin-top: -84px; height: 30px; line-height: 30px;">
+                                            <span class="user_account" ng-model="UserAccounts" style="white-space: nowrap;">{{UserAccounts}}</span>
+                                        </div>
+                                        <div class="form-group" style="margin-top: -54px; height: 30px; line-height: 30px; margin-bottom: 0;">
+                                            <span ng-click="ResetPwdPanel();" style="color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">重置密码</span>
+                                            <span ng-if="UserStatus==false" ng-click="EnableUser();" style="margin-left: 20px; color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">启用</span>
+                                            <span ng-if="UserStatus==true" ng-click="DisableUserPanel();" style="margin-left: 20px; color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">停用</span>
+                                            <div style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+                                        </div>
+                                        <div class="form-group" style="clear: both;margin-top:24px;">
+                                            <label class="control-label" style="display:block">所属 OU</label>
+                                            <label class="control-label">{{ParentOu}}</label>
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px; margin-top: 24px;">
+                                            <label class="control-label">姓<span class="required">*</span></label>
+                                            <input type="text" ng-model="$parent.ULastName" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -76px;">
+                                            <label class="control-label">名<span class="required">*</span></label>
+                                            <input ng-model="$parent.UFirstName" type="text" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both;">
+                                            <label class="control-label">显示名称<span class="required">*</span></label>
+                                            <input ng-model="$parent.UDisplayName" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px; margin-top: 24px;">
+                                            <label class="control-label">电话号码</label>
+                                            <input type="text" ng-model="$parent.UPhone" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -76px;">
+                                            <label class="control-label">移动号码</label>
+                                            <input ng-model="$parent.UMobile" type="text" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="control-label">办公室</label>
+                                            <input ng-model="$parent.UOffice" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="control-label">公司</label>
+                                            <input ng-model="$parent.UCompany" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; width: 174px; margin-top: 24px;">
+                                            <label class="control-label">部门</label>
+                                            <input type="text" ng-model="$parent.UDepartment" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="clear: both; float: right; width: 174px; margin-top: -76px;">
+                                            <label class="control-label">职务</label>
+                                            <input ng-model="$parent.UPost" type="text" class="form-control half-form-control" />
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 0;">
+                                            <label class="control-label" style="position: relative;">描述</label>
+                                            <textarea ng-model="$parent.UDesc" class="form-control" style="height: 90px; resize: none;"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane active" ng-switch-when="tab5" style="margin-top:18px;">
+                                <form class="validate userinfo" style="width: 360px;">
+                                    <div class="form-group">
+                                        <div id="user_Avatar" class="user_Avatar">
+                                            <img src="img/users/system_headphoto.png" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="position: absolute; margin-left: 85px; margin-top: -84px; height: 30px; line-height: 30px;">
+                                        <span class="user_account" ng-model="UserAccounts" style="white-space: nowrap;">{{UserAccounts}}</span>
+                                    </div>
+                                    <div class="form-group" style="margin-top: -54px; height: 30px; line-height: 30px; margin-bottom: 0;">
+                                        <span ng-click="ResetPwdPanel();" style="color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">重置密码</span>
+                                        <span ng-if="UserStatus==false" ng-click="EnableUser();" style="margin-left: 20px; color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">启用</span>
+                                        <span ng-if="UserStatus==true" ng-click="DisableUserPanel();" style="margin-left: 20px; color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">停用</span>
+                                        <div style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+                                    </div>
+                                    <div class="form-group" style="clear: both;margin-top:24px;">
+                                        <label class="control-label" style="display:block">所属 OU</label>
+                                        <label class="control-label">{{ParentOu}}</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" style="display:inline-block;float:left">通讯组</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddGroups()">选择通讯组</a></label>
+                                        <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                            <table class="Editable" style="width:100%">
+                                                <tbody>
+                                                    <tr ng-repeat="d in BelongGroups" id="d.GroupID">
+                                                        <td><span>{{d.DisplayName}}</span><img ng-if="d.GroupMold!=4" src="img/icon_close.png" ng-click="removeThis(d.GroupID,'edit')" style="float:right;margin-top:-24px;" /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane active" ng-switch-when="tab6" style="margin-top:18px;">
+                                <form class="validate userinfo" style="width: 360px;">
+                                    <div class="form-group">
+                                        <div id="user_Avatar" class="user_Avatar">
+                                            <img src="img/users/system_headphoto.png" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="position: absolute; margin-left: 85px; margin-top: -84px; height: 30px; line-height: 30px;">
+                                        <span class="user_account" ng-model="UserAccounts" style="white-space: nowrap;">{{UserAccounts}}</span>
+                                    </div>
+                                    <div class="form-group" style="margin-top: -54px; height: 30px; line-height: 30px; margin-bottom: 0;">
+                                        <span ng-click="ResetPwdPanel();" style="color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">重置密码</span>
+                                        <span ng-if="UserStatus==false" ng-click="EnableUser();" style="margin-left: 20px; color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">启用</span>
+                                        <span ng-if="UserStatus==true" ng-click="DisableUserPanel();" style="margin-left: 20px; color: #0163A7; margin-right: 20px; cursor: pointer; padding: 7px 0;">停用</span>
+                                        <div style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+                                    </div>
+                                    <div class="form-group" style="clear: both;margin-top:24px;">
+                                        <label class="control-label" style="display:block">所属 OU</label>
+                                        <label class="control-label">{{ParentOu}}</label>
+                                    </div>
+                                    <div class="form-group" style="clear: both;">
+                                        <table class="table dtable lcnp dataTable" style="border:1px solid #d8d8d8;border-bottom:0;">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th>属性</th>
+                                                    <th style="width: 80px;">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>邮箱状态</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input ng-model="$parent.ExchangeStatus" id="ExchangeStatus" ng-checked="ExchangeStatus" class="chk_3" type="checkbox"><label for="ExchangeStatus" style="margin-top: 3px;"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ActiveSync</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input ng-model="$parent.Activesync" id="Activesync" ng-checked="Activesync" class="chk_3" type="checkbox"><label for="Activesync" style="margin-top: 3px;"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>MAPI</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input ng-model="$parent.Mapi" id="Mapi" ng-checked="Mapi" class="chk_3" type="checkbox"><label for="Mapi" style="margin-top: 3px;"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>POP3</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input ng-model="$parent.POP3" id="POP3" ng-checked="POP3" class="chk_3" type="checkbox"><label for="POP3" style="margin-top: 3px;"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>IMAP4</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input ng-model="$parent.Imap4" id="Imap4" ng-checked="Imap4" class="chk_3" type="checkbox"><label for="Imap4" style="margin-top: 3px;"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>OWA</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input ng-model="$parent.OWA" id="OWA" ng-checked="OWA" class="chk_3" type="checkbox"><label for="OWA" style="margin-top: 3px;"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="form-group" style="clear: both;">
+                                        <label class="control-label">邮箱别名</label>
+                                        <input type="text" ng-model="$parent.UAliasName" class="form-control" value="" />
+                                    </div>
+                                    <div class="form-group" style="clear: both;">
+                                        <label class="control-label">数据库</label>
+                                        <input type="text" ng-model="$parent.Database" disabled="disabled" class="form-control" />
+                                    </div>
+                                    <div class="form-group" style="clear: both;">
+                                        <label class="control-label">邮箱空间</label>
+                                        <input type="number" ng-model="$parent.MailSize" ng-disabled="DefaultSet" class="form-control" />
+                                        <span style="display:inline-block;position:absolute;margin-left:330px;margin-top:-24px;">GB</span>
+                                        <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:0;margin-top:6px;">
+                                            <input id="DefaultMailSize" ng-model="$parent.DefaultSet" class="chk_1" type="checkbox" ng-click="CheckDefaultMailSize($event)" />
+                                            <label for="DefaultMailSize" style="margin-right:10px;"></label>使用默认邮箱空间设置
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="last-col" id="batchMovePanel">
+                <div class="panel panel-default org-panel">
+                    <div class="panel-heading clearfix">
+                        <span style="font-weight: 700;">移动</span>
+                        <span id="addgroupbtnbox" class="pull-right right-oprate-btn">
+                            <a ng-click="BatchMoveNode()" class="abtn" href="javascript:void(0);">保存</a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="block orginfo">
+                            <form class="validate" style="width: 360px">
+                                <div class="form-group" style="height:auto;width: 600px">
+                                    <label class="control-label" style="display:inline-block;float:left">成员<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddBatchMoveNodes()">选择成员</a></label>
+                                    <div class="scroll_bar" style="width: 600px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                        <table class="Editable" style="width:100%">
+                                            <tbody>
+                                                <tr ng-repeat="d in BatchMoveNodes" id="d.NodeID">
+                                                    <td><span>{{d.DisplayName}}</span><img src="img/icon_close.png" ng-click="removeBatchMoveNodes(d.NodeID)" style="float:right;margin-top:-24px;" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="height:auto;width: 600px;margin-top:18px;">
+                                    <label class="control-label" style="display:inline-block;float:left">移动到<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoChooseTargetNode('batch')">选择目标节点</a></label>
+                                    <input ng-model="BatchMoveTargetNodeName" type="text" class="form-control" readonly />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--右键菜单-->
+        <div id="rMenu" class="rMenu">
+            <ul>
+                <li id="r_addou" ng-click="AddOUPanel();">添加 OU</li>
+                <li id="r_moveou" ng-click="MoveOuPanel();">移动 OU</li>
+                <li id="r_delou" ng-click="DelOUPanel();">删除 OU</li>
+                <li id="r_addgroup" ng-click="AddGroupPanel();">添加通讯组</li>
+                <li id="r_delgroup" ng-click="DelGroupPanel();">删除通讯组</li>
+                <li id="r_adduser" ng-click="AddUserPanel();">添加用户</li>
+                <li id="r_enableuser" ng-click="EnableUser();">启用</li>
+                <li id="r_disableuser" ng-click="DisableUserPanel();">停用</li>
+                <li id="r_resetpwd" ng-click="ResetPwdPanel();">重置密码</li>
+                <li id="r_moveuser" ng-click="MoveUserPanel();">移动用户</li>
+                <li id="r_deluser" ng-click="DelUserPanel();">移动并禁用</li>
+                <li id="r_batchmove" ng-click="BatchMovePanel();">批量移动</li>
+            </ul>
+        </div>
+        <!--选择用户通讯组-->
+        <div class="modal fade" id="chooseGroups_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseGroupsModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="margin-bottom: 12px; width: 100%;height:32px;">
+                                <input type="text" ng-model="seachGroupNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchGroupTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachGroupNode!=''" ng-click="clearGroupInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="GroupTree" style="margin: 0; padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-disabled="modalButton" ng-click="AddBelongGroups()" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择管理员-->
+        <div class="modal fade" id="chooseAdmins_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseAdminsModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="margin-bottom: 12px; width: 100%;height:30px;">
+                                <input type="text" ng-model="seachAdminNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchAdminTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachAdminNode!=''" ng-click="clearAdminInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="AdminTree" style="margin: 0; padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-if="AddGroupAdminsOp=='add'" ng-click="AddGroupAdmins('add')" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <button type="button" ng-if="AddGroupAdminsOp=='edit'" ng-click="AddGroupAdmins('edit')" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择成员-->
+        <div class="modal fade" id="chooseMembers_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseMembersModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="margin-bottom: 12px; width: 100%;height:30px;">
+                                <input type="text" ng-model="seachUserNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchUserTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachUserNode!=''" ng-click="clearUserInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="UserTree" style="margin: 0; padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-if="AddGroupMembersOp=='add'" ng-click="AddGroupMembers('add')" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <button type="button" ng-if="AddGroupMembersOp=='edit'" ng-click="AddGroupMembers('edit')" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择批量移动成员-->
+        <div class="modal fade" id="AddBatchMoveNode_Modal" tabindex="-1" role="dialog" aria-labelledby="AddBatchMoveNodeModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="margin-bottom: 12px; width: 100%;height:32px;">
+                                <input type="text" ng-model="seachBatchMoveNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchBatchMoveTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachBatchMoveNode!=''" ng-click="clearBatchMoveInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="BatchMoveTree" style="margin: 0; padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="AddBatchMoveNodes()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--移动时选择目标节点-->
+        <div class="modal fade" id="MoveNodeforTargetNode_Modal" tabindex="-1" role="dialog" aria-labelledby="MoveNodeforTargetNodeModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="margin-bottom: 12px; width: 100%;height:32px;">
+                                <input type="text" ng-model="seachOrgNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchOrgTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachOrgNode!=''" ng-click="clearSearchOrgNodeInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="OrgTree" style="margin: 0; padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="chooseTargetNode()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--删除 OU-->
+        <div class="modal fade" id="delOU_Modal" tabindex="-1" role="dialog" aria-labelledby="delOUModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="delOULabel">删除 OU</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div id="delbox1" class="row">
+                                <div class="col-md-12">
+                                    <div>删除 OU 后：</div>
+                                    <div>1. 关联信息同步被删除。</div>
+                                    <div>2. 请谨慎操作。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DeleteOu()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--删除分组-->
+        <div class="modal fade" id="delGroup_Modal" tabindex="-1" role="dialog" aria-labelledby="delGroupModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="delGroupLabel">删除通讯组</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div id="delbox1" class="row">
+                                <div class="col-md-12">
+                                    <div>删除通讯组后：</div>
+                                    <div>1. 通讯组在 AD 中删除。</div>
+                                    <div>2. 通讯组邮箱被释放。</div>
+                                    <div>3. 请谨慎操作。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button id="delgroupmodal_btn" type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DeleteGroup()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--重置密码-->
+        <div class="modal fade" id="resetPassword_Modal" tabindex="-1" role="dialog" aria-labelledby="resetPasswordModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="resetPasswordLabel">重置密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <form class="ml_form" id="validateForReset">
+                                <div class="form-group clearfix">
+                                    <label class="control-label clearfix">用户</label>
+                                    <input ng-model="ResetPwdUser" type="text" class="form-control width1" value="" disabled="disabled" />
+                                </div>
+                                <div class="form-group clearfix" id="setDiv">
+                                    <label class="control-label clearfix" style="display: block;">密码</label>
+                                    <input type="text" id="resetpassword" ng-model="reSetPwd" ng-focus="showtips=true" ng-blur="showtips=false" class="form-control width1" style="width: 220px;" />
+                                    <span class="ck_resetPassword" ng-click="randPassword('reset',false,8)">生成随机密码</span>
+                                    <span class="tips" style="color:#999999;display:block;" ng-show="showtips">密码支持 8~20 个字符，包含字母、数字、标点符号；不支持空格，"&"，"<"；</span>
+                                </div>
+                                <div class="form-group" style="clear: both;height:32px;margin-bottom:0;">
+                                    <div class="checkbox" style="line-height: 1.1;width:180px;float:left;">
+                                        <input id="reNextLoginChangePassword" ng-model="reNextLoginChangePassword" class="chk_1" type="checkbox" />
+                                        <label for="reNextLoginChangePassword" style="margin-right:10px;"></label>下一次登录必须修改密码
+                                    </div>
+                                    <div class="checkbox" style="line-height: 1.1;width:168px;margin-top:0;float:right;">
+                                        <input id="rePasswordNeverExpire" ng-model="rePasswordNeverExpire" class="chk_1" type="checkbox" />
+                                        <label for="rePasswordNeverExpire" style="margin-right:10px;"></label>密码永不过期
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label clearfix" style="display: block;color:#999999;">说明：重置后新密码约 20 分钟后生效。</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button id="reset_modal_btn" type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="ResetPassword()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--用户停用-->
+        <div class="modal fade" id="ChangeUserState_Modal" tabindex="-1" role="dialog" aria-labelledby="ChangeUserStateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">停用</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>用户停用后：</div>
+                                    <div>1. 用户账户在 AD 中停用。</div>
+                                    <div>2. 用户邮箱和数据保留。</div>
+                                    <div>3. 用户无法登录和使用相关功能和服务。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button id="ChangeUserState_modal_btn" type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DisableUser()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--移动并禁用用户-->
+        <div class="modal fade" id="delUser_Modal" tabindex="-1" role="dialog" aria-labelledby="delUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">移动并禁用用户 </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>移动并禁用用户后：</div>
+                                    <div>1. 用户邮箱会被删除。</div>
+                                    <div>2. 用户在管理平台中的数据会被全部删除并且无法恢复。</div>
+                                    <div>3. 用户在AD中禁用并移动至离职人员OU节点中。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button id="delUser_modal_btn" type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DeleteUser()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

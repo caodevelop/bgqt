@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div style="padding:24px;">
+        <div class="RoleInfo" ng-show="ViewOrAdd" ng-init="GetRoleList(1)">
+            <div class="searchBox clearfix" style="line-height:0;">
+                <div class="pull-right opright">
+                    <a class="abtn" href="javascript:void(0);" ng-click="gotoAddRole()">添加角色</a>
+                </div>
+            </div>
+            <div class="data-fluid">
+                <div class="scroll_bar log">
+                    <table class="table dtable lcnp largeTable" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width:260px">角色名称</th>
+                                <th style="width:auto">管理范围</th>
+                                <th style="width:auto">成员</th>
+                                <th style="width:180px">创建时间</th>
+                                <th style="width:100px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="a in Lists">
+                                <td>{{a.RoleName}}</td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{a.ControlLimitPath}}" tooltip-trigger="'outsideClick'">{{a.ControlLimitPath}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{a.UserNameList}}" tooltip-trigger="'outsideClick'">{{a.UserNameList}}</span></td>
+                                <td>{{a.CreateTimeName}}</td>
+                                <td>
+                                    <div class="pull-left oprate" ng-if="a.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="GetRoleInfo(a.RoleID,'edit')">编辑</a>
+                                    </div>
+                                    <div class="pull-right oprate" ng-if="a.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="delRoleModal(a.RoleID)">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="position:relative;height:48px;margin-bottom:60px;">
+                    <ul uib-pagination total-items="bigTotalItems" items-per-page="pSize" ng-model="currentPage" ng-change="pageChanged(currentPage)" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>
+                    <ul style="width:90px;float:right;margin-top:23px;">
+                        <li><select ng-model="pSize" ng-change="changePageSize()" style="width:90px;background: url(../img/down.png) no-repeat scroll 64px center #fff;"><option ng-repeat="y in PageSizes" value="{{y.value}}">{{y.text}}</option></select></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="addRole page-row" ng-hide="ViewOrAdd" style="margin:0;">
+            <div class="panel panel-default org-panel">
+                <div class="panel-heading clearfix">
+                    <span style="font-weight: 700;">{{OpTitle}}</span>
+                    <span id="addgroupbtnbox" class="pull-right right-oprate-btn">
+                        <a ng-click="AddRole()" ng-if="op=='add'" class="abtn" href="javascript:void(0);">保存</a>
+                        <a ng-click="ChangeRole()" ng-if="op=='edit'" class="abtn" href="javascript:void(0);">保存</a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <div class="block orginfo" style="position:relative;">
+                        <div class="first-col" id="first-col" style="width:360px;padding-left:0;padding-right:0;">
+                            <div class="form-group">
+                                <label class="control-label" style="display:block;">角色名称<span class="required">*</span></label>
+                                <input type="text" ng-model="RoleName" class="form-control" value="" />
+                            </div>
+                            <div class="form-group" style="height:auto;margin-bottom:18px;">
+                                <label class="control-label" style="display:inline-block;float:left">管理范围<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddControlLimitOu()">添加</a></label>
+                                <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                    <table class="Editable" style="width:100%">
+                                        <tbody>
+                                            <tr ng-repeat="d in ControlLimitOuList" id="d.OuID">
+                                                <td><span>{{d.OUdistinguishedName}}</span><img src="img/icon_close.png" ng-click="removeControlLimitOu(d.OuID)" style="float:right;margin-top:-24px;" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group" style="height:auto;">
+                                <label class="control-label" style="display:inline-block;float:left">成员</label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddMember()">添加</a></label>
+                                <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                    <table class="Editable" style="width:100%">
+                                        <tbody>
+                                            <tr ng-repeat="d in UserLists" id="d.UserID">
+                                                <td><span>{{d.DisplayName}}({{d.UserAccount}})</span><img src="img/icon_close.png" ng-click="removeThis(d.UserID)" style="float:right;margin-top:-24px;" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="last-col" id="orgPanel" style="padding-right:0;">
+                            <div class="panel panel-default org-panel">
+                                <div class="panel-heading clearfix">
+                                    <span style="display:inline-block;margin-bottom:6px;line-height:1.5">分配权限<span class="required" style="color:red;margin-left:6px;">*</span></span>
+                                </div>
+                                <div class="panel-body" style="padding:0;">
+                                    <div class="block orginfo" style="width: 100%;border:1px solid #d8d8d8;border-top:0;border-bottom:0;">
+                                        <div ng-repeat="b in PermissionLists" style="width:100%;border-bottom:1px solid #d8d8d8;padding:12px 12px 0 12px">
+                                            <div class="input-group" style="float:left;display:inline-block;width:280px;margin-bottom:12px;">
+                                                <!--<input class="chk_2" type="checkbox" ng-click="checkWay($event)" id="{{b.ModuleTypeNum}}" ng-disabled="b.disabled" ng-checked="{{b.checked}}">-->
+                                                <label for="{{b.ModuleTypeNum}}"></label>
+                                                <span style="position:absolute;margin-top:-1px;">{{b.ModuleTypeName}}</span>
+                                            </div>
+                                            <div style="float:left;display:table-cell;width:calc(100% - 280px)">
+                                                <div ng-repeat="c in b.RoleParamList" class="input-group" style="float:left;display:inline-block;width:204px;margin-bottom:12px;">
+                                                    <input class="chk_1" type="checkbox" RoleLevel="{{b.ModuleTypeNum}}" ng-click="checkWay($event)" ParamID="{{c.ParamID}}" id="{{c.ParamID}}" ng-disabled="c.disabled" ng-checked="{{c.checked}}">
+                                                    <label for="{{c.ParamID}}"></label>
+                                                    <span style="position:absolute;margin-top:-3px;">{{c.ParamValue}}</span>
+                                                </div>
+                                            </div>
+                                            <div style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择管理范围-->
+        <div class="modal fade" id="ControlLimitOu_Modal" tabindex="-1" role="dialog" aria-labelledby="ControlLimitOuModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:32px;">
+                                <input type="text" ng-model="seachOrgNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchOrgTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachOrgNode!=''" ng-click="clearSearchOrgInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="OrgTree" style="padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button id="chooseUser_btn" type="button" ng-click="AddControlLimitOu()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择成员-->
+        <div class="modal fade" id="chooseUser_Modal" tabindex="-1" role="dialog" aria-labelledby="chooseUserModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:32px;">
+                                <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchCompanyTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide" style="margin-bottom: 0px;">
+                                <ul class="ztree scroll_bar" id="CompanyTree" style="margin: 0; padding: 12px; height: 318px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button id="chooseUser_btn" type="button" ng-click="AddMembers()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择同级 OU-->
+        <div class="modal fade" id="SameOU_Modal" tabindex="-1" role="dialog" aria-labelledby="SameOUModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">选择同级 OU</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:auto;">
+                                <input id="SameOUInput" type="text" readonly style="background: url(../img/down.png) no-repeat scroll 334px center #fff;" value="" class="form-control SameOUInput selectNomal" ng-focus="showSameOUContent();" />
+                                <div id="SameOUContent" class="menuContent scroll_bar" style="display:none; position: relative;">
+                                    <ul id="SameOUTree" class="ztree" style="margin-top:0;height:auto;max-height:200px;border:1px solid #d8d8d8;border-top:0;"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="closeModalBtn()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--删除-->
+        <div class="modal fade" id="delRole_Modal" tabindex="-1" role="dialog" aria-labelledby="delRoleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">删除</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>删除角色后：</div>
+                                    <div>1. 相关数据会被全部删除并且无法恢复。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelRole()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

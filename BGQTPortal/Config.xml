@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configUrls>
+  <configUrl name="InterfaceUrl" value="http://10.9.10.31:8808/" />
+  <configUrl name="loginUrl" value="http://10.9.10.31:8050/#/logOnOU" />
+</configUrls>
+

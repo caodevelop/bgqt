@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://Betternext.com/" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://Betternext.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://Betternext.com/">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="NewExchangeUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NewExchangeUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="NewExchangeUserResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateExchangeUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userAccount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="displayName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="alias" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateExchangeUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateExchangeUserResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUserAlias">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userAccount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="alias" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUserAliasResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateUserAliasResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUserExchange">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userAccount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="displayName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUserExchangeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateUserExchangeResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserExchange">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userAccount" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserExchangeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetUserExchangeResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetUserResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DisableMailbox">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DisableMailboxResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DisableMailboxResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnableMailbox">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="alias" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnableMailboxResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="EnableMailboxResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnableMailboxAndMailboxDataBase">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="alias" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mailboxdb" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnableMailboxAndMailboxDataBaseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="EnableMailboxAndMailboxDataBaseResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NewDistributionGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NewDistributionGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="NewDistributionGroupResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDistributionGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="groupID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDistributionGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetDistributionGroupResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnableDisGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="displayName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="account" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnableDisGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="EnableDisGroupResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDistributionGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="groupID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="displayName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="account" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDistributionGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SetDistributionGroupResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDistributionGroupModeratedBy">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="groupID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="moderationEnabled" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="users" type="tns:ArrayOfGuid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfGuid">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="guid" type="s1:guid" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SetDistributionGroupModeratedByResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SetDistributionGroupModeratedByResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDistributionGroupModeratedBy">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="groupID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDistributionGroupModeratedByResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetDistributionGroupModeratedByResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="users" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetDatabaseList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDatabaseListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetDatabaseListResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="info" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveSensitiveMail">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="transactionid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userMail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="keywords" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="startTime" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="endTime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveSensitiveMailResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RemoveSensitiveMailResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="resultmessage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="guid">
+        <s:restriction base="s:string">
+          <s:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="NewExchangeUserSoapIn">
+    <wsdl:part name="parameters" element="tns:NewExchangeUser" />
+  </wsdl:message>
+  <wsdl:message name="NewExchangeUserSoapOut">
+    <wsdl:part name="parameters" element="tns:NewExchangeUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateExchangeUserSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateExchangeUser" />
+  </wsdl:message>
+  <wsdl:message name="UpdateExchangeUserSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateExchangeUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserAliasSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateUserAlias" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserAliasSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateUserAliasResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserExchangeSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateUserExchange" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserExchangeSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateUserExchangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserExchangeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserExchange" />
+  </wsdl:message>
+  <wsdl:message name="GetUserExchangeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserExchangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUser" />
+  </wsdl:message>
+  <wsdl:message name="GetUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="DisableMailboxSoapIn">
+    <wsdl:part name="parameters" element="tns:DisableMailbox" />
+  </wsdl:message>
+  <wsdl:message name="DisableMailboxSoapOut">
+    <wsdl:part name="parameters" element="tns:DisableMailboxResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnableMailboxSoapIn">
+    <wsdl:part name="parameters" element="tns:EnableMailbox" />
+  </wsdl:message>
+  <wsdl:message name="EnableMailboxSoapOut">
+    <wsdl:part name="parameters" element="tns:EnableMailboxResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnableMailboxAndMailboxDataBaseSoapIn">
+    <wsdl:part name="parameters" element="tns:EnableMailboxAndMailboxDataBase" />
+  </wsdl:message>
+  <wsdl:message name="EnableMailboxAndMailboxDataBaseSoapOut">
+    <wsdl:part name="parameters" element="tns:EnableMailboxAndMailboxDataBaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="NewDistributionGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:NewDistributionGroup" />
+  </wsdl:message>
+  <wsdl:message name="NewDistributionGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:NewDistributionGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDistributionGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDistributionGroup" />
+  </wsdl:message>
+  <wsdl:message name="GetDistributionGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDistributionGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnableDisGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:EnableDisGroup" />
+  </wsdl:message>
+  <wsdl:message name="EnableDisGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:EnableDisGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetDistributionGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:SetDistributionGroup" />
+  </wsdl:message>
+  <wsdl:message name="SetDistributionGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:SetDistributionGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetDistributionGroupModeratedBySoapIn">
+    <wsdl:part name="parameters" element="tns:SetDistributionGroupModeratedBy" />
+  </wsdl:message>
+  <wsdl:message name="SetDistributionGroupModeratedBySoapOut">
+    <wsdl:part name="parameters" element="tns:SetDistributionGroupModeratedByResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDistributionGroupModeratedBySoapIn">
+    <wsdl:part name="parameters" element="tns:GetDistributionGroupModeratedBy" />
+  </wsdl:message>
+  <wsdl:message name="GetDistributionGroupModeratedBySoapOut">
+    <wsdl:part name="parameters" element="tns:GetDistributionGroupModeratedByResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDatabaseListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDatabaseList" />
+  </wsdl:message>
+  <wsdl:message name="GetDatabaseListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDatabaseListResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveSensitiveMailSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveSensitiveMail" />
+  </wsdl:message>
+  <wsdl:message name="RemoveSensitiveMailSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveSensitiveMailResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ManagerWebServiceSoap">
+    <wsdl:operation name="NewExchangeUser">
+      <wsdl:input message="tns:NewExchangeUserSoapIn" />
+      <wsdl:output message="tns:NewExchangeUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateExchangeUser">
+      <wsdl:input message="tns:UpdateExchangeUserSoapIn" />
+      <wsdl:output message="tns:UpdateExchangeUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserAlias">
+      <wsdl:input message="tns:UpdateUserAliasSoapIn" />
+      <wsdl:output message="tns:UpdateUserAliasSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserExchange">
+      <wsdl:input message="tns:UpdateUserExchangeSoapIn" />
+      <wsdl:output message="tns:UpdateUserExchangeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserExchange">
+      <wsdl:input message="tns:GetUserExchangeSoapIn" />
+      <wsdl:output message="tns:GetUserExchangeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <wsdl:input message="tns:GetUserSoapIn" />
+      <wsdl:output message="tns:GetUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DisableMailbox">
+      <wsdl:input message="tns:DisableMailboxSoapIn" />
+      <wsdl:output message="tns:DisableMailboxSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnableMailbox">
+      <wsdl:input message="tns:EnableMailboxSoapIn" />
+      <wsdl:output message="tns:EnableMailboxSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnableMailboxAndMailboxDataBase">
+      <wsdl:input message="tns:EnableMailboxAndMailboxDataBaseSoapIn" />
+      <wsdl:output message="tns:EnableMailboxAndMailboxDataBaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="NewDistributionGroup">
+      <wsdl:input message="tns:NewDistributionGroupSoapIn" />
+      <wsdl:output message="tns:NewDistributionGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDistributionGroup">
+      <wsdl:input message="tns:GetDistributionGroupSoapIn" />
+      <wsdl:output message="tns:GetDistributionGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnableDisGroup">
+      <wsdl:input message="tns:EnableDisGroupSoapIn" />
+      <wsdl:output message="tns:EnableDisGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDistributionGroup">
+      <wsdl:input message="tns:SetDistributionGroupSoapIn" />
+      <wsdl:output message="tns:SetDistributionGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDistributionGroupModeratedBy">
+      <wsdl:input message="tns:SetDistributionGroupModeratedBySoapIn" />
+      <wsdl:output message="tns:SetDistributionGroupModeratedBySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDistributionGroupModeratedBy">
+      <wsdl:input message="tns:GetDistributionGroupModeratedBySoapIn" />
+      <wsdl:output message="tns:GetDistributionGroupModeratedBySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDatabaseList">
+      <wsdl:input message="tns:GetDatabaseListSoapIn" />
+      <wsdl:output message="tns:GetDatabaseListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSensitiveMail">
+      <wsdl:input message="tns:RemoveSensitiveMailSoapIn" />
+      <wsdl:output message="tns:RemoveSensitiveMailSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ManagerWebServiceSoap" type="tns:ManagerWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="NewExchangeUser">
+      <soap:operation soapAction="http://Betternext.com/NewExchangeUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateExchangeUser">
+      <soap:operation soapAction="http://Betternext.com/UpdateExchangeUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserAlias">
+      <soap:operation soapAction="http://Betternext.com/UpdateUserAlias" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserExchange">
+      <soap:operation soapAction="http://Betternext.com/UpdateUserExchange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserExchange">
+      <soap:operation soapAction="http://Betternext.com/GetUserExchange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <soap:operation soapAction="http://Betternext.com/GetUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisableMailbox">
+      <soap:operation soapAction="http://Betternext.com/DisableMailbox" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnableMailbox">
+      <soap:operation soapAction="http://Betternext.com/EnableMailbox" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnableMailboxAndMailboxDataBase">
+      <soap:operation soapAction="http://Betternext.com/EnableMailboxAndMailboxDataBase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewDistributionGroup">
+      <soap:operation soapAction="http://Betternext.com/NewDistributionGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDistributionGroup">
+      <soap:operation soapAction="http://Betternext.com/GetDistributionGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnableDisGroup">
+      <soap:operation soapAction="http://Betternext.com/EnableDisGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDistributionGroup">
+      <soap:operation soapAction="http://Betternext.com/SetDistributionGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDistributionGroupModeratedBy">
+      <soap:operation soapAction="http://Betternext.com/SetDistributionGroupModeratedBy" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDistributionGroupModeratedBy">
+      <soap:operation soapAction="http://Betternext.com/GetDistributionGroupModeratedBy" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDatabaseList">
+      <soap:operation soapAction="http://Betternext.com/GetDatabaseList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSensitiveMail">
+      <soap:operation soapAction="http://Betternext.com/RemoveSensitiveMail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ManagerWebServiceSoap12" type="tns:ManagerWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="NewExchangeUser">
+      <soap12:operation soapAction="http://Betternext.com/NewExchangeUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateExchangeUser">
+      <soap12:operation soapAction="http://Betternext.com/UpdateExchangeUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserAlias">
+      <soap12:operation soapAction="http://Betternext.com/UpdateUserAlias" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserExchange">
+      <soap12:operation soapAction="http://Betternext.com/UpdateUserExchange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserExchange">
+      <soap12:operation soapAction="http://Betternext.com/GetUserExchange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <soap12:operation soapAction="http://Betternext.com/GetUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisableMailbox">
+      <soap12:operation soapAction="http://Betternext.com/DisableMailbox" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnableMailbox">
+      <soap12:operation soapAction="http://Betternext.com/EnableMailbox" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnableMailboxAndMailboxDataBase">
+      <soap12:operation soapAction="http://Betternext.com/EnableMailboxAndMailboxDataBase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewDistributionGroup">
+      <soap12:operation soapAction="http://Betternext.com/NewDistributionGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDistributionGroup">
+      <soap12:operation soapAction="http://Betternext.com/GetDistributionGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnableDisGroup">
+      <soap12:operation soapAction="http://Betternext.com/EnableDisGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDistributionGroup">
+      <soap12:operation soapAction="http://Betternext.com/SetDistributionGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDistributionGroupModeratedBy">
+      <soap12:operation soapAction="http://Betternext.com/SetDistributionGroupModeratedBy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDistributionGroupModeratedBy">
+      <soap12:operation soapAction="http://Betternext.com/GetDistributionGroupModeratedBy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDatabaseList">
+      <soap12:operation soapAction="http://Betternext.com/GetDatabaseList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSensitiveMail">
+      <soap12:operation soapAction="http://Betternext.com/RemoveSensitiveMail" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ManagerWebService">
+    <wsdl:port name="ManagerWebServiceSoap" binding="tns:ManagerWebServiceSoap">
+      <soap:address location="http://10.9.10.31:8808/webserivice/ManagerWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ManagerWebServiceSoap12" binding="tns:ManagerWebServiceSoap12">
+      <soap12:address location="http://10.9.10.31:8808/webserivice/ManagerWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

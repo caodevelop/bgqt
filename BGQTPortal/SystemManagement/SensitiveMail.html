@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <div style="padding:24px;">
+        <div class="LogTable" ng-show="ViewOrAdd">
+            <div class="searchBox clearfix" style="line-height:0;" ng-init="GetSensitiveMailList(1)">
+                <div style="display:inline-block">
+                    <form role="form" class="form-inline clearfix">
+                        <div class="form-group">
+                            <input ng-model="Searchstr" type="text" class="form-control" name="search_code" placeholder="名称/关键字" />
+                        </div>
+                        <div class="form-group" style="margin-right: 10px">
+                            <div class="input-group input-group-minimal">
+                                <input type="text" placeholder="时间" ng-model="StartTime" ng-time class="form-control input-group date form_date" data-date="" data-date-format="yyyy/MM/dd" data-link-field="dtp_input2" data-link-format="yyyy/mm/dd" />
+                            </div>
+                        </div>
+                        <div id="coo-icon" class="form-group" style="width: 10px; text-align: center; margin-right: 0px; margin-left: -10px">
+                            <span class="coo-icon">~</span>
+                        </div>
+                        <div class="form-group margin20">
+                            <div class="input-group input-group-minimal">
+                                <input type="text" placeholder="时间" ng-model="EndTime" ng-time class="form-control input-group date form_date" data-date="" data-date-format="yyyy/MM/dd" data-link-field="dtp_input2" data-link-format="yyyy/mm/dd" />
+                            </div>
+                        </div>
+                        <div class="oprate-butons form-group">
+                            <button type="reset" class="btn btn-theme secondary" ng-click="clearSearch()">清除</button>
+                            <button type="button" class="btn btn-theme primary" ng-click="GetSensitiveMailList(1)">查询</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="pull-right opright">
+                    <a class="abtn" href="javascript:void(0);" ng-click="gotoSMailModal('add','')">添加</a>
+                </div>
+            </div>
+            <div class="data-fluid">
+                <div class="scroll_bar log">
+                    <table class="table dtable lcnp largeTable" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width: 140px">名称</th>
+                                <th style="width: 120px">对象</th>
+                                <th style="width: 140px">关键字</th>
+                                <th style="width: 120px">创建时间</th>
+                                <th style="width: 120px">上一次执行时间</th>
+                                <th style="width: 100px">执行状态</th>
+                                <th style="width: 80px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in Lists">
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.Name}}" tooltip-trigger="'outsideClick'">{{x.Name}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.ObjectNames}}" tooltip-trigger="'outsideClick'">{{x.ObjectNames}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.Keywords}}" tooltip-trigger="'outsideClick'">{{x.Keywords}}</span></td>
+                                <td>{{x.CreateTimeName}}</td>
+                                <td>{{x.ExecuteTimeName}}</td>
+                                <td>{{x.StatusName}}</td>
+                                <td>
+                                    <div class="pull-left oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="gotoExecuteSensitiveMailModal(x.ID)" style="margin-right:6px;">立即执行</a>
+                                    </div>
+                                    <div class="pull-right oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">更多<span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="javascript:void(0);" ng-click="gotoSMailModal('edit',x.ID)">编辑</a></li>
+                                            <li><a href="javascript:void(0);" ng-click="delSMailModal(x.ID)">删除</a></li>
+                                            <li><a href="javascript:void(0);" id="{{x.ID}}" ng-click="ExportToExcel(x.ID)">导出</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="position:relative;height:48px;margin-bottom:60px;">
+                    <ul uib-pagination total-items="bigTotalItems" items-per-page="pSize" ng-model="currentPage" ng-change="pageChanged(currentPage)" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>
+                    <ul style="width:90px;float:right;margin-top:23px;">
+                        <li><select ng-model="pSize" ng-change="changePageSize()" style="width:90px;background: url(../img/down.png) no-repeat scroll 64px center #fff;"><option ng-repeat="y in PageSizes" value="{{y.value}}">{{y.text}}</option></select></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="addSensitiveMail page-row" ng-hide="ViewOrAdd" style="margin:0;">
+            <div class="panel panel-default org-panel">
+                <div class="panel-heading clearfix">
+                    <span style="font-weight: 700;">{{OpTitle}}</span>
+                    <span id="addgroupbtnbox" class="pull-right right-oprate-btn">
+                        <a ng-click="AddSensitiveMail()" ng-if="op=='add'" class="abtn" href="javascript:void(0);">保存</a>
+                        <a ng-click="ModifySensitiveMail()" ng-if="op=='edit'" class="abtn" href="javascript:void(0);">保存</a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <div class="block orginfo" style="position:relative;">
+                        <div class="first-col" id="first-col" style="width:360px;padding-left:0;padding-right:0;">
+                            <div class="form-group">
+                                <label class="control-label" style="display:block;">名称<span class="required">*</span></label>
+                                <input type="text" ng-model="SensitiveMailName" ng-disabled="op=='edit'" class="form-control" value="" />
+                            </div>
+                            <div class="form-group" style="height:auto;margin-bottom:18px;">
+                                <label class="control-label" style="display:inline-block;float:left">范围<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddObjectLimit()">添加</a></label>
+                                <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
+                                    <table class="Editable" style="width:100%;">
+                                        <tbody>
+                                            <tr ng-repeat="d in ObjectLimits" id="{{d.ObjectID}}">
+                                                <td style="width: 250px;"><span style="width: 250px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;height: 30px;line-height: 30px;">{{d.ObjectName}}</span></td>
+                                                <td style="width: 70px;"><span style="width: 70px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;height: 30px;line-height: 30px;">{{d.TypeName}}</span></td>
+                                                <td><img src="img/icon_close.png" ng-click="removeObjectLimit(d.ObjectID)" style="float:right;" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group" style="clear: both;height:32px;margin-bottom:0;display:none;">
+                                <div class="checkbox" style="line-height: 1.1;width:180px;float:left;">
+                                    <input id="ComplianceSearch" ng-disabled="op=='edit'" style="margin:0;vertical-align:text-top;" ng-model="SensitiveMailType" type="radio" name="SensitiveMailType" value="1" />
+                                    <label for="ComplianceSearch" style="margin:0;padding:0;">小于 10000 用户</label>
+                                </div>
+                                <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:0;float:right;">
+                                    <input id="SearchMailbox" ng-disabled="op=='edit'" style="margin:0;vertical-align:text-top;" ng-model="SensitiveMailType" type="radio" name="SensitiveMailType" value="2" />
+                                    <label for="SearchMailbox" style="margin:0;padding:0;">大于等于 10000 用户</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="last-col" style="padding-right:0;">
+                            <div class="panel panel-default org-panel">
+                                <div class="panel-body" style="padding:0;">
+                                    <div class="block orginfo" style="width: 100%;">
+                                        <div class="form-group clearfix" style="margin-bottom: 0px;">
+                                            <label class="control-label clearfix" style="display:block;">时间段<span class="required">*</span></label>
+                                            <div class="input-group input-group-minimal" style="display:inline-block;margin-bottom:0;">
+                                                <input type="text" placeholder="时间" ng-model="SMailStartTime" ng-time style="width:168px;" class="form-control date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd hh:ii" />
+                                            </div>
+                                            <div id="coo-icon" class="form-group" style="width: 10px; text-align: center; margin-right: 4px; margin-left: 4px;position:absolute;margin-top:7px;display:inline-block;margin-bottom:0;">
+                                                <span class="coo-icon">~</span>
+                                            </div>
+                                            <div class="input-group input-group-minimal" style="display:inline-block;margin-bottom:0;margin-left:20px;">
+                                                <input type="text" placeholder="时间" ng-model="SMailEndTime" ng-time style="width:168px;" class="form-control date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd hh:ii" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group clearfix" style="height:auto">
+                                            <label class="control-label clearfix">关键字<span class="required">*</span></label>
+                                            <textarea ng-model="Keywords" ng-focus="showtips=true;checkTips=true;" ng-blur="showtips=false" class="form-control" placeholder='' style="width: 480px; height: 90px;resize: none;"></textarea>
+                                            <span class="tips" style="width:480px;display:block;margin-top:10px;">
+                                                说明：<br />
+                                            </span>
+                                            <span class="tips" style="width:480px;display:block;margin-top:10px;">
+                                                1.&nbsp;&nbsp;查询关键字模版：<br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询格式：名称(英文):查询值  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：subject:主题 <br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询条件：AND 或 OR(大写) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：body:正文 AND from:user@baosteelgas.com <br />
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可搜索属性：<a target="_blank" style="cursor:pointer" href="https://docs.microsoft.com/zh-cn/exchange/security-and-compliance/in-place-ediscovery/message-properties-and-search-operators#searchable-properties-in-exchange">详见链接</a><br />
+                                            </span>
+                                            <!--<span class="tips" style="width:480px;display:block;margin-top:10px;">
+                                            2.&nbsp;&nbsp;大于等于 10000 用户查询关键字模版：<br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询格式：(名称(英文): "查询值"), <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：(subject:"主题") <br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询条件：AND 或 OR(大写) ，<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：(subject:"主题") AND (from:"user@baosteelgas.com")<br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;针对大于等于 10000 用户的可搜索属性：<a target="_blank" style="cursor:pointer" href="https://docs.microsoft.com/zh-cn/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference">详见链接</a>
+                                        </span>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--添加/编辑-->
+        <div class="modal fade" id="SMail_Modal" tabindex="-1" role="dialog" aria-labelledby="SMailModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">添加</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="form-group" style="width: 100%;height:32px;">
+                                <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
+                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchCompanyTree()">搜索</button>
+                                <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="form-group treeHide">
+                                <ul class="ztree scroll_bar" id="CompanyTree" style="margin: 0; padding:12px; height: 258px; overflow: auto;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" ng-click="AddObjectLimit()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--删除-->
+        <div class="modal fade" id="delSMail_Modal" tabindex="-1" role="dialog" aria-labelledby="delSMailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">删除</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>删除敏感邮件后：</div>
+                                    <div>1. 相关数据会被全部删除并且无法恢复。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelSMail()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--立即执行-->
+        <div class="modal fade" id="ExecuteSMail_Modal" tabindex="-1" role="dialog" aria-labelledby="ExecuteSMailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">立即执行</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>立即执行删除敏感邮件：</div>
+                                    <div>1. 该操作执行时间较长，请耐心等待。</div>
+                                    <div>2. 执行后，所有在范围内符合规则的邮件将会被删除且无法找回。</div>
+                                    <div>3. 该功能需谨慎操作。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="ExecuteSensitiveMail()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

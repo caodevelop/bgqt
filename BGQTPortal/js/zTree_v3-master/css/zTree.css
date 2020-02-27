@@ -1,0 +1,312 @@
+﻿.tree-wrap {
+    width: 20%;
+}
+
+.ztree {
+    color: #333333;
+    background: #FFFFFF;
+    overflow: auto;
+}
+
+    .ztree * {
+        background-color: #FFFFFF;
+    }
+
+    .ztree li a {
+        color: #333333;
+        height: 30px;
+        line-height: 30px;
+        text-decoration: none !important;
+        z-index: -1;
+    }
+
+        .ztree li a.curSelectedNode {
+            background-color: #FDF2E6;
+            color: #333333;
+        }
+
+    .ztree li span.button.ico_open::before, .ztree li span.button.ico_close::before {
+        color: #0163A7;
+    }
+
+    .ztree li span.button {
+        width: 16px;
+        height: 30px;
+        margin-right: 6px;
+    }
+
+        .ztree li span.button.root_open {
+            background: url(../img/treeicon/down.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.org_ico_open, .ztree li span.button.org_ico_close {
+            background: url(../img/treeicon/org.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.root_close {
+            background: url(../img/treeicon/right.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.center_close, .ztree li span.button::before {
+            content: "" !important;
+        }
+
+        .ztree li span.button.center_close, .ztree li span.button.bottom_close {
+            background: url(../img/treeicon/right.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.center_open, .ztree li span.button.bottom_open {
+            background: url(../img/treeicon/down.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.depart_ico_close, .ztree li span.button.depart_ico_docu {
+            background: url(../img/treeicon/icon_ou.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.depart_ico_open {
+            background: url(../img/treeicon/icon_ou.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.group_ico_docu {
+            margin-right: 6px;
+            background: url(../img/treeicon/group.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+        .ztree li span.button.group_ico_open, .ztree li span.button.group_ico_close {
+            background: url(../img/treeicon/group.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+        .ztree li span.button.habgroup_ico_docu {
+            margin-right: 6px;
+            background: url(../img/treeicon/habgroup.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.habgroup_ico_open, .ztree li span.button.habgroup_ico_close {
+            background: url(../img/treeicon/habgroup.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+        .ztree li span.button.Nuser_ico_docu {
+            margin-right: 6px;
+            background: url(../img/treeicon/Nuser.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.Nuser_ico_open, .ztree li span.button.Nuser_ico_close {
+            background: url(../img/treeicon/Nuser.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+        .ztree li span.button.Duser_ico_docu {
+            margin-right: 6px;
+            background: url(../img/treeicon/Duser.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+        .ztree li span.button.Duser_ico_open, .ztree li span.button.Duser_ico_close {
+            background: url(../img/treeicon/Duser.png) no-repeat scroll 0 7px transparent;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+    .ztree li a.user {
+        height: 54px;
+        line-height: 54px;
+    }
+
+        .ztree li a.user span.button {
+            height: 52px;
+            line-height: 52px;
+            width: 44px;
+            margin-right: 12px;
+            vertical-align: top;
+            *vertical-align: middle
+        }
+
+            .ztree li a.user span.button img {
+                width: 36px;
+                margin-right: 10px;
+                height: 36px;
+                margin-top: 14px;
+                border-radius: 50%;
+                object-fit: cover;
+                *vertical-align: middle;
+            }
+
+        .ztree li a.user span.node_name {
+            display: inline-block;
+            margin-top: 14px;
+        }
+
+            .ztree li a.user span.node_name ul {
+                padding: 0;
+                height: 36px;
+                background-color: transparent;
+            }
+
+                .ztree li a.user span.node_name ul li.UNode, .ztree li a.user span.node_name ul li.UNode1 {
+                    line-height: 18px;
+                    background-color: transparent;
+                }
+
+                .ztree li a.user span.node_name ul li.UNode {
+                    color: #333333;
+                }
+
+                .ztree li a.user span.node_name ul li.UNode1 {
+                    color: #999999;
+                }
+
+    .ztree li span.button.DisUser_ico_docu {
+        margin-right: 4px;
+        background: url(../img/treeicon/icon_circle_gray.png) no-repeat scroll right bottom transparent;
+        *vertical-align: middle
+    }
+
+    .ztree li span.button.ExpireUser_ico_docu {
+        margin-right: 4px;
+        background: url(../img/treeicon/icon_circle_red.png) no-repeat scroll right bottom transparent;
+        *vertical-align: middle
+    }
+
+    .ztree li span.button.NothingUser_ico_docu {
+        margin-right: 4px;
+        background: url(../img/treeicon/icon_circle_gold.png) no-repeat scroll right bottom transparent;
+        *vertical-align: middle
+    }
+
+    .ztree li span.button.NormalUser_ico_docu {
+        margin-right: 4px;
+        background: none;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+
+    .ztree li span.button.chk.checkbox_false_part, .ztree li span.button.chk.checkbox_false_part_focus, .ztree li span.button.chk.checkbox_false_full, .ztree li span.button.chk.checkbox_false_full_focus {
+        background: url(../../../img/check_normal.png) no-repeat scroll 0 8px transparent;
+        margin-right: 8px;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+
+    .ztree li span.button.chk.checkbox_true_part, .ztree li span.button.chk.checkbox_true_part_focus, .ztree li span.button.chk.checkbox_true_full, .ztree li span.button.chk.checkbox_true_full_focus {
+        background: url(../../../img/check_checked.png) no-repeat scroll 0 7px transparent;
+        margin-right: 8px;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+
+    .ztree li span.button.chk.checkbox_false_disable, .ztree li span.button.chk.checkbox_false_disable_focus, .ztree li span.button.chk.checkbox_false_disable, .ztree li span.button.chk.checkbox_false_disable_focus {
+        background: url(../../../img/check_normal_disable.png) no-repeat scroll 0 7px transparent;
+        margin-right: 8px;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+
+    .ztree li.userOrgroup span.button.chk.checkbox_false_part, .ztree li.userOrgroup span.button.chk.checkbox_false_part_focus, .ztree li.userOrgroup span.button.chk.checkbox_false_full, .ztree li.userOrgroup span.button.chk.checkbox_false_full_focus {
+        background: url(../../../img/check_normal.png) no-repeat scroll 0 7px transparent;
+        margin-right: 6px;
+        margin-top: 12px;
+        z-index: 999;
+        *vertical-align: middle
+    }
+
+    .ztree li.userOrgroup span.button.chk.checkbox_true_part, .ztree li.userOrgroup span.button.chk.checkbox_true_part_focus, .ztree li.userOrgroup span.button.chk.checkbox_true_full, .ztree li.userOrgroup span.button.chk.checkbox_true_full_focus {
+        background: url(../../../img/check_checked.png) no-repeat scroll 0 7px transparent;
+        margin-right: 6px;
+        margin-top: 12px;
+        z-index: 999;
+        *vertical-align: middle
+    }
+
+    .ztree li.userOrgroup span.button.chk.checkbox_false_disable, .ztree li.userOrgroup span.button.chk.checkbox_false_disable_focus, .ztree li.userOrgroup span.button.chk.checkbox_false_disable, .ztree li.userOrgroup span.button.chk.checkbox_false_disable_focus {
+        background: url(../../../img/check_normal_disable.png) no-repeat scroll 0 7px transparent;
+        margin-right: 6px;
+        margin-top: 12px;
+        z-index: 999;
+        *vertical-align: middle
+    }
+
+div#rMenu {
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    background-color: #ffffff;
+    border: 1px solid #d8d8d8;
+    text-align: left;
+    z-index: 2;
+}
+
+    div#rMenu ul {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+        div#rMenu ul li {
+            padding: 0 20px;
+            cursor: pointer;
+            list-style: none outside none;
+            line-height: 2.5;
+            background-color: #ffffff;
+        }
+
+            div#rMenu ul li:hover {
+                background-color: #0163A7;
+                color: #ffffff;
+            }
+
+#orgTree_1_switch {
+    margin-right: 3px;
+}
+
+#orgTree_1_ico {
+    background-position: 0 6px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+li.userOrgroup {
+    height: 54px;
+    line-height: 54px;
+}
+    li.userOrgroup span.button.switch{
+
+    }
+    li.userOrgroup a, li.userOrgroup a.curSelectedNode {
+        height: 54px;
+        padding: 9px 40px;
+        margin: 0 -40px;
+    }
+    ul.userOrgroup {
+        padding: 0 !important;
+        position: relative;
+        margin-left: 46px !important;
+        margin-top: -28px !important;
+        background-color: transparent;
+    }
+ul.userOrgroup li {
+    height: 18px;
+    line-height: 18px;
+}
+li.userOrgroup a.curSelectedNode ul.userOrgroup li, li.userOrgroup a.curSelectedNode span.userOrgroup img {
+    background-color: #FDF2E6;
+}

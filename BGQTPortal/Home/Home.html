@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar user-info-navbar" role="navigation">
+            <div class="logo"><img src="img/logo.png" style="height:50px;" /></div>
+            <div class="tabName">{{orgName}}</div>
+            <div role="navigation" class="navbar-header pull-right">
+                <div class="checkbox1">
+                    <input id="ckdel" style="display:none" type="checkbox" ng-model="adminSetting" />
+                    <label for="ckdel" style="margin-top:22px;margin-bottom:22px;margin-right:24px;"><img class="nav-user-photo" src="../img/users/system_headphoto.png" style="height:36px;width:36px;border-radius:18px;object-fit:cover;margin-right:10px;" />{{adminName}}</label>
+                    
+                </div>
+            </div>
+        </nav>
+        <div class="content-body" id="containermain" style="overflow:hidden;">
+            <div class="content-left">
+                <div class="sidebar-nav-left">
+                    <div class="subNavBox">
+                        <div class="subNav OrgStructure">组织架构</div>
+                        <ul class="navContent">
+                            <li><a id="nav_Org" ui-sref="Home.Org" ui-sref-opts="{reload:'Home.Org'}">组织与用户</a></li>
+                            <!--<li><a id="nav_HAB" ng-show="RoleHAB==true" ui-sref="Home.HAB" ui-sref-opts="{reload:'Home.HAB'}">HAB 地址簿</a></li>-->
+                            <!--<li><a id="nav_PAG" ng-show="RolePAG==true" ui-sref="Home.PAG" ui-sref-opts="{reload:'Home.PAG'}">公用账户组</a></li>-->
+                            <li><a id="nav_Quit" ng-show="RoleQuit==true" ui-sref="Home.Quit" ui-sref-opts="{reload:'Home.Quit'}">离职人员管理</a></li>
+                            <!--<li><a id="nav_SCG" ng-show="RoleSCG==true" ui-sref="Home.SCG" ui-sref-opts="{reload:'Home.SCG'}">控股静态通讯组</a></li>
+                            <li><a id="nav_SOU" ng-show="RoleSOU==true" ui-sref="Home.SOU" ui-sref-opts="{reload:'Home.SOU'}">同级 OU 管理</a></li>-->
+                        </ul>
+                        <div class="subNav SystemStatistics">系统统计</div>
+                        <ul class="navContent">
+                            <li><a id="nav_NeverLogin" ui-sref="Home.NeverLogin" ui-sref-opts="{reload:'Home.NeverLogin'}">从未登录用户</a></li>
+                            <li><a id="nav_PVP" ui-sref="Home.PVP" ui-sref-opts="{reload:'Home.PVP'}">密码有效期</a></li>
+                            <li><a id="nav_Deactivated" ui-sref="Home.Deactivated" ui-sref-opts="{reload:'Home.Deactivated'}">已停用用户</a></li>
+                            <li><a id="nav_CreateUser" ui-sref="Home.CreateUser" ui-sref-opts="{reload:'Home.CreateUser'}">创建用户时间</a></li>
+                        </ul>
+                        <div class="subNav SystemManagement">系统管理</div>
+                        <ul class="navContent">
+                            <li><a id="nav_RP" ui-sref="Home.RP" ui-sref-opts="{reload:'Home.RP'}">角色与权限</a></li>
+                            <!--<li><a id="nav_MD" ng-show="RoleMD==true" ui-sref="Home.MD" ui-sref-opts="{reload:'Home.MD'}">邮箱数据库</a></li>-->
+                            <li><a id="nav_SM" ng-show="RoleSM==true" ui-sref="Home.SM" ui-sref-opts="{reload:'Home.SM'}">敏感邮件删除</a></li>
+                            <!--<li><a id="nav_MA" ng-show="RoleMA==true" ui-sref="Home.MA" ui-sref-opts="{reload:'Home.MA'}">邮件审批</a></li>-->
+                        </ul>
+                        <div id="nav_Log" class="subNav log" ui-sref="Home.Log" ui-sref-opts="{reload:'Home.Log'}"><a>日志</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-right">
+                <div class="content-right-header">
+                    <!--<div style="height:42px;line-height:42px;padding:0 20px;background-color:#e1e1e5;border-top:1px solid #d8d8d8;border-bottom:1px solid #d8d8d8;display:none;">公告</div>-->
+                    <div class="msgBoxDIV">
+                        <div id="msgBoxDIV" style="margin:0;"></div>
+                        <!--<a class="close_errorTips" href="javascript:void(0);"></a>-->
+                    </div>
+                </div>
+                <div class="scroll_bar" ui-view></div>
+                <div style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+            </div>
+        </div>
+        <div class="fixed-userinfo" ng-hide="adminSetting">
+            <div class="div-basicInfo">
+                <div class="userinfos">
+                    <div class="userinfoImg"><img src="../img/users/system_headphoto.png" /></div>
+                    <div class="userNameandAccount">
+                        <div>{{adminName}}</div>
+                    </div>
+                </div>
+                <div class="usersetting">
+                    <ul>
+                        <li ng-click="loginoutSystem()">注销</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer" style="position:fixed;bottom:0;left:0px;width:100%;height:4px;background:url(../img/bottom-line.png)no-repeat;background-size:cover;z-index:99999"></div>
+        <div class="maskDiv" id="maskDiv" ng-hide="maskDiv" ng-click="closeMenu()"></div>
+        <div class="preloader">
+            <!--<svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+            </svg>-->
+            <img src="../img/progress.gif" />
+        </div>
+    </div>
+</body>
+</html>

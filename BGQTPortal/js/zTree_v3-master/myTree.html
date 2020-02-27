@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title></title>
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">          
+		<link rel="stylesheet" type="text/css" href="css/awesomeStyle/awesome.css"/>
+		<script src="js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.ztree.core.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var zTreeObj;
+		   // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+		   var setting = {};
+		   // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+		   var zNodes = [
+		   {name:"test1", open:true, children:[
+		      {name:"test1_1"}, {name:"test1_2"}]},
+		   {name:"test2", open:true, children:[
+		      {name:"test2_1"}, {name:"test2_2"}]}
+		   ];
+		   $(document).ready(function(){
+		      //zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		   });
+		   var myNodes = {
+		       name:"大地信息",open:true,iconSkin:"org",children:[
+		   			{name:"技术部",open:true,iconSkin:"depart",children:[
+		   				{name:"魏磊磊(jason@betternext.com)"},{name:"曹珊(cs@skype.cn)"},{name:"刘宇(ly@qq.com)"}
+		   			]},
+		   			{name:"研发部",open:true,iconSkin:"depart",children:[
+		   				{name:"马良(mal@emial.com)"},{name:"曹珊(caos@qq.com)"},{name:"刘宇(ly@be.com)"}
+		   			]},
+		   			{name:"财务部",open:true,iconSkin:"depart",children:[
+		   				{name:"张齐全(dylan@btnext.com)"},{name:"袁鹏(pual@betternext.com)"},{name:"其他"}
+		   			]},
+		   			{name:"无指定",open:true,iconSkin:"depart",children:[
+		   				{name:"新员工(newpeople)"}
+		   			]},
+		   			
+		   		]
+		   }
+		   $(document).ready(function(){
+		   	zTreeObj = $.fn.zTree.init($("#treeDemo"),setting,myNodes);
+		   })
+		</script>
+		<style type="text/css">
+			.tree-wrap{width: 20%;}
+            .ztree {
+                color: #333333;
+                background: #FFFFFF;
+            }
+			.ztree *{background-color: #FFFFFF;}
+                .ztree li a {
+                    color: #333333;
+                    margin-bottom: 3px;
+                    text-decoration: none !important;
+                }
+                    .ztree li a.curSelectedNode {
+                        background-color: #d8d8d8;
+                        color: #333333;
+                    }
+                .ztree li span.button.ico_open::before, .ztree li span.button.ico_close::before {
+                    color: #333333;
+                }
+			.ztree li span.button{width: 18px;height: 16px;}	
+			.ztree li span.button.root_open{margin-right:2px; background: url(img/treeicon/down.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.org_ico_open,.ztree li span.button.org_ico_close{margin-right:2px; background: url(img/treeicon/org.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.root_close{margin-right:2px; background: url(img/treeicon/right.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.center_close,.ztree li span.button::before{content: "" !important;}
+			.ztree li span.button.center_close,.ztree li span.button.bottom_close{margin-right:2px; background: url(img/treeicon/right.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.center_open,.ztree li span.button.bottom_open{margin-right:2px; background: url(img/treeicon/down.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.depart_ico_close{margin-right:2px; background: url(img/treeicon/depart.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.depart_ico_open{margin-right:2px; background: url(img/treeicon/depart.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.ico_docu{margin-right:2px; background: url(img/treeicon/user.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+		</style>
+	</head>
+	<body>
+		<div class="tree-wrap">
+			<ul id="treeDemo" class="ztree"></ul>
+		</div>
+	</body>
+</html>

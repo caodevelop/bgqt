@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div style="padding:24px;">
+        <div class="LogTable">
+            <div class="searchBox clearfix" style="line-height:0;" ng-init="GetUserCreateTime(1)">
+                <div style="display:inline-block">
+                    <form role="form" class="form-inline clearfix">
+                        <div class="form-group" style="margin-right: 10px">
+                            <div class="input-group input-group-minimal">
+                                <input type="text" placeholder="时间" ng-model="StartTime" ng-time class="form-control input-group date form_date" data-date="" data-date-format="yyyy/MM/dd" data-link-field="dtp_input2" data-link-format="yyyy/mm/dd" />
+                            </div>
+                        </div>
+                        <div id="coo-icon" class="form-group" style="width: 10px; text-align: center; margin-right: 0px; margin-left: -10px">
+                            <span class="coo-icon">~</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-minimal">
+                                <input type="text" placeholder="时间" ng-model="EndTime" ng-time class="form-control input-group date form_date" data-date="" data-date-format="yyyy/MM/dd" data-link-field="dtp_input2" data-link-format="yyyy/mm/dd" />
+                            </div>
+                        </div>
+                        <div class="form-group margin20">
+                            <input ng-model="Searchstr" type="text" class="form-control" placeholder="账号" />
+                        </div>
+                        <div class="oprate-butons form-group">
+                            <button type="reset" class="btn btn-theme secondary" ng-click="clearSearch()">清除</button>
+                            <button type="button" class="btn btn-theme primary" ng-click="GetUserCreateTime(1)">查询</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="pull-right opright">
+                    <a class="abtn" id="Export" href="javascript:void(0);" ng-click="ExportUserCreateTimeToExcel()">导出</a>
+                </div>
+            </div>
+            <div class="data-fluid">
+                <div class="scroll_bar">
+                    <table class="table dtable lcnp largeTable" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th style="width: 260px">显示名称</th>
+                                <th style="width: 260px">邮箱</th>
+                                <th style="width: 180px">创建时间</th>
+                                <th style="width: auto">最近登录时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in Lists">
+                                <td>{{x.DisplayName}}</td>
+                                <td>{{x.UserAccount}}</td>
+                                <td>{{x.CreateTimeName}}</td>
+                                <td>{{x.LastLoginTimeName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="position:relative;height:48px;margin-bottom:60px;">
+                    <ul uib-pagination total-items="bigTotalItems" items-per-page="pSize" ng-model="currentPage" ng-change="pageChanged(currentPage)" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>
+                    <ul style="width:90px;float:right;margin-top:23px;">
+                        <li><select ng-model="pSize" ng-change="changePageSize()" style="width:90px;background: url(../img/down.png) no-repeat scroll 64px center #fff;"><option ng-repeat="y in PageSizes" value="{{y.value}}">{{y.text}}</option></select></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
