@@ -16,6 +16,7 @@ namespace SyncADControl
     {
         private CBaseDB m_db;
         private CXmlOUList m_cOuList;
+
         private List<string> strNamedOUArray = new List<string>();
         private string strRootOU = string.Empty;
 
