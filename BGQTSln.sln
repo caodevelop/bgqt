@@ -42,7 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncADControl", "SyncADCont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensitiveMailService", "SensitiveMailService\SensitiveMailService.csproj", "{D418BEA0-836E-4711-8D28-618E101038A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigAttatchWeb", "BigAttatchWeb\BigAttatchWeb.csproj", "{B5700C98-2FE7-4153-A5E8-0896A3C9ED36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigAttachWeb", "BigAttatchWeb\BigAttachWeb.csproj", "{B5700C98-2FE7-4153-A5E8-0896A3C9ED36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
