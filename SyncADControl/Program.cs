@@ -16,6 +16,7 @@ namespace SyncADControl
             {
                 SyncADManager sync = new SyncADManager();
                 sync.Load(out error);
+                //test0228
                 if (string.IsNullOrEmpty(error))
                 {
                     Log4netHelper.Info("Sync AD Control Result Succeeded" );
