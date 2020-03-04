@@ -1,0 +1,1 @@
+﻿!function (l) { l.global.debug = 0, l.global.cookieRootPath = "/", l.global.cookieExpire = 30, l.global.remoteBaseUri = "/", l.global.loginUri = "pages/signin.htm", l.global.mainUri = "pages/main.htm", l.global.defaultUri = "../demo.htm", l.global.en = "en-US", l.global.cn = "zh-CN", l.global.defaultLanguage = l.global.cn, l.global.loginNumber = 3 }(window.app);

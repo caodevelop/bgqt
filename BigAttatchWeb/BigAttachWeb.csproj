@@ -45,6 +45,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -68,12 +71,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\main.css" />
+    <Content Include="css\reset.css" />
+    <Content Include="images\btn_question.png" />
+    <Content Include="images\checked.png" />
+    <Content Include="images\close_icon.png" />
+    <Content Include="images\img_error_24.png" />
+    <Content Include="images\img_success_24.png" />
+    <Content Include="images\img_warning_24.png" />
+    <Content Include="images\main_top_icon.png" />
+    <Content Include="images\pause_icon.png" />
+    <Content Include="images\start_icon.png" />
+    <Content Include="images\upload_icon.png" />
+    <Content Include="js\config.js" />
+    <Content Include="js\fileupload.js" />
+    <Content Include="js\libs\app.min.js" />
+    <Content Include="js\libs\filehash.js" />
+    <Content Include="js\libs\jquery-1.11.1.min.js" />
+    <Content Include="js\libs\knockout-3.3.0.js" />
+    <Content Include="js\libs\knockout.mapping-latest.js" />
+    <Content Include="js\libs\ko.custom.extend.js" />
+    <Content Include="js\libs\prompt.js" />
+    <Content Include="js\libs\spark-md5.min.js" />
+    <Content Include="js\loadingLanguage.js" />
+    <Content Include="js\main.js" />
+    <Content Include="lang\zh-CN.js" />
+    <Content Include="Pages\main.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="api\Setting.ashx.cs">
+      <DependentUpon>Setting.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="api\Setting.ashx" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -81,6 +114,20 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{f34299fc-908e-4b84-a8b6-8f6031191350}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBUtility\DBUtility.csproj">
+      <Project>{71546099-a114-4891-b25d-cabb48ca429c}</Project>
+      <Name>DBUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entity\Entity.csproj">
+      <Project>{87cb305a-d409-4a44-9055-4ef619db2c45}</Project>
+      <Name>Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AdminInfo.cs" />
     <Compile Include="BaseListInfo.cs" />
+    <Compile Include="BigAttachInfo.cs" />
     <Compile Include="ErrorCodeInfo.cs" />
     <Compile Include="ExchangeUserInfo.cs" />
     <Compile Include="GroupInfo.cs" />
