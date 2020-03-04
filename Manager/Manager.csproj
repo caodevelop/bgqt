@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigAttachManager.cs" />
     <Compile Include="GroupManager.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="MailAuditManager.cs" />

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BigAttatchWeb.api
+namespace AttachforOutlookWeb.api
 {
     /// <summary>
     /// Summary description for Setting
@@ -40,7 +40,17 @@ namespace BigAttatchWeb.api
                         context.Response.ContentType = "text/plain";
                         strJsonResult = GetGlobalUploadSetting(context);
                         context.Response.Write(strJsonResult);
-                        break;                
+                        break;
+                    case "GetUploadBar":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetUploadBar(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "AutoLogin":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = AutoLogin(context);
+                        context.Response.Write(strJsonResult);
+                        break;
                     default:
                         context.Response.Write(strJsonResult);
                         break;
@@ -81,6 +91,72 @@ namespace BigAttatchWeb.api
             {
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Error("Setting.ashx调用接口GetGlobalUploadSetting异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetUploadBar(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetUploadBar";
+            try
+            {
+                do
+                {
+                    AttachResultInfo resultinfo = new AttachResultInfo();
+                    GetUploadParItem gupi = new GetUploadParItem();
+                    gupi.OutlookFolderID = "";
+                    gupi.StorageID = "";
+                    gupi.StorageRelativePath = "";
+                    gupi.StorageUri = "";
+                    gupi.UserQuota = 2147483648.0;
+                    gupi.UserUsedQuota = 648.0;
+
+                    resultinfo.data = gupi;
+                    string json = JsonConvert.SerializeObject(resultinfo);
+                    strJsonResult = json;
+                    
+                    //{"error":null,"data":{"StorageID":"8522ed80-7edc-4b30-9456-cd8edac0684e","StorageRelativePath":"2020-02-26","StorageUri":"\\\\172.16.6.12\\e","UserQuota":2147483648.0,"UserUsedQuota":357.0,"OutlookFolderID":"230cf621-1011-4921-8896-edd973fbda73"}}
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("Setting.ashx调用接口GetUploadBar异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string AutoLogin(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "AutoLogin";
+            try
+            {
+                do
+                {
+                    HttpCookie myCookie = new HttpCookie("BGQTUserToken");
+                    myCookie["Token"] = Guid.NewGuid().ToString();
+                    myCookie.Expires = DateTime.Now.AddHours(1);
+                    context.Response.Cookies.Add(myCookie);
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("Setting.ashx调用接口AutoLogin异常", context.Request.RawUrl, ex.ToString(), transactionid);
                 LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
             }

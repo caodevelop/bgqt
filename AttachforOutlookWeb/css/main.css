@@ -1,0 +1,2671 @@
+﻿@charset "utf-8";
+
+body {
+    overflow-x: hidden;
+}
+
+/*   头部区域css样式开始    */
+.disNone {
+    display: none;
+}
+
+.float_left {
+    float: left;
+}
+
+.l_main_head {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: #F1F1F1;
+    min-width: 309px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.l_main_head_left {
+    height: 37px;
+    font-size: 14px;
+}
+
+    .l_main_head_left li {
+        float: left;
+    }
+
+.l_main_head_upload {
+    /*min-width: 55px;*/
+    min-width: 1px;
+    display: inline-block;
+    margin-left: 20px;
+    /*color: #666;*/
+    line-height: 40px;
+    height: 37px;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+}
+
+.l_main_head_circle {
+    margin-top: 13px;
+    text-align: center;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    color: #FFF;
+    background-color: #DB4C3F;
+    font-size: 10px;
+    float: right;
+    display: none;
+    margin-left: 2px;
+}
+
+
+.main_border_hide {
+    border-bottom-width: 0;
+}
+
+.l_main_icon_test ul li.l_main_menu_left {
+    border-left: 5px solid #0173C7;
+}
+
+.l_main_head_share,
+.l_main_head_link,
+.l_main_head_recycle,
+.l_main_head_setting {
+    /*min-width: 55px;*/
+    min-width: 1px;
+    /*margin-left: 10px;*/
+    margin-left: 20px;
+    line-height: 40px;
+    height: 37px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.l_main_head_link,
+.l_main_head_setting,
+.l_main_head_recycle {
+    display: none;
+}
+
+.l_main_head ul li {
+    display: inline-block;
+    list-style-type: none;
+}
+
+.l_main_head_underline {
+    width: 60px;
+    height: 3px;
+    background-color: #0173C7;
+    margin-left: 20px;
+}
+
+.l_main_head_icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 40px;
+    width: 40px;
+    background: url(../images/main_top_icon.png) no-repeat center center;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.l_main_icon_test {
+    width: 95px;
+    position: absolute;
+    top: 0;
+    right: 4px;
+    padding-top: 40px;
+    z-index: 99;
+    display: none;
+}
+
+    .l_main_icon_test ul {
+        width: 100%;
+        border: 2px solid #ccc;
+        background-color: #ffffff;
+    }
+
+        .l_main_icon_test ul li {
+            display: none;
+            padding-left: 10px;
+            line-height: 25px;
+            height: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            border-left: 5px solid transparent;
+        }
+
+#m_signOut {
+    display: block;
+}
+
+.l_main_icon_test ul li:hover {
+    background-color: #F1F1F1;
+}
+
+/*   内容区域css样式开始    */
+
+/*上传文件区域样式开始*/
+
+.m_upload {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 40px;
+    min-height: 460px;
+    overflow-x: hidden;
+    min-width: 269px;
+    display: none;
+}
+
+.m_upload_item {
+    padding-left: 20px;
+    background-color: #FFF;
+    height: 50px;
+    font-size: 20px;
+    color: #666;
+    line-height: 60px;
+}
+
+.m_upload_dragarea {
+    /*padding-top: 20px;*/
+    background-color: #F1F1F1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50px;
+    bottom: 110px;
+}
+
+.m_upload_h5 {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-top: 20px;
+    display: none;
+}
+
+.m_f_btnUpload img {
+    width: 309px;
+}
+
+.m_f_btnUpload span {
+    font-size: 12px;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    color: #666666;
+    /*margin-top: -15px;*/
+}
+
+.m_upload_area1 {
+    width: 200px;
+    margin-left: 60px;
+    height: 30px;
+}
+
+.m_upload_btn {
+    margin: 0 auto;
+    width: 120px;
+    height: 30px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 30px;
+    border-radius: 15px;
+    background-color: #0173C7;
+    color: #FFF;
+}
+
+.m_upload_area2,
+.m_upload_area3 {
+    width: 200px;
+    height: 30px;
+    margin-left: 60px;
+    margin-top: 15px;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    color: #666;
+}
+
+.m_upload_btn:hover {
+    cursor: pointer;
+}
+
+/*****上传文件区域样式结束*****/
+
+/****文件队列区域样式开始****/
+
+.m_upload_array {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    background-color: #FFF;
+}
+
+.m_array_item {
+    margin-left: 20px;
+    height: 50px;
+    font-size: 20px;
+    line-height: 60px;
+    color: #666;
+}
+
+.m_array_wrap {
+    max-height: 150px;
+    padding-right: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.noUploadFile {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 3px;
+    margin-bottom: 13px;
+    text-align: center;
+}
+
+.m_array_box {
+    width: 100%;
+    height: 50px;
+    margin-left: 20px;
+    font-size: 12px;
+}
+
+.m_array_top {
+    height: 20px;
+    font-size: 12px;
+}
+
+.m_array_top1 {
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+    width: 15px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+}
+
+.upload_checkbox {
+    display: block;
+    float: left;
+    margin-top: 3px;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.upload_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    height: 13px;
+}
+
+.upload_text_content {
+    background: url("../images/checked.png") no-repeat center;
+}
+
+.upFileCheckBox {
+    display: none;
+}
+
+.array_top1_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+.m_array_top2 {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url(../images/upload_icon.png) no-repeat top left;
+}
+
+.m_array_top3 {
+    margin-left: 10px;
+    display: inline-block;
+    color: #333;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.m_array_mid {
+    color: #666;
+    height: 20px;
+    width: 100%;
+    padding-left: 25px;
+    min-width: 279px;
+    font-size: 12px;
+}
+
+.m_array_mid1 {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-left: -5px;
+    cursor: pointer;
+}
+
+.m_array_mid1_start {
+    background: url(../images/pause_icon.png) no-repeat top left;
+}
+
+.m_array_mid1_pause {
+    background: url(../images/start_icon.png) no-repeat top left;
+}
+
+.m_array_mid2 {
+    margin-left: 10px;
+    width: 15px;
+    height: 15px;
+    background: url(../images/close_icon.png) no-repeat top left;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.m_array_mid_right {
+    float: right;
+}
+
+.m_array_mid3 {
+    margin-right: 30px;
+    display: inline-block;
+    width: 35px;
+}
+
+.m_array_mid4 {
+    margin-right: 30px;
+    display: inline-block;
+}
+
+.m_array_bottom {
+    margin-bottom: 5px;
+    width: 100%;
+    height: 5px;
+    background-color: #CCCCCC;
+}
+
+.m_array_bottom_progress {
+    width: 0;
+    height: 5px;
+    background: #0173C7;
+}
+
+/****文件队列区域样式结束****/
+
+/*****main页面footer区域开始*****/
+
+.l_main_footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    background-color: #F1F1F1;
+}
+
+.m_footer_btn {
+    min-width: 289px;
+    font-size: 0;
+}
+
+.m_footer_btn_left,
+.m_footer_btn_right {
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 15px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+    .m_footer_btn_left:hover,
+    .m_footer_btn_right:hover {
+        cursor: pointer;
+    }
+
+/*****main页面footer区域结束*****/
+
+/* main2页面分享文件样式开始*/
+
+.m_share_wrap {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    min-width: 269px;
+    background-color: #ffffff;
+    display: none;
+}
+
+.m_share {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 0;
+    min-width: 269px;
+    height: 90px;
+    margin-right: 20px;
+}
+
+    .m_share p {
+        height: 50px;
+        font-size: 20px;
+        color: #666;
+        line-height: 60px;
+        display: inline-block;
+    }
+
+.m_share_refresh {
+    padding-left: 16px;
+    margin-top: 24px;
+    color: #0173C7;
+    font-size: 12px;
+    text-align: right;
+    float: right;
+    background: url(../images/share_refresh_icon.png) no-repeat center left;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.m_search_delete_box {
+    z-index: 5;
+    width: 100%;
+    background-color: #F1F1F1;
+    height: 30px;
+    min-width: 269px;
+    margin-top: 5px;
+    position: absolute;
+    top: 82px;
+}
+
+.delete_box_left {
+    float: left;
+    text-align: left;
+    line-height: 30px;
+    height: 30px;
+    color: #0072C6;
+    margin-left: 20px;
+    padding: 0 5px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.delete_box_right {
+    float: right;
+    text-align: right;
+    line-height: 30px;
+    height: 30px;
+    color: #0072C6;
+    margin-right: 16px;
+    padding: 0 5px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+    .delete_box_right:hover,
+    .delete_box_left:hover {
+        cursor: pointer;
+    }
+
+.m_share_search {
+    width: 100%;
+    height: 30px;
+    position: relative;
+}
+
+.m_share_text {
+    width: 99.5%;
+    height: 30px;
+    padding-left: 5px;
+    border: 1px solid #ABABAB;
+    line-height: 30px;
+}
+
+.input_click {
+    border: 1px solid #71AFE5;
+    background-color: #E0F4FF;
+}
+
+.searchBtn {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    position: absolute;
+    right: -5px;
+    top: 0;
+    background: url(../images/share_btn_icon.png) no-repeat center center;
+    cursor: pointer;
+}
+
+/****搜索结果区域样式开始****/
+
+.m_shareFiles_container {
+    position: absolute;
+    top: 87px;
+    left: 20px;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+    color: #333;
+    padding-right: 20px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.m_search_result_item {
+    height: 30px;
+    min-width: 269px;
+    display: none;
+}
+
+.research,
+.noSearch,
+.noLinkSearch {
+    font-size: 12px;
+    margin-top: 3px;
+    padding: 0 2px;
+    color: #999999;
+    text-align: center;
+    display: none;
+}
+
+.noLinkSearch {
+    position: absolute;
+    top: 92px;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+    margin-top: 3px;
+    padding: 0 2px;
+    color: #999999;
+    text-align: center;
+    display: none;
+}
+
+.m_search_result_item span {
+    float: left;
+}
+
+.m_search_result_item div {
+    margin-top: 10px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.search_icon {
+    background: url(../images/result_drop_down.png) no-repeat center left;
+    width: 20px;
+    height: 21px;
+    display: inline-block;
+    float: left;
+}
+
+.search_title_text {
+    max-width: 32px;
+    /*max-width: 60px;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+}
+
+.m_search_result_clear {
+    width: 24px;
+    /*width: 45px;*/
+    text-align: right;
+    margin-top: 10px;
+    float: right;
+    height: 20px;
+    color: #0072C6;
+    cursor: pointer;
+}
+
+.m_search_result_box {
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    min-width: 472px;
+    position: relative;
+}
+
+    .m_search_result_box:hover {
+        background: #E0F4FF;
+    }
+
+.m_search_result_right {
+    float: right;
+    position: relative;
+}
+
+.search_box_more {
+    position: relative;
+    float: left;
+    width: 24px;
+    height: 30px;
+    text-align: center;
+    font-size: 26px;
+    line-height: 14px;
+    color: #ffffff;
+}
+
+    .search_box_more:hover {
+        background-color: #71AFE5;
+        cursor: pointer;
+    }
+
+.m_search_result_second {
+    display: inline-block;
+    min-width: 80px;
+    height: 30px;
+    text-align: left;
+    float: left;
+    margin-left: 40px;
+}
+
+.m_recycle_result_second {
+    display: inline-block;
+    min-width: 185px;
+    height: 30px;
+    text-align: left;
+    float: left;
+    margin-left: 40px;
+}
+
+.m_search_result_third {
+    margin-left: 10px;
+    text-align: right;
+    display: inline-block;
+    float: left;
+    min-width: 66px;
+}
+
+.m_search_result_checkbox {
+    display: block;
+    margin-left: 20px;
+    float: left;
+    margin-top: 8px;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+}
+
+.search_result_checkbox_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+/****搜索结果区域样式结束****/
+
+/****我的文件区域样式开始****/
+
+.m_file_item {
+    height: 30px;
+    min-width: 274px;
+}
+
+    .m_file_item div {
+        font-size: 12px;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    .m_file_item i {
+        background: url(../images/result_drop_down.png) no-repeat center left;
+        display: inline-block;
+        width: 20px;
+        height: 21px;
+        float: left;
+    }
+
+.m_file_checkAll {
+    display: none;
+    float: left;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.file_checkAll_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+.m_shareFiles_container .icon_showtoggle {
+    background: url(../images/result_drop_down2.png) no-repeat center left;
+}
+
+.m_file_item .m_file_order {
+    font-size: 12px;
+    text-align: left;
+    margin-top: 10px;
+    height: 20px;
+    float: right;
+}
+
+.m_file_order select,
+.adShareSeleteItem,
+.language_change,
+.shareLink_filterFile {
+    font-size: 12px;
+    border: 1px solid #999999;
+    cursor: pointer;
+}
+
+    .m_file_order select::-ms-expand,
+    .adShareSeleteItem::-ms-expand,
+    .language_change::-ms-expand,
+    .shareLink_filterFile::-ms-expand {
+        border: none;
+        background: none;
+    }
+
+.m_file_wrap {
+    margin-top: 1px;
+}
+
+.myfiles,
+.myRecycleFiles {
+    font-size: 12px;
+    margin-top: 3px;
+    padding: 0 2px;
+    color: #999999;
+    text-align: center;
+    display: none;
+}
+
+.loading_moreFiles {
+    height: 30px;
+    line-height: 30px;
+    background-color: #F1F1F1;
+    text-align: center;
+    font-size: 12px;
+    color: #999999;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: none;
+}
+
+.m_file_box {
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    min-width: 472px;
+    position: relative;
+}
+
+.m_recycle_box {
+    min-width: 577px;
+}
+
+.m_file_box p:hover,
+.m_search_result_box p:hover {
+    cursor: pointer;
+}
+
+.m_file_box:hover {
+    background: #E0F4FF;
+}
+
+    .m_file_box:hover .m_file_more {
+        color: #71AFE5;
+    }
+
+        .m_file_box:hover .m_file_more:hover {
+            color: #ffffff;
+        }
+
+    .m_file_box:hover .search_box_more {
+        color: #71AFE5;
+    }
+
+        .m_file_box:hover .search_box_more:hover {
+            color: #ffffff;
+        }
+
+    .m_file_box:hover .shareLink_file_more {
+        color: #71AFE5;
+    }
+
+        .m_file_box:hover .shareLink_file_more:hover {
+            color: #ffffff;
+        }
+
+.m_file_checkbox {
+    display: block;
+    margin-left: 20px;
+    float: left;
+    margin-top: 8px;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+}
+
+.file_checkbox_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+/*file icon begin*/
+.folder {
+    background: url('../images/filespic.png') no-repeat 0 0;
+}
+
+.sFolder {
+    background: url('../images/filespic.png') no-repeat -16px 0;
+}
+
+.fileJpg {
+    background: url('../images/filespic.png') no-repeat 0 -16px
+}
+
+.fileTxt {
+    background: url('../images/filespic.png') no-repeat -32px -16px;
+}
+
+.fileRar {
+    background: url('../images/filespic.png') no-repeat -64px -16px;
+}
+
+.fileZip {
+    background: url('../images/filespic.png') no-repeat -48px -16px;
+}
+
+.fileFile {
+    background: url('../images/filespic.png') no-repeat -17px -16px;
+}
+
+.fileMp3 {
+    background: url('../images/filespic.png') no-repeat -112px -16px;
+}
+
+.fileMp4 {
+    background: url('../images/filespic.png') no-repeat -96px -16px;
+}
+
+.fileDoc {
+    background: url('../images/filespic.png') no-repeat -32px 0;
+}
+
+.fileExcel {
+    background: url('../images/filespic.png') no-repeat -48px 0;
+}
+
+.filePPT {
+    background: url('../images/filespic.png') no-repeat -64px 0;
+}
+
+.fileVsd {
+    background: url('../images/filespic.png') no-repeat -112px 0;
+}
+
+.filePdf {
+    background: url('../images/filespic.png') no-repeat -80px -16px;
+}
+
+.fileProject {
+    background: url('../images/filespic.png') no-repeat -96px 0;
+}
+
+.m_file_name {
+    float: left;
+    position: absolute;
+    left: 38px;
+    right: 220px;
+}
+
+.m_file_box .m_recycle_name {
+    float: left;
+    position: absolute;
+    left: 38px;
+    right: 325px;
+}
+
+.m_file_name span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-top: 7px;
+    float: left;
+    margin-right: 4px;
+}
+
+.m_file_name p,
+.shareLink_file_name p {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.m_file_name input,
+.shareLink_file_name input {
+    width: 78px;
+    height: 20px;
+    border: 1px solid #444444;
+    background: #ffffff;
+    float: left;
+    margin-top: 5px;
+}
+
+.shareLink_file_name input {
+    width: 140px;
+}
+
+.m_file_name .nameSuffix {
+    display: inline-block;
+    margin-left: 3px;
+    margin-right: 4px;
+    float: left;
+    margin-top: 0;
+    font-style: normal;
+}
+
+.m_file_name .renameOk,
+.m_file_name .renameCancel,
+.shareLink_file_name .renameOk,
+.shareLink_file_name .renameCancel {
+    display: inline-block;
+    margin-left: 3px;
+    height: 30px;
+    width: 24px;
+    border: none;
+    float: left;
+    margin-top: 0;
+}
+
+.renameOk {
+    background: url('../images/btn_ok.png') no-repeat center center;
+}
+
+.renameCancel {
+    background: url('../images/btn_cancel.png') no-repeat center center;
+}
+
+.renameOk:hover {
+    background: url('../images/btn_ok_hover.png') no-repeat center center;
+    background-color: #71AFE5;
+}
+
+.renameCancel:hover {
+    background: url('../images/btn_cancel_hover.png') no-repeat center center;
+    background-color: #71AFE5;
+}
+
+.m_file_right {
+    float: right;
+    position: relative;
+}
+
+.m_file_more {
+    position: relative;
+    float: left;
+    width: 24px;
+    height: 30px;
+    text-align: center;
+    font-size: 26px;
+    line-height: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+    .m_file_more:hover {
+        background-color: #71AFE5;
+        color: #ffffff;
+    }
+
+.m_file_option {
+    position: absolute;
+    top: 0;
+    left: -53px;
+    width: 77px;
+    height: 60px;
+    display: none;
+    z-index: 1;
+}
+
+.m_file_option_more {
+    width: 73px;
+    height: 84px;
+    background-color: #FFF;
+    border: 2px solid #71AFE5;
+    position: absolute;
+}
+
+.m_recycle_option_more {
+    width: 73px;
+    height: 56px;
+    background-color: #FFF;
+    border: 2px solid #71AFE5;
+    position: absolute;
+}
+
+.m_file_option:hover {
+    display: block;
+}
+
+.m_file_download,
+.m_file_rename,
+.m_file_delete,
+.m_recycle_recovery,
+.m_recycle_delete {
+    height: 28px;
+    padding-left: 10px;
+    font-size: 12px;
+    line-height: 28px;
+    color: #000;
+    z-index: 9999;
+}
+
+    .m_file_download a {
+        display: inline-block;
+        width: 100%;
+        height: 28px;
+        font-size: 12px;
+        line-height: 28px;
+        color: #000;
+        z-index: 9999;
+        text-decoration: none;
+    }
+
+    .m_file_download:hover,
+    .m_file_rename:hover,
+    .m_file_delete:hover,
+    .m_recycle_recovery:hover,
+    .m_recycle_delete:hover {
+        cursor: pointer;
+        background-color: #E0F4FF;
+    }
+
+.m_file_second {
+    display: inline-block;
+    min-width: 80px;
+    height: 30px;
+    text-align: left;
+    float: left;
+    margin-left: 40px;
+}
+
+.m_file_third {
+    margin-left: 10px;
+    text-align: right;
+    display: inline-block;
+    float: left;
+    min-width: 66px;
+}
+
+.list_background {
+    background: #E0F4FF;
+}
+
+.fileBox_checked {
+    background-color: #E0F4FF;
+}
+
+.more_checked {
+    background-color: #71AFE5;
+    color: #ffffff !important;
+}
+
+/****我的文件区域样式结束****/
+
+/****遮罩层样式开始****/
+
+.l_main_mask {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #777;
+    z-index: 100;
+    filter: alpha(opacity=60);
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    display: none;
+}
+
+.m_main_advancedShare {
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+    .m_main_advancedShare div {
+        margin-bottom: 10px;
+    }
+
+.m_advancedShare_title {
+    margin-top: 10px;
+}
+
+    .m_advancedShare_title p {
+        font-size: 16px;
+        color: #666666;
+        display: inline-block;
+        padding-left: 20px;
+    }
+
+    .m_advancedShare_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        position: absolute;
+        right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+.m_advancedShare_identity {
+    padding-left: 20px;
+}
+
+.advancedShare_input {
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
+.advanced_checkbox {
+    display: block;
+    float: left;
+    margin-top: 1px;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+}
+
+.advanced_checkbox_disable {
+    background-color: #CCCCCC !important;
+}
+
+.advanced_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+.m_advancedShare_code {
+    min-width: 289px;
+    padding-left: 20px;
+}
+
+    .m_advancedShare_code p {
+        float: left;
+    }
+
+    .m_advancedShare_code .code_input {
+        border: 1px solid #999999;
+        width: 50px;
+        height: 16px;
+        line-height: 16px;
+        text-align: center;
+        margin: 0 5px 0 3px;
+    }
+
+.m_advancedShare_code {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    .m_advancedShare_code span {
+        cursor: pointer;
+        color: #0072C6;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .m_advancedShare_code .disableSpan {
+        color: #CCCCCC;
+    }
+
+.m_advancedShare_shareTime img {
+    position: relative;
+    top: -2px;
+}
+
+.m_advancedShare_shareTime p {
+    float: left;
+    margin-right: 5px;
+    padding-left: 20px;
+}
+
+.m_advancedShare_shareTime #adShareSeleteItem {
+    display: inline-block;
+    height: 20px;
+}
+
+.m_advancedShare_shareTime select {
+    border: 1px solid #999999;
+}
+
+.m_advancedShare_btn {
+    min-width: 289px;
+    height: 60px;
+    font-size: 0;
+    padding-left: 20px;
+}
+
+.advancedShare_left,
+.advancedShare_right {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 20px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #0173C7;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.advancedShare_share_ok_disable {
+    background-color: #CCCCCC;
+}
+
+/****遮罩层样式结束****/
+
+/****批量删除样式开始****/
+.m_main_batchDelete {
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+    .m_main_batchDelete div {
+        margin-bottom: 10px;
+    }
+
+.m_batchDelete_title {
+    margin-top: 10px;
+}
+
+    .m_batchDelete_title p {
+        font-size: 16px;
+        color: #666666;
+        display: inline-block;
+        padding-left: 20px;
+    }
+
+    .m_batchDelete_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        position: absolute;
+        right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+.m_main_batchDelete .m_batchDelete_content {
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.m_batchDelete_btn {
+    min-width: 289px;
+    height: 60px;
+    font-size: 0;
+    padding-left: 20px;
+}
+
+.batchDelete_left,
+.batchDelete_right {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 20px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/****批量删除样式结束****/
+
+/****清空回车站样式开始****/
+.m_main_emptyRecycle {
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+    .m_main_emptyRecycle div {
+        margin-bottom: 10px;
+    }
+
+.m_emptyRecycle_title {
+    margin-top: 10px;
+}
+
+    .m_emptyRecycle_title p {
+        font-size: 16px;
+        color: #666666;
+        display: inline-block;
+        padding-left: 20px;
+    }
+
+    .m_emptyRecycle_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        position: absolute;
+        right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+.m_main_emptyRecycle .m_emptyRecycle_content {
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.m_emptyRecycle_btn {
+    min-width: 289px;
+    height: 60px;
+    font-size: 0;
+    padding-left: 20px;
+}
+
+.emptyRecycle_left,
+.emptyRecycle_right {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 20px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/****清空回车站样式结束****/
+
+/****恢复文件样式开始****/
+.m_main_recoverRecycle {
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+    .m_main_recoverRecycle div {
+        margin-bottom: 10px;
+    }
+
+.m_recoverRecycle_title {
+    margin-top: 10px;
+}
+
+    .m_recoverRecycle_title p {
+        font-size: 16px;
+        color: #666666;
+        display: inline-block;
+        padding-left: 20px;
+    }
+
+    .m_recoverRecycle_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        position: absolute;
+        right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+.m_main_recoverRecycle .m_recoverRecycle_content {
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.m_recoverRecycle_btn {
+    min-width: 289px;
+    height: 60px;
+    font-size: 0;
+    padding-left: 20px;
+}
+
+.recoverRecycle_left,
+.recoverRecycle_right {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 20px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/****恢复文件样式结束****/
+
+/****回收站批量删除样式开始****/
+.m_main_deleteRecycle {
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+    .m_main_deleteRecycle div {
+        margin-bottom: 10px;
+    }
+
+.m_deleteRecycle_title {
+    margin-top: 10px;
+}
+
+    .m_deleteRecycle_title p {
+        font-size: 16px;
+        color: #666666;
+        display: inline-block;
+        padding-left: 20px;
+    }
+
+    .m_deleteRecycle_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        position: absolute;
+        right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+.m_main_deleteRecycle .m_deleteRecycle_content {
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.m_deleteRecycle_btn {
+    min-width: 289px;
+    height: 60px;
+    font-size: 0;
+    padding-left: 20px;
+}
+
+.deleteRecycle_left,
+.deleteRecycle_right {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 20px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/****回收站批量删除样式结束****/
+
+/****撤销分享样式开始****/
+.m_main_cancelShareLink {
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+    .m_main_cancelShareLink div {
+        margin-bottom: 10px;
+    }
+
+.m_cancelShareLink_title {
+    margin-top: 10px;
+}
+
+    .m_cancelShareLink_title p {
+        font-size: 16px;
+        color: #666666;
+        display: inline-block;
+        padding-left: 20px;
+    }
+
+    .m_cancelShareLink_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        position: absolute;
+        right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+.m_main_cancelShareLink .m_cancelShareLink_content {
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.m_cancelShareLink_btn {
+    min-width: 289px;
+    height: 60px;
+    font-size: 0;
+    padding-left: 20px;
+}
+
+.cancelShareLink_left,
+.cancelShareLink_right {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 20px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/****撤销分享样式结束****/
+
+
+.a_f_s_d_Time {
+    position: relative;
+    padding-left: 2px;
+    border: 1px solid #999999;
+    width: 80px;
+    height: 18px;
+    line-height: 16px;
+    margin: 0 5px 0 3px;
+    /*background: url(../images/date.jpg) no-repeat right center;*/
+}
+
+/***SimpleCalendar begin***/
+.simpleCalendar {
+    width: 180px;
+    height: 175px;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+.simpleMonthViewTitle {
+    width: 100%;
+    height: 23px;
+    overflow: hidden;
+    table-layout: fixed;
+}
+
+.simpleMonthViewTitleBtn {
+    width: 19px;
+}
+
+.simpleMonthViewTitleBtnLeft {
+    background: url("../images/simple_title_left.png") no-repeat;
+    height: 23px;
+    cursor: pointer;
+}
+
+.simpleMonthViewTitleBtnRight {
+    background: url("../images/simple_title_right.png") no-repeat;
+    height: 23px;
+    cursor: pointer;
+}
+
+.simpleMonthViewTitleText {
+    text-align: center;
+    height: 23px;
+    line-height: 23px;
+}
+
+.simpleMonthView {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+    .simpleMonthView td {
+        height: 21px;
+        width: 26px;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+        .simpleMonthView td > div {
+            text-align: center;
+        }
+
+.simpleCalendarToday {
+    background-color: #0072C6;
+    color: #ffffff;
+}
+
+.simpleCalendarCurMonth {
+    background-color: #CCEBF7;
+}
+
+/***SimpleCalendar end***/
+
+/***Calendar Choose begin***/
+.calendarchoose {
+    width: 200px;
+    border: 1px solid #eee;
+    height: 216px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 1001;
+    background-color: #FFFFFF;
+}
+
+.calendarchoosefooter {
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: -5px;
+    height: 19px;
+}
+
+    .calendarchoosefooter button {
+        margin-right: 10px;
+    }
+
+/***Calendar Choose end***/
+
+/***Prompt begin***/
+.promptMain {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 30px;
+    background-color: #FFFFCC;
+    z-index: 111;
+}
+
+.promptIcon {
+    position: absolute;
+    left: 0;
+    width: 30px;
+    height: 30px;
+}
+
+.promptClose {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.promptText {
+    position: absolute;
+    left: 35px;
+    right: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/***Prompt end***/
+
+.m_main_settings {
+    /*width: 260px;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 101;
+    position: fixed;
+    right: -260px;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;*/
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 40px;
+    min-height: 460px;
+    overflow-x: hidden;
+    min-width: 310px;
+    background-color: #ffffff;
+    display: none;
+    z-index: 9;
+}
+
+.m_settings_title {
+    margin-top: 10px;
+    padding-left: 20px;
+    overflow: hidden;
+    font-size: 0;
+}
+
+    .m_settings_title p {
+        font-size: 20px;
+        color: #666;
+        display: inline-block;
+    }
+
+        .m_settings_title p.userId {
+            display: inline-block;
+            width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: top;
+            white-space: nowrap;
+            cursor: default;
+        }
+
+    .m_settings_title span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../images/close_icon.png) no-repeat top left;
+        float: right;
+        margin-right: 20px;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+
+.setting_space_title,
+.setting_language_title,
+.setting_link_title {
+    font-size: 20px;
+    color: #666666;
+    display: inline-block;
+    font-style: normal;
+    height: 50px;
+    line-height: 60px;
+}
+
+    .setting_space_title span {
+        float: left;
+    }
+
+    .setting_space_title .userId {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 130px;
+        display: inline-block;
+    }
+
+.m_setting_space {
+    padding-left: 20px;
+}
+
+.setting_space_round {
+    margin-top: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.space_round_left {
+    width: 100px;
+    height: 200px;
+    border-radius: 100px 0 0 100px;
+    background-color: #F1F1F1;
+    float: left;
+}
+
+.space_round_right {
+    width: 100px;
+    height: 200px;
+    border-radius: 0px 100px 100px 0;
+    background-color: #0173C7;
+    float: left;
+}
+
+.space_round_top {
+    width: 100px;
+    height: 200px;
+    border-radius: 0px 100px 100px 0;
+    background-color: #F1F1F1;
+    position: absolute;
+    top: 0;
+    left: 100px;
+    transform-origin: center left;
+    -ms-transform-origin: center left;
+    /*transition: transform 0.7s linear;*/
+}
+
+.space_round_top1 {
+    width: 100px;
+    height: 200px;
+    border-radius: 100px 0 0 100px;
+    background-color: #0173C7;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: center right;
+    -ms-transform-origin: center right;
+    /*transition: transform 0.7s linear;*/
+}
+
+.space_round_middle {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    background-color: #F1F1F1;
+    position: absolute;
+    top: 80px;
+    left: 80px;
+    z-index: 10;
+    line-height: 40px;
+    text-align: center;
+    color: #0173c7;
+}
+
+.m_setting_language {
+    padding-left: 20px;
+    overflow: hidden;
+}
+
+    .m_setting_language .setting_lang {
+        overflow: hidden;
+    }
+
+    .m_setting_language select {
+        float: left;
+        width: 120px;
+        height: 20px;
+    }
+
+.language_btn {
+    float: left;
+    display: inline-block;
+    margin-left: 20px;
+    height: 20px;
+    line-height: 20px;
+    width: 60px;
+    background-color: #ccc;
+    color: #FFF;
+    font-size: 14px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.uploading_title {
+    margin-top: 10px;
+    color: #FF6767;
+    display: none;
+    width: 220px;
+}
+
+.roundRed_color {
+    color: #cc3300;
+}
+
+.roundRed_bg {
+    background-color: #cc3300;
+}
+
+.roundBlue_color {
+    color: #0173c7;
+}
+
+.roundBlue_bg {
+    background-color: #0173c7;
+}
+
+.dragClass {
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+    -moz-opacity: 0.7;
+}
+
+/* 回收站区域样式开始 */
+.m_recycle_container {
+    position: absolute;
+    top: 87px;
+    left: 20px;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+    color: #333;
+    padding-right: 20px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+    .m_recycle_container .icon_showtoggle {
+        background: url(../images/result_drop_down2.png) no-repeat center left;
+    }
+
+.m_recycle_wrap {
+    margin-top: 1px;
+}
+
+.m_recycle {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 0;
+    min-width: 269px;
+    height: 90px;
+    margin-right: 20px;
+}
+
+    .m_recycle p {
+        height: 50px;
+        font-size: 20px;
+        color: #666;
+        line-height: 60px;
+        display: inline-block;
+    }
+
+.m_recycleBin_wrap {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    min-width: 269px;
+    background-color: #ffffff;
+    display: none;
+    z-index: 9;
+}
+
+.m_recycle_search {
+    width: 100%;
+    height: 30px;
+    position: relative;
+}
+
+.m_recycle_text {
+    width: 99.5%;
+    height: 30px;
+    padding-left: 5px;
+    border: 1px solid #ABABAB;
+    line-height: 30px;
+}
+
+.recycleSearchBtn {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    position: absolute;
+    right: -5px;
+    top: 0;
+    background: url(../images/share_btn_icon.png) no-repeat center center;
+    cursor: pointer;
+}
+
+.m_recycle_empty {
+    padding-left: 18px;
+    margin-top: 24px;
+    color: #0173C7;
+    font-size: 12px;
+    margin-right: 8px;
+    text-align: right;
+    float: right;
+    background: url(../images/recycle_icon.png) no-repeat center left;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.m_recycle_refresh {
+    padding-left: 16px;
+    margin-top: 24px;
+    color: #0173C7;
+    font-size: 12px;
+    text-align: right;
+    float: right;
+    background: url(../images/share_refresh_icon.png) no-repeat center left;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.input_click {
+    border: 1px solid #71AFE5;
+    background-color: #E0F4FF;
+}
+
+.noSearch {
+    font-size: 12px;
+    margin-top: 3px;
+    padding: 0 2px;
+    color: #999999;
+    text-align: center;
+    display: none;
+}
+
+.recycleSearch_title_text {
+    max-width: 32px;
+    /*max-width: 60px;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+}
+
+.m_recycle_result_clear {
+    width: 24px;
+    /*width: 45px;*/
+    text-align: right;
+    margin-top: 10px;
+    float: right;
+    height: 20px;
+    color: #0072C6;
+    cursor: pointer;
+}
+
+.recycle_searchIcon,
+.recycle_fileIcon {
+    background: url(../images/result_drop_down.png) no-repeat center left;
+    width: 20px;
+    height: 21px;
+    display: inline-block;
+    float: left;
+}
+
+.m_recycle_checkAll {
+    display: none;
+    float: left;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.recycle_checkAll_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+
+/* 回收站区域样式结束 */
+
+/* 分享链接区域样式开始 */
+
+.m_shareLink_wrap {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    /*min-width: 269px;*/
+    min-width: 309px;
+    background-color: #ffffff;
+    display: none;
+    z-index: 9;
+}
+
+.m_shareLink {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 0;
+    min-width: 269px;
+    /*height: 90px;*/
+    margin-right: 20px;
+}
+
+    .m_shareLink p {
+        height: 50px;
+        font-size: 20px;
+        color: #666;
+        line-height: 60px;
+        display: inline-block;
+    }
+
+.m_shareLink_refresh {
+    padding-left: 16px;
+    margin-top: 24px;
+    color: #0173C7;
+    font-size: 12px;
+    text-align: right;
+    float: right;
+    background: url(../images/share_refresh_icon.png) no-repeat center left;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.m_shareLink_search {
+    width: 100%;
+    height: 30px;
+    background-color: #F1F1F1;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    padding-top: 10px;
+}
+
+    .m_shareLink_search select {
+        width: 80px;
+        height: 20px;
+        margin-right: 10px;
+        margin-left: 20px;
+        float: left;
+    }
+
+.m_shareLink_text {
+    border: 1px solid #999999;
+    padding-left: 5px;
+    height: 18px;
+    background: #ffffff;
+    float: left;
+    width: 180px;
+    line-height: 18px;
+}
+
+.m_shareLink_container {
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+    color: #333;
+    padding-right: 20px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.shareLink_file_expand {
+    width: 11px;
+    height: 11px;
+    background: url(../images/shareLink_expand.png);
+    float: left;
+    margin-top: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.shareLink_file_name {
+    float: left;
+    /*position: absolute;
+    left: 55px;
+    right: 220px;*/
+    width: 211px;
+}
+
+    .shareLink_file_name p {
+        font-size: 12px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+    }
+
+.shareLink_file_more {
+    position: relative;
+    float: left;
+    width: 24px;
+    height: 30px;
+    text-align: center;
+    font-size: 26px;
+    line-height: 14px;
+    color: #ffffff;
+}
+
+    .shareLink_file_more:hover {
+        background-color: #71AFE5;
+        cursor: pointer;
+    }
+
+.shareLink_file_checkbox {
+    display: block;
+    margin-left: 5px;
+    float: left;
+    margin-top: 8px;
+    margin-right: 5px;
+    border: 1px solid #999999;
+    width: 10px;
+    height: 13px;
+    background-color: #ffffff !important;
+    padding-left: 3px;
+    font-size: 12px !important;
+    color: #444444 !important;
+    position: relative;
+    cursor: pointer;
+}
+
+.shareLink_checkbox_text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: url("../images/checked.png") no-repeat center;
+    height: 13px;
+    display: none;
+}
+
+.shareLink_file_option {
+    position: absolute;
+    top: 0;
+    left: 199px;
+    width: 77px;
+    height: 60px;
+    display: none;
+    z-index: 1;
+}
+
+.file_option_more {
+    width: 73px;
+    /*height: 84px;*/
+    background-color: #FFF;
+    border: 2px solid #71AFE5;
+    position: absolute;
+    top: 30px;
+}
+
+.shareLink_file_auth,
+.shareLink_file_code,
+.shareLink_file_expire,
+.shareLink_file_shareTime {
+    float: left;
+}
+
+.shareLink_file_auth {
+    /*width: 82px;*/
+    /*margin-left: 25px;*/
+    width: 70px;
+    margin-left: 15px;
+}
+
+.shareLink_file_code {
+    /*width: 78px;*/
+    width: 70px;
+}
+
+.shareLink_file_expire {
+    /*width: 150px;*/
+    /*width: 140px;*/
+    width: 130px;
+}
+
+.shareLink_file_shareTime {
+    width: 200px;
+}
+
+.shareLink_file_box {
+    min-width: 925px;
+    height: auto;
+    zoom: 1;
+}
+
+    .shareLink_file_box:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+
+.shareLink_cancelShare {
+    display: inline-block;
+    margin-top: 15px;
+    margin-left: 94px;
+    height: 30px;
+    width: 120px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #ccc;
+    line-height: 30px;
+    color: #FFF;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.shareLink_again,
+.shareLink_rename,
+.shareLink_cancel {
+    height: 28px;
+    padding-left: 10px;
+    font-size: 12px;
+    line-height: 28px;
+    color: #000;
+    z-index: 9999;
+}
+
+.shareLink_again,
+.shareLink_rename {
+    display: none;
+}
+
+    .shareLink_again:hover,
+    .shareLink_rename:hover,
+    .shareLink_cancel:hover {
+        cursor: pointer;
+        background-color: #E0F4FF;
+    }
+
+.shareLink_expand_content {
+    margin-left: 25px;
+    float: left;
+    margin-top: -5px;
+    padding-bottom: 5px;
+    display: none;
+    clear: both;
+}
+
+.shareLink_link {
+    color: #0173C7;
+    cursor: pointer;
+}
+
+.expand_files {
+    border-left: 5px solid #71AFE5;
+    color: #0173C7;
+    margin-bottom: 5px;
+}
+
+    .expand_files li {
+        height: 20px;
+        line-height: 20px;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+.shareLink_expand_content p {
+    height: 20px;
+    line-height: 20px;
+}
+
+
+/* 分享链接区域样式结束 */
+.checkbox_display {
+    visibility: hidden;
+}
+
+.icon_background {
+    background-color: #cccccc;
+}
+
+.fileMore_btn {
+    color: #71AFE5;
+}
+
+.filebox_hover {
+    background-color: #E0F4FF;
+}
+
+.shareLink_expend {
+    background: url(../images/shareLink_retract.png);
+}
+
+.share_background {
+    background-color: #0173C7;
+}
+
+.hightClass {
+    background-color: #FFFF00;
+    border-radius: 3px;
+}
+
+.shareLink_file_name .hightClass {
+    background-color: #FFFF00;
+    border-radius: 3px;
+}
+
+.minHeight {
+    min-height: 0;
+}
+
+.content_display {
+    display: block;
+}
+
+.content_inline {
+    display: inline-block;
+}
+
+.line_through {
+    text-decoration: line-through;
+}
+
+.txtHover:hover {
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+    -moz-opacity: 0.7;
+}
+
+.l_main_icon_test ul .menu_display {
+    display: block;
+}
+
+.l_main_menu_border {
+    border-bottom: 3px solid #0173C7;
+}
