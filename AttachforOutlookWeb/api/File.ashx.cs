@@ -11,7 +11,7 @@ namespace AttachforOutlookWeb.api
     /// <summary>
     /// Summary description for File
     /// </summary>
-    public class File : IHttpHandler
+    public class File : PageBase, IHttpHandler
     {
         public void ProcessRequest(HttpContext context)
         {
@@ -90,23 +90,7 @@ namespace AttachforOutlookWeb.api
         }
 
 
-        private string CheckCookie(HttpContext context)
-        {
-            string userid = string.Empty;
-            if (context.Request.Cookies["BGQTUserToken"] != null)
-            {
-                // return error?
-            }
-            else if (String.IsNullOrEmpty(context.Request.Cookies["BGQTUserToken"]["Token"]) == true)
-            {
-                // return error?
-            }
-            else
-            {
-                userid = context.Request.Cookies["BGQTUserToken"]["Token"];
-            }
-            return userid;
-        }
+        
 
         public bool IsReusable
         {

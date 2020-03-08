@@ -68,6 +68,7 @@
     <Compile Include="ADProvider\GroupProvider.cs" />
     <Compile Include="ADProvider\OuProvider.cs" />
     <Compile Include="ADProvider\UserProvider.cs" />
+    <Compile Include="DBProvider\BigAttachDBProvider.cs" />
     <Compile Include="DBProvider\LogDBProvider.cs" />
     <Compile Include="DBProvider\MailAuditDBProvider.cs" />
     <Compile Include="DBProvider\MailDataBaseDBProvider.cs" />

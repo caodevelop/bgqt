@@ -436,6 +436,7 @@
     <Compile Include="api\File.ashx.cs">
       <DependentUpon>File.ashx</DependentUpon>
     </Compile>
+    <Compile Include="api\PageBase.cs" />
     <Compile Include="api\Setting.ashx.cs">
       <DependentUpon>Setting.ashx</DependentUpon>
     </Compile>
@@ -463,6 +464,10 @@
     <ProjectReference Include="..\Entity\Entity.csproj">
       <Project>{87cb305a-d409-4a44-9055-4ef619db2c45}</Project>
       <Name>Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Manager\Manager.csproj">
+      <Project>{048c9b6e-de3f-4e11-ae59-96deb2704c8f}</Project>
+      <Name>Manager</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
