@@ -511,6 +511,15 @@ namespace Provider.ExchangeProvider
             }
         }
 
+        public class PSCommandSetMailboxRegionalConfiguration : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(PSParameters parms)
+            {
+                return PSCommandBase.ExecuteCmdlet("Set-MailboxRegionalConfiguration", parms);
+            }
+        }
+        
+
         public class PSCommandRemoveDevice : WSCommandBase
         {
             public static ICollection<PSObject> ExecuteCmdlet(PSParameters parms)

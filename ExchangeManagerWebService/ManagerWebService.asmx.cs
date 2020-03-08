@@ -49,6 +49,12 @@ namespace ExchangeManagerWebService
                 Log4netHelper.Error("EnableMailboxArchive异常", paramstr, strError, transactionid);
                 result = false;
             }
+            if (!ExchangeProvider.SetMailboxRegionalConfiguration(user.UserAccount, out strError))
+            {
+                Log4netHelper.Error("SetMailboxRegionalConfiguration异常", paramstr, strError, transactionid);
+                result = false;
+            }
+
             info = JsonHelper.SerializeObject(user);
             return result;
         }
@@ -193,7 +199,11 @@ namespace ExchangeManagerWebService
                 Log4netHelper.Error("EnableMailboxArchive异常", paramstr, strError, transactionid);
                 return false;
             }
-
+            if (!ExchangeProvider.SetMailboxRegionalConfiguration(userID, out strError))
+            {
+                Log4netHelper.Error("SetMailboxRegionalConfiguration异常", paramstr, strError, transactionid);
+                result = false;
+            }
             return result;
         }
 
@@ -217,6 +227,11 @@ namespace ExchangeManagerWebService
             {
                 Log4netHelper.Error("EnableMailboxArchive异常", paramstr, strError, transactionid);
                 return false;
+            }
+            if (!ExchangeProvider.SetMailboxRegionalConfiguration(userID, out strError))
+            {
+                Log4netHelper.Error("SetMailboxRegionalConfiguration异常", paramstr, strError, transactionid);
+                result = false;
             }
             return result;
         }

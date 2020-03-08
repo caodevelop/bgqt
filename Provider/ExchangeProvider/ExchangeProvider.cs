@@ -1018,6 +1018,7 @@ namespace Provider.ExchangeProvider
            ref UserInfo user,
             ref string pStrError)
         {
+            Log4netHelper.Info("AddMailbox " +  user.UserAccount + " " + user.AliasName);
             System.Security.SecureString passwordStr = new System.Security.SecureString();
 
             foreach (char c in user.Password.ToCharArray())
@@ -1841,6 +1842,33 @@ namespace Provider.ExchangeProvider
             return true;
         }
 
+        public static bool SetMailboxRegionalConfiguration(string userMail, out string strError)
+        {
+            strError = string.Empty;
+            //PSParameters paras = new PSParameters();
+
+            //paras.AddPara("Identity", userMail);
+
+            //paras.AddPara("Language", "zh-cn");
+            ////paras.AddPara("PrimarySmtpAddress", email);//x400邮箱地址设置，设置后会改变属性
+            //paras.AddPara("TimeZone", "China Standard Time");
+
+            try
+            {
+                //ExchangePSProvider.PSCommandSetMailboxRegionalConfiguration.ExecuteCmdlet(paras);
+                string cmd = $"Set-MailboxRegionalConfiguration -Identity {userMail} -Language 'zh-cn' -TimeZone 'China Standard Time' -LocalizeDefaultFolderName";
+                PSCommandBase.ExecuteCmdlet(cmd);
+            }
+            catch (Exception ex)
+            {
+                strError += string.Format("<SetMailboxRegionalConfiguration>{0}</SetMailboxRegionalConfiguration>", ex.ToString());
+                return false;
+            }
+
+
+            return true;
+        }
+
         public static bool DisableMailbox(string email, out string strError)
         {
             strError = string.Empty;
@@ -2090,6 +2118,11 @@ namespace Provider.ExchangeProvider
                             Log4netHelper.Error("EnableMailboxArchive" + strError);
                             return false;
                         }
+                        if (!SetMailboxRegionalConfiguration(userEmail, out strError))
+                        {
+                            Log4netHelper.Error("SetMailboxRegionalConfiguration" + strError);
+                            return false;
+                        }
                     }
                     else
                     {
@@ -2103,6 +2136,11 @@ namespace Provider.ExchangeProvider
                         if (!EnableMailboxArchive(userEmail, out strError))
                         {
                             Log4netHelper.Error("EnableMailboxArchive" + strError);
+                            return false;
+                        }
+                        if (!SetMailboxRegionalConfiguration(userEmail, out strError))
+                        {
+                            Log4netHelper.Error("SetMailboxRegionalConfiguration" + strError);
                             return false;
                         }
                     }
