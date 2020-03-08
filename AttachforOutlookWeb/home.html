@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport"
+          name="viewport" />
+    <title>Loading</title>
+    <!--build:css css/default.min.css-->
+    <link type="text/css" href="css/common/reset.css" rel="stylesheet">
+    <link href="css/demo.css" rel="stylesheet" type="text/css" />
+    <!--endbuild-->
+    <!--[if lt IE 8]>
+    <script src="js/json2.min.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="l_demo_head">
+        <div id="languageItem" class="m_demo_btn_language">
+            <ul>
+                <li lang="zh-CN" class="txtHover"><a>中</a></li>
+                <li lang="en-US" class="txtHover"><a>EN</a></li>
+            </ul>
+            <div class="m_demo_btn_underline" id="buoy"></div>
+        </div>
+    </div>
+    <div class="l_default_loading" id="lDefaultLoading"></div>
+    <div class="l_demo_main_wrap hide" id="lDemoMainWrap">
+        <div class="l_demo_main">
+            <div class="l_demo_logo">
+                <img src="images/icon_demo_160.png" alt="icon_demo_160.png" />
+            </div>
+            <div class="l_demo_title">ExDrivePlus For Outlook</div>
+            <div class="l_demo_prompt">
+                <p id="demo_prompt_title"></p>
+                <p><span id="demo_prompt_one"></span><span class="agreeState_open txtHover" id="agreeState_open" data-bind="click:$root.agreeOpen"></span></p>
+                <p id="demo_prompt_two"></p>
+                <p id="demo_prompt_three"></p>
+                <div class="m_demo_agreeState">
+                    <div class="agreeState_checkbox">
+                        <div class="agreeState_text"></div>
+                    </div>
+                    <span class="agreeState_title"><span id="agreeState_title"></span><a class="agreeState_open txtHover" id="agreeState_content" data-bind="click:$root.agreeOpen"></a></span>
+                </div>
+            </div>
+            <div class="l_footer_btn">
+                <div class="m_begin_btn" id="m_begin_btn" data-bind="css:{beginBtn_bg:$root.beginBtn(),txtHover:$root.beginBtn()},click:$root.beginClick"></div>
+            </div>
+        </div>
+    </div>
+    <div class="l_demo_mask" data-bind="css:{content_display:$root.maskOpen()},click:$root.maskClose"></div>
+    <div class="m_demo_statement">
+        <div class="m_statement_title">
+            <p class="statement_title" id="statement_title"></p>
+            <span class="m_statement_close txtHover" data-bind="click:$root.maskClose"></span>
+        </div>
+        <div class="m_statement_content" id="m_statement_content"></div>
+    </div>
+    <div class="hide"><img src="images/checked.png" /></div>
+</body>
+<script src="js/libs/jquery-1.11.1.min.js"></script>
+<script src="js/libs/jquery.base64.js"></script>
+<script src="js/libs/knockout-3.3.0.js"></script>
+<script src="js/libs/knockout.mapping-latest.js"></script>
+<script src="js/libs/app.min.js"></script>
+<script>
+    //app.loadFile('js/libs/Office/MicrosoftAjax.js', 'js');
+    //app.loadFile('js/libs/Office/1/Office.js', 'js');
+	 app.loadFile('https://appsforoffice.microsoft.com/lib/1/hosted/office.js','js');
+</script>
+<!--build:js js/config.min.js-->
+<script src="js/config.js"></script>
+<!--endbuild-->
+<!--build:js js/demo.min.js-->
+<!-- <script src="../js/loadingLanguage.js"></script> -->
+<script src="js/demo.js"></script>
+<!--endbuild-->
+</html>

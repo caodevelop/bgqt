@@ -118,6 +118,7 @@
     <Content Include="css\reset.css" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
+    <Content Include="home.html" />
     <Content Include="Images\btn_question.png" />
     <Content Include="Images\checked.png" />
     <Content Include="Images\Close.png" />
@@ -134,10 +135,12 @@
     <Content Include="Images\start_icon.png" />
     <Content Include="Images\upload_icon.png" />
     <Content Include="js\config.js" />
+    <Content Include="js\demo.js" />
     <Content Include="js\fileupload.js" />
     <Content Include="js\libs\app.min.js" />
     <Content Include="js\libs\filehash.js" />
     <Content Include="js\libs\jquery-1.11.1.min.js" />
+    <Content Include="js\libs\jquery.base64.js" />
     <Content Include="js\libs\knockout-3.3.0.js" />
     <Content Include="js\libs\knockout.mapping-latest.js" />
     <Content Include="js\libs\ko.custom.extend.js" />
@@ -436,6 +439,7 @@
     <Compile Include="api\File.ashx.cs">
       <DependentUpon>File.ashx</DependentUpon>
     </Compile>
+    <Compile Include="api\PageBase.cs" />
     <Compile Include="api\Setting.ashx.cs">
       <DependentUpon>Setting.ashx</DependentUpon>
     </Compile>
@@ -463,6 +467,10 @@
     <ProjectReference Include="..\Entity\Entity.csproj">
       <Project>{87cb305a-d409-4a44-9055-4ef619db2c45}</Project>
       <Name>Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Manager\Manager.csproj">
+      <Project>{048c9b6e-de3f-4e11-ae59-96deb2704c8f}</Project>
+      <Name>Manager</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

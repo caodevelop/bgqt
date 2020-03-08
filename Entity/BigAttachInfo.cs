@@ -27,7 +27,7 @@ namespace Entity
     }
 
 
-    public class GetUploadParItem
+    public class UploadParItemInfo
     {
         public string StorageID { get; set; } = string.Empty;
         public string StorageRelativePath { get; set; } = string.Empty;
@@ -47,17 +47,77 @@ namespace Entity
 
     public class BigFileItemInfo
     {
-        public string ID { get; set; } = string.Empty;
+        public Guid ID { get; set; } = Guid.Empty;
         public string FileName { get; set; } = string.Empty;
+        public string FileFullName { get; set; } = string.Empty;
+        public string HashCode { get; set; } = string.Empty;
         public string ExtensionName { get; set; } = string.Empty;
         public double FileSize { get; set; } = 0.00;
-        public string UserID { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public Guid UserID { get; set; } = Guid.Empty;
+        public string AuthorName { get; set; } = string.Empty;
+        public int FileStatus { get; set; } = 1;
         public string FolderID { get; set; } = string.Empty;
+        public string StoreID { get; set; } = string.Empty;
         public DateTime UploadTime { get; set; } = DateTime.MinValue;
         public DateTime LastUpdateTime { get; set; } = DateTime.MinValue;
-        public string DisplayFileSize { get; set; } = string.Empty;
+        public string DisplayFileSize
+        {
+            get
+            {
+                string str = string.Empty;
+                int sizeKB = Convert.ToInt32(FileSize / 1024);
+                if (sizeKB == 0)
+                {
+                    str = "1 KB";
+                }
+                else if (sizeKB < 1024)
+                {
+                    str = $"{sizeKB} KB";
+                }
+                else if (sizeKB >= 1024)
+                {
+                    int sizeMB = Convert.ToInt32(sizeKB / 1024);
+                    if (sizeMB < 1024)
+                    {
+                        str = $"{sizeMB} MB";
+                    }
+                    else if (sizeMB >= 1024)
+                    {
+                        int sizeGB = Convert.ToInt32(sizeMB / 1024);
+                        str = $"{sizeGB} GB";
+                    }
+                }
+
+                return str;
+            }
+        }
     }
 
 
+
+    public class Rootobject
+    {
+        public object error { get; set; }
+        public Data data { get; set; }
+    }
+
+    public class Data
+    {
+        public string ID { get; set; }
+        public string FileName { get; set; }
+        public string FileFullName { get; set; }
+        public string HashCode { get; set; }
+        public string ExtensionName { get; set; }
+        public float FileSize { get; set; }
+        public string DisplayName { get; set; }
+        public string UserID { get; set; }
+        public string AuthorName { get; set; }
+        public int FileStatus { get; set; }
+        public string FolderID { get; set; }
+        public string StoreID { get; set; }
+        public DateTime UploadTime { get; set; }
+        public DateTime LastUpdateTime { get; set; }
+    }
 
 }

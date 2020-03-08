@@ -1,5 +1,6 @@
 ﻿using Common;
 using Entity;
+using Manager;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace AttachforOutlookWeb.api
     /// <summary>
     /// Summary description for Setting
     /// </summary>
-    public class Setting : IHttpHandler
+    public class Setting : PageBase, IHttpHandler
     {
 
         public void ProcessRequest(HttpContext context)
@@ -72,18 +73,26 @@ namespace AttachforOutlookWeb.api
                 do
                 {
 
-                    AttachResultInfo resultinfo = new AttachResultInfo();
-                    AttachSettingItem asi = new AttachSettingItem();
-                    asi.MaxFileSize = 6442450944.0;
-                    asi.MaxUploads = 5;
-                    asi.FileUploadBlackList = "ade; adp; app; asa; ashx; asmx; asp; bas; bat; cdx; cer; chm;class; cmd;com;config;cpl;crt;csh;dll;fxp;hlp;hta;htr;htw;ida;idc;idq;inf;ins;isp;its;jar;js;jse;ksh;lnk;mad;maf;mag;mam;maq;mar;mas;mat;mau;mav;maw;mda;mdb;mde;mdt;mdw;mdz;msc;msh;msh1;msh1xml;msh2;msh2xml;mshxml;msi;msp;mst;ops;pcd;pif;prf;prg;printer;pst;reg;rem;scf;scr;sct;shb;shs;shtm;shtml;soap;stm;tmp;url;vb;vbe;vbs;vsmacros;vss;vst;vsw;ws;wsc;wsf;wsh;";
-                    asi.ChunkSize = 1048576;
-                    asi.AllowDrop = true;
-                    asi.DefaultExtension = ".xdrv";
-                    resultinfo.data = asi;
-                    string json = JsonConvert.SerializeObject(resultinfo);
-                    strJsonResult = json;
+                    //AttachResultInfo resultinfo = new AttachResultInfo();
+                    //AttachSettingItem asi = new AttachSettingItem();
+                    //asi.MaxFileSize = 6442450944.0;
+                    //asi.MaxUploads = 5;
+                    //asi.FileUploadBlackList = "ade; adp; app; asa; ashx; asmx; asp; bas; bat; cdx; cer; chm;class; cmd;com;config;cpl;crt;csh;dll;fxp;hlp;hta;htr;htw;ida;idc;idq;inf;ins;isp;its;jar;js;jse;ksh;lnk;mad;maf;mag;mam;maq;mar;mas;mat;mau;mav;maw;mda;mdb;mde;mdt;mdw;mdz;msc;msh;msh1;msh1xml;msh2;msh2xml;mshxml;msi;msp;mst;ops;pcd;pif;prf;prg;printer;pst;reg;rem;scf;scr;sct;shb;shs;shtm;shtml;soap;stm;tmp;url;vb;vbe;vbs;vsmacros;vss;vst;vsw;ws;wsc;wsf;wsh;";
+                    //asi.ChunkSize = 1048576;
+                    //asi.AllowDrop = true;
+                    //asi.DefaultExtension = ".xdrv";
+                    //resultinfo.data = asi;
+                    //string json = JsonConvert.SerializeObject(resultinfo);
+                    //strJsonResult = json;
                     //"{"error":null,"data":{"MaxFileSize":6442450944.0,"MaxUploads":5,"FileUploadBlackList":"ade; adp; app; asa; ashx; asmx; asp; bas; bat; cdx; cer; chm;class; cmd;com;config;cpl;crt;csh;dll;fxp;hlp;hta;htr;htw;ida;idc;idq;inf;ins;isp;its;jar;js;jse;ksh;lnk;mad;maf;mag;mam;maq;mar;mas;mat;mau;mav;maw;mda;mdb;mde;mdt;mdw;mdz;msc;msh;msh1;msh1xml;msh2;msh2xml;mshxml;msi;msp;mst;ops;pcd;pif;prf;prg;printer;pst;reg;rem;scf;scr;sct;shb;shs;shtm;shtml;soap;stm;tmp;url;vb;vbe;vbs;vsmacros;vss;vst;vsw;ws;wsc;wsf;wsh;","ChunkSize":1048576,"AllowDrop":true,"DefaultExtension":".xdrv"}}";
+                    Guid userid = this.CheckCookie(context);
+                    if (userid == Guid.Empty)
+                    {
+                        //error?
+                        break;
+                    }
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.GetGlobalUploadSetting(transactionid, userid, out strJsonResult);
 
                 } while (false);
             }
@@ -109,20 +118,29 @@ namespace AttachforOutlookWeb.api
             {
                 do
                 {
-                    AttachResultInfo resultinfo = new AttachResultInfo();
-                    GetUploadParItem gupi = new GetUploadParItem();
-                    gupi.OutlookFolderID = "";
-                    gupi.StorageID = "";
-                    gupi.StorageRelativePath = "";
-                    gupi.StorageUri = "";
-                    gupi.UserQuota = 2147483648.0;
-                    gupi.UserUsedQuota = 648.0;
+                    //AttachResultInfo resultinfo = new AttachResultInfo();
+                    //GetUploadParItem gupi = new GetUploadParItem();
+                    //gupi.OutlookFolderID = "";
+                    //gupi.StorageID = "";
+                    //gupi.StorageRelativePath = "";
+                    //gupi.StorageUri = "";
+                    //gupi.UserQuota = 2147483648.0;
+                    //gupi.UserUsedQuota = 648.0;
 
-                    resultinfo.data = gupi;
-                    string json = JsonConvert.SerializeObject(resultinfo);
-                    strJsonResult = json;
-                    
+                    //resultinfo.data = gupi;
+                    //string json = JsonConvert.SerializeObject(resultinfo);
+                    //strJsonResult = json;
+
                     //{"error":null,"data":{"StorageID":"8522ed80-7edc-4b30-9456-cd8edac0684e","StorageRelativePath":"2020-02-26","StorageUri":"\\\\172.16.6.12\\e","UserQuota":2147483648.0,"UserUsedQuota":357.0,"OutlookFolderID":"230cf621-1011-4921-8896-edd973fbda73"}}
+
+                    Guid userid = this.CheckCookie(context);
+                    if (userid == Guid.Empty)
+                    {
+                        //error?
+                        break;
+                    }
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.GetUploadParItem(transactionid, userid, out strJsonResult);
                 } while (false);
             }
             catch (Exception ex)
@@ -163,6 +181,7 @@ namespace AttachforOutlookWeb.api
 
             return strJsonResult;
         }
+
 
         public bool IsReusable
         {
