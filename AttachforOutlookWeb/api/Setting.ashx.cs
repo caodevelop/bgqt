@@ -42,7 +42,7 @@ namespace AttachforOutlookWeb.api
                         strJsonResult = GetGlobalUploadSetting(context);
                         context.Response.Write(strJsonResult);
                         break;
-                    case "GetUploadBar":
+                    case "GetUploadPar":
                         context.Response.ContentType = "text/plain";
                         strJsonResult = GetUploadPar(context);
                         context.Response.Write(strJsonResult);

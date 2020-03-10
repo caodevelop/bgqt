@@ -44,15 +44,17 @@
                 </li>
             </ul>
         </div>
-        <div class="l_main_head_icon txtHover"></div>
-        <div class="l_main_icon_test">
-            <ul class="l_main_head_right">
-                <li id="m_link" data-bind="click:$root.linkFun.link,css:{l_main_menu_left:$root.linkFun.showLinkDiv(),menu_display:!$root.shareLinkMenu()}"></li>
-                <li id="m_recycleBin" data-bind="click:$root.recycleFun.recycleBin,css:{l_main_menu_left:$root.recycleFun.showRecycleDiv(),menu_display:!$root.recycleBinMenu()}"></li>
-                <li id="m_setting" data-bind="click:$root.settings,css:{l_main_menu_left:$root.showSettingDiv(),menu_display:!$root.settingMenu()}"></li>
-                <li id="m_signOut" data-bind="click:$root.logout"></li>
-            </ul>
-        </div>
+        <!--
+    <div class="l_main_head_icon txtHover"></div>
+    <div class="l_main_icon_test">
+        <ul class="l_main_head_right">
+            <li id="m_link" data-bind="click:$root.linkFun.link,css:{l_main_menu_left:$root.linkFun.showLinkDiv(),menu_display:!$root.shareLinkMenu()}"></li>
+            <li id="m_recycleBin" data-bind="click:$root.recycleFun.recycleBin,css:{l_main_menu_left:$root.recycleFun.showRecycleDiv(),menu_display:!$root.recycleBinMenu()}"></li>
+            <li id="m_setting" data-bind="click:$root.settings,css:{l_main_menu_left:$root.showSettingDiv(),menu_display:!$root.settingMenu()}"></li>
+            <li id="m_signOut" data-bind="click:$root.logout"></li>
+        </ul>
+    </div>
+        -->
     </div>
     <!-- 内容区域 -->
     <div class="l_main_content" id="l_main_content">
@@ -88,366 +90,370 @@
             <!-- 上传文件分享区域 -->
             <div class="l_main_footer">
                 <div class="m_footer_btn">
-                    <div id="upload_shareBtn_left" class="m_footer_btn_left"
-                         data-bind="css:{share_background:$root.shareStyle(),txtHover:$root.shareStyle()},click:$root.advancedFileShare.uploadAdvancedBtn">
-                        高级分享
-                    </div>
+                    <!--
+    <div id="upload_shareBtn_left" class="m_footer_btn_left"
+         data-bind="css:{share_background:$root.shareStyle(),txtHover:$root.shareStyle()},click:$root.advancedFileShare.uploadAdvancedBtn">
+        高级分享
+    </div>
+            -->
                     <div id="upload_shareBtn_right" class="m_footer_btn_right"
                          data-bind="css:{share_background:$root.shareStyle(),txtHover:$root.shareStyle()},click:$root.uploadQuickBtn">
                         快速分享
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- 分享文件区域 -->
-        <div class="m_share_wrap" data-bind="css:{content_display:$root.showShareDiv()}">
-            <div class="m_share">
-                <p id="m_share_item">选择需要分享的文件</p>
-                <div id="m_share_refresh" class="m_share_refresh txtHover" data-bind="click:$root.totalRefresh">刷新</div>
-                <div class="m_share_search">
-                    <input type="text" name="share-text" class="m_share_text" id="m_share_text" />
-                    <span class="searchBtn txtHover" id="searchBtn"></span>
-                </div>
-            </div>
-
-            <div class="m_search_delete_box" data-bind="visible:showDeleteDiv">
-                <div class="delete_box_left txtHover" id="fileShare_delete" data-bind="click:$root.batchDelete">删除</div>
-                <div class="delete_box_right txtHover" id="fileShare_cancel" data-bind="click:$root.deselect">取消选定</div>
-            </div>
-
-            <!-- 搜索结果区域-->
-
-            <div class="m_shareFiles_container" id="m_shareFiles_container">
-                <div class="m_search_result_item" data-bind="css:{content_display:$root.showSearchResult()}">
-                    <div>
-                        <span class="search_icon" id="search_icon" data-bind="click:$root.searchIconClick"></span>
-                        <p class="m_file_checkAll"
-                           data-bind="click:$root.checkAllSearchBox,css:{content_display:$root.isHaveSearch()}">
-                            <span class="file_checkAll_text"
-                                  data-bind="css:{content_display:$root.isCheckAllSearch()}"></span>
-                        </p>
-                        <span>"</span>
-                        <span class="search_title_text"></span>
-                        <span>"</span>
-                        <span id="m_search_title">的搜索结果</span>
-                        <span class="resultMore"></span>
-                    </div>
-
-                    <div id="m_search_result_clear" class="m_search_result_clear txtHover">清除</div>
-                </div>
-                <div class="m_search_result_wrap" data-bind="template: {name: 'searchTemplate', foreach:search}"></div>
-                <p class="research" id="m_search_result">未找到搜索结果，请重试</p>
-                <script type="text/html" id="searchTemplate">
-                    <div class="m_file_box" data-bind="click:$root.searchCheck,css:{fileBox_checked:isChecked}">
-                        <div class="m_file_checkbox" data-bind="click:$root.checkList">
-                            <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
-                        </div>
-                        <div class="m_file_name">
-                            <span data-bind="showIcon:$root.showIcon($data)"></span>
-                            <p data-bind="html:hightFileName, attr:{title:FileName}"></p>
-                        </div>
-                        <div class="m_search_result_right">
-                            <div class="search_box_more"
-                                 data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
-                                ...
-                            </div>
-                            <div class="m_file_option">
-                                <div class="m_file_option_more">
-                                    <div class="m_file_download"
-                                         data-bind="click:function(data,event){$root.downloadSingleFile(data,event)}">
-                                    </div>
-                                    <div class="m_file_rename"
-                                         data-bind="click:function(data,event){$root.renameClick(data,event)}">
-                                    </div>
-                                    <div class="m_file_delete"
-                                         data-bind="click:function(data,event){$root.deleteSearch(data,event)}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m_search_result_second" data-bind="text:LastUpdateTime"></div>
-                            <div class="m_search_result_third" data-bind="text:DisplayFileSize"></div>
-                        </div>
-                    </div>
-                </script>
-
-
-                <!--我的文件区域-->
-                <div class="m_file_item">
-                    <div>
-                        <i id="m_file_icon" data-bind="click:$root.fileIconClick"></i>
-                        <p class="m_file_checkAll"
-                           data-bind="click:$root.checkAllFilesBox,css:{content_display:$root.isHaveFiles()}">
-                            <span class="file_checkAll_text"
-                                  data-bind="css:{content_display:$root.isCheckAllFiles()}"></span>
-                        </p>
-                        <span id="m_file_title">我的文件</span>
-                    </div>
-                    <div class="m_file_order">
-                        <select data-bind="options: $root.filesSortOptions,
-                       optionsText: 'text',
-                       value: $root.fileCurSort"></select>
-                    </div>
-                </div>
-
-                <div class="m_file_wrap" data-bind="template: {name: 'filesTemplate', foreach:files}"></div>
-                <p class="myfiles" id="share_myFiles">未找到文件，请先到上传页面进行上传</p>
-
-                <script type="text/html" id="filesTemplate">
-                    <div class="m_file_box" data-bind="click:$root.checkOne,css:{fileBox_checked:isChecked}">
-                        <div class="m_file_checkbox" data-bind="click:$root.checkList">
-                            <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
-                        </div>
-                        <div class="m_file_name">
-                            <span data-bind="showIcon:$root.showIcon($data)"></span>
-                            <p data-bind="text:FileName, attr:{title:FileName}"></p>
-                        </div>
-                        <div class="m_file_right">
-                            <div class="m_file_more"
-                                 data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
-                                ...
-                            </div>
-                            <div class="m_file_option">
-                                <div class="m_file_option_more">
-                                    <div class="m_file_download"
-                                         data-bind="click:function(data,event){$root.downloadSingleFile(data,event)}">
-                                    </div>
-                                    <div class="m_file_rename"
-                                         data-bind="click:function(data,event){$root.renameClick(data,event)}">
-                                    </div>
-                                    <div class="m_file_delete"
-                                         data-bind="click:function(data,event){$root.deleteClick(data,event)}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m_file_second" data-bind="text:LastUpdateTime"></div>
-                            <div class="m_file_third" data-bind="text:DisplayFileSize"></div>
-                        </div>
-                    </div>
-                </script>
-            </div>
-            <div class="loading_moreFiles" id="loading_moreFiles">正在加载更多文件</div>
-            <!-- 分享文件分享区域 -->
-            <div class="l_main_footer">
-                <div class="m_footer_btn">
-                    <div id="share_shareBtn_left" class="m_footer_btn_left "
-                         data-bind="css:{share_background:$root.shareBg(),txtHover:$root.shareBg()},click:$root.advancedFileShare.advancedBtnClick">
-                        高级分享
-                    </div>
-                    <div id="share_shareBtn_right" class="m_footer_btn_right"
-                         data-bind="css:{share_background:$root.shareBg(),txtHover:$root.shareBg()},click:$root.quickShare">
-                        快速分享
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 设置 -->
-        <div class="m_main_settings" data-bind="css:{content_display:$root.showSettingDiv()}">
-            <div class="m_setting_space">
-                <p class="setting_space_title"><span id="setting_title">占用空间</span><span>&nbsp;-&nbsp;</span><span class="userId"></span></p>
-                <p class="setting_space_used">
-                    <span id="setting_used">已使用/全部：</span><span class="space_used"></span> / <span class="space_all"></span>
-                </p>
-                <div class="setting_space_round">
-                    <div class="space_round_left"></div>
-                    <div class="space_round_right"></div>
-                    <div class="space_round_middle"></div>
-                </div>
-            </div>
-            <div class="m_setting_language">
-                <p class="setting_language_title" id="setting_lang_title">语言选项</p>
-                <div class="setting_lang">
-                    <select id="language_change" class="language_change">
-                        <option value="zh-CN" id="setting_lang_Chinese">中文</option>
-                        <option value="en-US" id="setting_lang_English">英文</option>
-                    </select>
-                    <div class="language_btn" id="setting_lang_confirm"
-                         data-bind="css:{share_background:$root.langBtn()},click:$root.langClick">
-                        确定
-                    </div>
-                </div>
-                <p class="uploading_title" id="setting_lang_prompt"></p>
-            </div>
-        </div>
-        <!-- 回收站 -->
-        <div class="m_recycleBin_wrap" data-bind="css:{content_display:$root.recycleFun.showRecycleDiv()}">
-            <div class="m_recycle">
-                <p id="m_recycle_item">我的回收站</p>
-                <div id="m_recycle_refresh" class="m_recycle_refresh txtHover" data-bind="click:$root.recycleFun.recycleRefresh">刷新</div>
-                <div id="m_recycle_empty" class="m_recycle_empty txtHover" data-bind="click:$root.recycleFun.emptyRecycle">清空回收站</div>
-                <div class="m_recycle_search">
-                    <input type="text" name="share-text" class="m_recycle_text" id="m_recycle_text" />
-                    <span class="recycleSearchBtn txtHover" id="recycleSearchBtn"></span>
-                </div>
-            </div>
-
-            <div class="m_search_delete_box" data-bind="visible:$root.recycleFun.recycleToolBar">
-                <div class="delete_box_left txtHover" id="recycle_delete" data-bind="click:$root.recycleFun.deleteRecycle">删除</div>
-                <div class="delete_box_right txtHover" id="recycle_cancel" data-bind="click:$root.recycleFun.recycleDeselect">取消选定</div>
-            </div>
-
-            <!-- 搜索结果区域-->
-            <div class="m_recycle_container" id="m_recycle_container">
-                <div class="m_search_result_item" data-bind="css:{content_display:$root.recycleFun.showRecycleSearch()}">
-                    <div>
-                        <span class="recycle_searchIcon" data-bind="click:$root.recycleFun.recycleSearchIcon"></span>
-                        <p class="m_recycle_checkAll"
-                           data-bind="click:$root.recycleFun.recycleSearchAllChecked,css:{content_display:$root.recycleFun.isRecycleSearch()}">
-                            <span class="recycle_checkAll_text"
-                                  data-bind="css:{content_display:$root.recycleFun.isCheckRecycleSearch()}"></span>
-                        </p>
-                        <span>"</span>
-                        <span class="recycleSearch_title_text"></span>
-                        <span>"</span>
-                        <span id="recycle_search_title">的搜索结果</span>
-                        <span class="recycleExceed"></span>
-                    </div>
-                    <div id="m_recycle_search_clear" class="m_recycle_result_clear txtHover">清除</div>
-                </div>
-                <div class="m_recycle_search_wrap" data-bind="template: {name: 'recycleSearchTemplate', foreach:recycleFun.recycleSearch}"></div>
-                <p class="noSearch" id="noSearch"></p>
-                <script type="text/html" id="recycleSearchTemplate">
-                    <div class="m_file_box m_recycle_box" data-bind="click:$root.recycleFun.recycleFind,css:{fileBox_checked:isChecked}">
-                        <div class="m_file_checkbox" data-bind="click:$root.recycleFun.recycleCheckBox">
-                            <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
-                        </div>
-                        <div class="m_file_name m_recycle_name">
-                            <span data-bind="showIcon:$root.showIcon($data)"></span>
-                            <p data-bind="html:hightFileName, attr:{title:FileNameTitle}"></p>
-                        </div>
-                        <div class="m_search_result_right">
-                            <div class="search_box_more"
-                                 data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
-                                ...
-                            </div>
-                            <div class="m_file_option">
-                                <div class="m_file_option_more m_recycle_option_more">
-                                    <div class="m_recycle_recovery" data-bind="click:function(data,event){$root.recycleFun.singleRecover(data,event)}"></div>
-                                    <div class="m_recycle_delete" data-bind="click:function(data,event){$root.recycleFun.recycleDelete(data,event)}"></div>
-                                </div>
-                            </div>
-                            <div class="m_recycle_result_second"><span data-bind="text:DeleteTime"></span><span> -</span><span data-bind="text:RecycleExpireTime"></span></div>
-                            <div class="m_search_result_third" data-bind="text:FileDisplaySize"></div>
-                        </div>
-                    </div>
-                </script>
-
-
-                <!--我的文件区域-->
-                <div class="m_file_item">
-                    <div>
-                        <i class="recycle_fileIcon" data-bind="click:$root.recycleFun.recyclefileIcon"></i>
-                        <p class="m_recycle_checkAll"
-                           data-bind="click:$root.recycleFun.recycleFilesAllChecked,css:{content_display:$root.recycleFun.isRecycleFile()}">
-                            <span class="recycle_checkAll_text"
-                                  data-bind="css:{content_display:$root.recycleFun.isCheckRecycleFiles()}"></span>
-                        </p>
-                        <span id="m_myRecycle_title">我的回收站</span>
-                    </div>
-                    <div class="m_file_order">
-                        <select data-bind="options: $root.recycleSortOptions,
-                       optionsText: 'text',
-                       value: $root.recycleCurSort"></select>
-                    </div>
-                </div>
-
-                <div class="m_recycle_wrap" data-bind="template: {name: 'recycleTemplate', foreach:recycleFun.recycleList}"></div>
-                <p class="myRecycleFiles" id="myRecycleFiles">未找到文件</p>
-                <script type="text/html" id="recycleTemplate">
-                    <div class="m_file_box m_recycle_box" data-bind="click:$root.recycleFun.recycleFile,css:{fileBox_checked:isChecked}">
-                        <div class="m_file_checkbox" data-bind="click:$root.recycleFun.recycleCheckBox">
-                            <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
-                        </div>
-                        <div class="m_file_name m_recycle_name">
-                            <span data-bind="showIcon:$root.showIcon($data)"></span>
-                            <p data-bind="text:FileName, attr:{title:FileNameTitle}"></p>
-                        </div>
-                        <div class="m_file_right">
-                            <div class="m_file_more"
-                                 data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
-                                ...
-                            </div>
-                            <div class="m_file_option">
-                                <div class="m_file_option_more m_recycle_option_more">
-                                    <div class="m_recycle_recovery" data-bind="click:function(data,event){$root.recycleFun.singleRecover(data,event)}"></div>
-                                    <div class="m_recycle_delete" data-bind="click:function(data,event){$root.recycleFun.recycleDelete(data,event)}"></div>
-                                </div>
-                            </div>
-                            <div class="m_recycle_result_second"><span data-bind="text:DeleteTime"></span><span> -</span><span data-bind="text:RecycleExpireTime"></span></div>
-                            <div class="m_file_third" data-bind="text:FileDisplaySize"></div>
-                        </div>
-                    </div>
-                </script>
-            </div>
-            <div class="loading_moreFiles" id="loading_recycleFiles">正在加载更多文件</div>
-            <!-- 分享文件分享区域 -->
-            <div class="l_main_footer">
-                <div class="m_footer_btn">
-                    <div class="m_footer_btn_left" id="recycle_recovery" data-bind="css:{share_background:$root.recycleFun.recycleBg(),txtHover:$root.recycleFun.recycleBg()},click:$root.recycleFun.recoverBtn">
-                        恢复文件
-                    </div>
-                    <div class="m_footer_btn_right" id="recycle_shred" data-bind="css:{share_background:$root.recycleFun.recycleBg(),txtHover:$root.recycleFun.recycleBg()},click:$root.recycleFun.deleteRecycle">
-                        永久删除
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 分享链接 -->
-        <div class="m_shareLink_wrap" data-bind="css:{content_display:$root.linkFun.showLinkDiv()}">
-            <div class="m_shareLink">
-                <p id="m_shareLink_item">我的分享链接</p>
-                <div id="m_shareLink_refresh" class="m_shareLink_refresh txtHover" data-bind="click:$root.linkFun.initShare">刷新</div>
-            </div>
-            <div class="m_shareLink_search">
-                <select class="shareLink_filterFile" id="shareLink_filterFile" data-bind="event: {change: $root.linkFun.initShare}">
-                    <option id="shareLink_seven" value="7">最近7天</option>
-                    <option id="shareLink_thirty" value="30">最近30天</option>
-                    <option id="shareLink_all" value="3650">全部</option>
-                </select>
-                <input type="text" name="share-text" class="m_shareLink_text" placeholder="关键字筛选" maxlength="30" onkeyup=" value=value.replace(/[\|\\\*^%$?#.\+\[\]\(\)]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\|\\\*^%$?#.\-+\[\]\(\)]/g,''))" />
-                <!-- <input type="text" name="share-text" class="m_shareLink_text" placeholder="关键字筛选" maxlength="30"/> -->
-            </div>
-            <div class="m_shareLink_container" data-bind="template: {name: 'shareTemplate', foreach:linkFun.shareList}"></div>
-            <p class="noLinkSearch" id="noLinkSearch">未找到搜索结果，请重试</p>
-            <script type="text/html" id="shareTemplate">
-                <div class="m_file_box shareLink_file_box" data-bind="click:$root.linkFun.linkListClick,css:{fileBox_checked:isChecked}">
-                    <div class="shareLink_file_checkbox" data-bind="click:$root.linkFun.linkCheckbox">
-                        <div class="shareLink_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
-                    </div>
-                    <div class="shareLink_file_expand" data-bind="click:function(data,event){$root.linkFun.fileExpand(data,event)}"></div>
-                    <div class="shareLink_file_name">
-                        <p data-bind="html:hightDisplayName, attr:{title:DisplayName}"></p>
-                    </div>
-                    <div class="shareLink_file_more" data-bind="click:function(data,event){$root.linkFun.linkMore(data,event)},css:{fileMore_btn:isChecked}">...</div>
-                    <div class="shareLink_file_option">
-                        <div class="file_option_more">
-                            <div class="shareLink_again" data-bind="click:function(data,event){$root.linkFun.shareAgain(data,event)},css:{content_display:isInvalidShare}"></div>
-                            <div class="shareLink_rename" data-bind="click:function(data,event){$root.linkFun.linkRename(data,event)},css:{content_display:isInvalidShare}"></div>
-                            <div class="shareLink_cancel" data-bind="click:function(data,event){$root.linkFun.cancelShare(data,event)}"></div>
-                        </div>
-                    </div>
-                    <div class="shareLink_file_auth" data-bind="text:AuthTypeDisplay"></div>
-                    <div class="shareLink_file_code"><span data-bind="text:ValidateCode"></span></div>
-                    <div class="shareLink_file_expire"><span data-bind="text:shareExpireTime"></span></div>
-                    <div class="shareLink_file_shareTime"><span data-bind="text:LastReviseTime"></span></div>
-                    <div class="shareLink_expand_content">
-                        <span class="shareLink_link" data-bind="text:ShortUrl,click:function(data,event){$root.linkFun.linkDownload(data,event)}"></span>
-                        <ul class="expand_files" data-bind="attr:{title:expandFiles},click:function(data,event){$root.linkFun.linkDownload(data,event)}">
-                            <!-- ko foreach: $data.expandShare -->
-                            <li data-bind="html: $data"></li>
-                            <!-- /ko -->
-                        </ul>
-                        <p><span class="expand_expire">下载期限：</span><span data-bind="text:ExpireDate"></span></p>
-                        <p><span class="expand_auth">身份验证：</span><span data-bind="text:AuthTypeName"></span></p>
-                        <p><span class="expand_code">验证码：</span><span data-bind="text:ValidateCode"></span></p>
-                    </div>
-                </div>
-            </script>
-
-            <div class="l_main_footer">
-                <div id="shareLink_cancelShare" class="shareLink_cancelShare" data-bind="css:{share_background:$root.linkFun.linkBg(),txtHover:$root.linkFun.linkBg()},click:$root.linkFun.deleteShare">取消分享</div>
-            </div>
         </div>
     </div>
+    <!-- 分享文件区域 -->
+                    <div class="m_share_wrap" data-bind="css:{content_display:$root.showShareDiv()}">
+                        <div class="m_share">
+                            <p id="m_share_item">选择需要分享的文件</p>
+                            <div id="m_share_refresh" class="m_share_refresh txtHover" data-bind="click:$root.totalRefresh">刷新</div>
+                            <div class="m_share_search">
+                                <input type="text" name="share-text" class="m_share_text" id="m_share_text" />
+                                <span class="searchBtn txtHover" id="searchBtn"></span>
+                            </div>
+                        </div>
+
+                        <div class="m_search_delete_box" data-bind="visible:showDeleteDiv">
+                            <div class="delete_box_left txtHover" id="fileShare_delete" data-bind="click:$root.batchDelete">删除</div>
+                            <div class="delete_box_right txtHover" id="fileShare_cancel" data-bind="click:$root.deselect">取消选定</div>
+                        </div>
+
+                        <!-- 搜索结果区域-->
+
+                        <div class="m_shareFiles_container" id="m_shareFiles_container">
+                            <div class="m_search_result_item" data-bind="css:{content_display:$root.showSearchResult()}">
+                                <div>
+                                    <span class="search_icon" id="search_icon" data-bind="click:$root.searchIconClick"></span>
+                                    <p class="m_file_checkAll"
+                                       data-bind="click:$root.checkAllSearchBox,css:{content_display:$root.isHaveSearch()}">
+                                        <span class="file_checkAll_text"
+                                              data-bind="css:{content_display:$root.isCheckAllSearch()}"></span>
+                                    </p>
+                                    <span>"</span>
+                                    <span class="search_title_text"></span>
+                                    <span>"</span>
+                                    <span id="m_search_title">的搜索结果</span>
+                                    <span class="resultMore"></span>
+                                </div>
+
+                                <div id="m_search_result_clear" class="m_search_result_clear txtHover">清除</div>
+                            </div>
+                            <div class="m_search_result_wrap" data-bind="template: {name: 'searchTemplate', foreach:search}"></div>
+                            <p class="research" id="m_search_result">未找到搜索结果，请重试</p>
+                            <script type="text/html" id="searchTemplate">
+                                <div class="m_file_box" data-bind="click:$root.searchCheck,css:{fileBox_checked:isChecked}">
+                                    <div class="m_file_checkbox" data-bind="click:$root.checkList">
+                                        <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
+                                    </div>
+                                    <div class="m_file_name">
+                                        <span data-bind="showIcon:$root.showIcon($data)"></span>
+                                        <p data-bind="html:hightFileName, attr:{title:FileName}"></p>
+                                    </div>
+                                    <div class="m_search_result_right">
+                                        <div class="search_box_more"
+                                             data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
+                                            ...
+                                        </div>
+                                        <div class="m_file_option">
+                                            <div class="m_file_option_more">
+                                                <div class="m_file_download"
+                                                     data-bind="click:function(data,event){$root.downloadSingleFile(data,event)}">
+                                                </div>
+                                                <div class="m_file_rename"
+                                                     data-bind="click:function(data,event){$root.renameClick(data,event)}">
+                                                </div>
+                                                <div class="m_file_delete"
+                                                     data-bind="click:function(data,event){$root.deleteSearch(data,event)}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m_search_result_second" data-bind="text:LastUpdateTime"></div>
+                                        <div class="m_search_result_third" data-bind="text:DisplayFileSize"></div>
+                                    </div>
+                                </div>
+                            </script>
+
+
+                            <!--我的文件区域-->
+                            <div class="m_file_item">
+                                <div>
+                                    <i id="m_file_icon" data-bind="click:$root.fileIconClick"></i>
+                                    <p class="m_file_checkAll"
+                                       data-bind="click:$root.checkAllFilesBox,css:{content_display:$root.isHaveFiles()}">
+                                        <span class="file_checkAll_text"
+                                              data-bind="css:{content_display:$root.isCheckAllFiles()}"></span>
+                                    </p>
+                                    <span id="m_file_title">我的文件</span>
+                                </div>
+                                <!--
+             <div class="m_file_order">
+                 <select data-bind="options: $root.filesSortOptions,
+    optionsText: 'text',
+    value: $root.fileCurSort"></select>
+             </div>
+                 -->
+                            </div>
+
+                            <div class="m_file_wrap" data-bind="template: {name: 'filesTemplate', foreach:files}"></div>
+                            <p class="myfiles" id="share_myFiles">未找到文件，请先到上传页面进行上传</p>
+
+                            <script type="text/html" id="filesTemplate">
+                                <div class="m_file_box" data-bind="click:$root.checkOne,css:{fileBox_checked:isChecked}">
+                                    <div class="m_file_checkbox" data-bind="click:$root.checkList">
+                                        <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
+                                    </div>
+                                    <div class="m_file_name">
+                                        <span data-bind="showIcon:$root.showIcon($data)"></span>
+                                        <p data-bind="text:FileName, attr:{title:FileName}"></p>
+                                    </div>
+                                    <div class="m_file_right">
+                                        <div class="m_file_more"
+                                             data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
+                                            ...
+                                        </div>
+                                        <div class="m_file_option">
+                                            <div class="m_file_option_more">
+                                                <div class="m_file_download"
+                                                     data-bind="click:function(data,event){$root.downloadSingleFile(data,event)}">
+                                                </div>
+                                                <div class="m_file_rename"
+                                                     data-bind="click:function(data,event){$root.renameClick(data,event)}">
+                                                </div>
+                                                <div class="m_file_delete"
+                                                     data-bind="click:function(data,event){$root.deleteClick(data,event)}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m_file_second" data-bind="text:LastUpdateTime"></div>
+                                        <div class="m_file_third" data-bind="text:DisplayFileSize"></div>
+                                    </div>
+                                </div>
+                            </script>
+                        </div>
+                        <div class="loading_moreFiles" id="loading_moreFiles">正在加载更多文件</div>
+                        <!-- 分享文件分享区域 -->
+                        <div class="l_main_footer">
+                            <div class="m_footer_btn">
+                                <div id="share_shareBtn_left" class="m_footer_btn_left "
+                                     data-bind="css:{share_background:$root.shareBg(),txtHover:$root.shareBg()},click:$root.advancedFileShare.advancedBtnClick">
+                                    高级分享
+                                </div>
+                                <div id="share_shareBtn_right" class="m_footer_btn_right"
+                                     data-bind="css:{share_background:$root.shareBg(),txtHover:$root.shareBg()},click:$root.quickShare">
+                                    快速分享
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 设置 -->
+                    <div class="m_main_settings" data-bind="css:{content_display:$root.showSettingDiv()}">
+                        <div class="m_setting_space">
+                            <p class="setting_space_title"><span id="setting_title">占用空间</span><span>&nbsp;-&nbsp;</span><span class="userId"></span></p>
+                            <p class="setting_space_used">
+                                <span id="setting_used">已使用/全部：</span><span class="space_used"></span> / <span class="space_all"></span>
+                            </p>
+                            <div class="setting_space_round">
+                                <div class="space_round_left"></div>
+                                <div class="space_round_right"></div>
+                                <div class="space_round_middle"></div>
+                            </div>
+                        </div>
+                        <div class="m_setting_language">
+                            <p class="setting_language_title" id="setting_lang_title">语言选项</p>
+                            <div class="setting_lang">
+                                <select id="language_change" class="language_change">
+                                    <option value="zh-CN" id="setting_lang_Chinese">中文</option>
+                                    <option value="en-US" id="setting_lang_English">英文</option>
+                                </select>
+                                <div class="language_btn" id="setting_lang_confirm"
+                                     data-bind="css:{share_background:$root.langBtn()},click:$root.langClick">
+                                    确定
+                                </div>
+                            </div>
+                            <p class="uploading_title" id="setting_lang_prompt"></p>
+                        </div>
+                    </div>
+                    <!-- 回收站 -->
+                    <div class="m_recycleBin_wrap" data-bind="css:{content_display:$root.recycleFun.showRecycleDiv()}">
+                        <div class="m_recycle">
+                            <p id="m_recycle_item">我的回收站</p>
+                            <div id="m_recycle_refresh" class="m_recycle_refresh txtHover" data-bind="click:$root.recycleFun.recycleRefresh">刷新</div>
+                            <div id="m_recycle_empty" class="m_recycle_empty txtHover" data-bind="click:$root.recycleFun.emptyRecycle">清空回收站</div>
+                            <div class="m_recycle_search">
+                                <input type="text" name="share-text" class="m_recycle_text" id="m_recycle_text" />
+                                <span class="recycleSearchBtn txtHover" id="recycleSearchBtn"></span>
+                            </div>
+                        </div>
+
+                        <div class="m_search_delete_box" data-bind="visible:$root.recycleFun.recycleToolBar">
+                            <div class="delete_box_left txtHover" id="recycle_delete" data-bind="click:$root.recycleFun.deleteRecycle">删除</div>
+                            <div class="delete_box_right txtHover" id="recycle_cancel" data-bind="click:$root.recycleFun.recycleDeselect">取消选定</div>
+                        </div>
+
+                        <!-- 搜索结果区域-->
+                        <div class="m_recycle_container" id="m_recycle_container">
+                            <div class="m_search_result_item" data-bind="css:{content_display:$root.recycleFun.showRecycleSearch()}">
+                                <div>
+                                    <span class="recycle_searchIcon" data-bind="click:$root.recycleFun.recycleSearchIcon"></span>
+                                    <p class="m_recycle_checkAll"
+                                       data-bind="click:$root.recycleFun.recycleSearchAllChecked,css:{content_display:$root.recycleFun.isRecycleSearch()}">
+                                        <span class="recycle_checkAll_text"
+                                              data-bind="css:{content_display:$root.recycleFun.isCheckRecycleSearch()}"></span>
+                                    </p>
+                                    <span>"</span>
+                                    <span class="recycleSearch_title_text"></span>
+                                    <span>"</span>
+                                    <span id="recycle_search_title">的搜索结果</span>
+                                    <span class="recycleExceed"></span>
+                                </div>
+                                <div id="m_recycle_search_clear" class="m_recycle_result_clear txtHover">清除</div>
+                            </div>
+                            <div class="m_recycle_search_wrap" data-bind="template: {name: 'recycleSearchTemplate', foreach:recycleFun.recycleSearch}"></div>
+                            <p class="noSearch" id="noSearch"></p>
+                            <script type="text/html" id="recycleSearchTemplate">
+                                <div class="m_file_box m_recycle_box" data-bind="click:$root.recycleFun.recycleFind,css:{fileBox_checked:isChecked}">
+                                    <div class="m_file_checkbox" data-bind="click:$root.recycleFun.recycleCheckBox">
+                                        <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
+                                    </div>
+                                    <div class="m_file_name m_recycle_name">
+                                        <span data-bind="showIcon:$root.showIcon($data)"></span>
+                                        <p data-bind="html:hightFileName, attr:{title:FileNameTitle}"></p>
+                                    </div>
+                                    <div class="m_search_result_right">
+                                        <div class="search_box_more"
+                                             data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
+                                            ...
+                                        </div>
+                                        <div class="m_file_option">
+                                            <div class="m_file_option_more m_recycle_option_more">
+                                                <div class="m_recycle_recovery" data-bind="click:function(data,event){$root.recycleFun.singleRecover(data,event)}"></div>
+                                                <div class="m_recycle_delete" data-bind="click:function(data,event){$root.recycleFun.recycleDelete(data,event)}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="m_recycle_result_second"><span data-bind="text:DeleteTime"></span><span> -</span><span data-bind="text:RecycleExpireTime"></span></div>
+                                        <div class="m_search_result_third" data-bind="text:FileDisplaySize"></div>
+                                    </div>
+                                </div>
+                            </script>
+
+
+                            <!--我的文件区域-->
+                            <div class="m_file_item">
+                                <div>
+                                    <i class="recycle_fileIcon" data-bind="click:$root.recycleFun.recyclefileIcon"></i>
+                                    <p class="m_recycle_checkAll"
+                                       data-bind="click:$root.recycleFun.recycleFilesAllChecked,css:{content_display:$root.recycleFun.isRecycleFile()}">
+                                        <span class="recycle_checkAll_text"
+                                              data-bind="css:{content_display:$root.recycleFun.isCheckRecycleFiles()}"></span>
+                                    </p>
+                                    <span id="m_myRecycle_title">我的回收站</span>
+                                </div>
+                                <div class="m_file_order">
+                                    <select data-bind="options: $root.recycleSortOptions,
+                       optionsText: 'text',
+                       value: $root.recycleCurSort"></select>
+                                </div>
+                            </div>
+
+                            <div class="m_recycle_wrap" data-bind="template: {name: 'recycleTemplate', foreach:recycleFun.recycleList}"></div>
+                            <p class="myRecycleFiles" id="myRecycleFiles">未找到文件</p>
+                            <script type="text/html" id="recycleTemplate">
+                                <div class="m_file_box m_recycle_box" data-bind="click:$root.recycleFun.recycleFile,css:{fileBox_checked:isChecked}">
+                                    <div class="m_file_checkbox" data-bind="click:$root.recycleFun.recycleCheckBox">
+                                        <div class="file_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
+                                    </div>
+                                    <div class="m_file_name m_recycle_name">
+                                        <span data-bind="showIcon:$root.showIcon($data)"></span>
+                                        <p data-bind="text:FileName, attr:{title:FileNameTitle}"></p>
+                                    </div>
+                                    <div class="m_file_right">
+                                        <div class="m_file_more"
+                                             data-bind="click:function(data,event){$root.moreClick(data,event)},css:{fileMore_btn:isChecked}">
+                                            ...
+                                        </div>
+                                        <div class="m_file_option">
+                                            <div class="m_file_option_more m_recycle_option_more">
+                                                <div class="m_recycle_recovery" data-bind="click:function(data,event){$root.recycleFun.singleRecover(data,event)}"></div>
+                                                <div class="m_recycle_delete" data-bind="click:function(data,event){$root.recycleFun.recycleDelete(data,event)}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="m_recycle_result_second"><span data-bind="text:DeleteTime"></span><span> -</span><span data-bind="text:RecycleExpireTime"></span></div>
+                                        <div class="m_file_third" data-bind="text:FileDisplaySize"></div>
+                                    </div>
+                                </div>
+                            </script>
+                        </div>
+                        <div class="loading_moreFiles" id="loading_recycleFiles">正在加载更多文件</div>
+                        <!-- 分享文件分享区域 -->
+                        <div class="l_main_footer">
+                            <div class="m_footer_btn">
+                                <div class="m_footer_btn_left" id="recycle_recovery" data-bind="css:{share_background:$root.recycleFun.recycleBg(),txtHover:$root.recycleFun.recycleBg()},click:$root.recycleFun.recoverBtn">
+                                    恢复文件
+                                </div>
+                                <div class="m_footer_btn_right" id="recycle_shred" data-bind="css:{share_background:$root.recycleFun.recycleBg(),txtHover:$root.recycleFun.recycleBg()},click:$root.recycleFun.deleteRecycle">
+                                    永久删除
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 分享链接 -->
+                    <div class="m_shareLink_wrap" data-bind="css:{content_display:$root.linkFun.showLinkDiv()}">
+                        <div class="m_shareLink">
+                            <p id="m_shareLink_item">我的分享链接</p>
+                            <div id="m_shareLink_refresh" class="m_shareLink_refresh txtHover" data-bind="click:$root.linkFun.initShare">刷新</div>
+                        </div>
+                        <div class="m_shareLink_search">
+                            <select class="shareLink_filterFile" id="shareLink_filterFile" data-bind="event: {change: $root.linkFun.initShare}">
+                                <option id="shareLink_seven" value="7">最近7天</option>
+                                <option id="shareLink_thirty" value="30">最近30天</option>
+                                <option id="shareLink_all" value="3650">全部</option>
+                            </select>
+                            <input type="text" name="share-text" class="m_shareLink_text" placeholder="关键字筛选" maxlength="30" onkeyup=" value=value.replace(/[\|\\\*^%$?#.\+\[\]\(\)]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\|\\\*^%$?#.\-+\[\]\(\)]/g,''))" />
+                            <!-- <input type="text" name="share-text" class="m_shareLink_text" placeholder="关键字筛选" maxlength="30"/> -->
+                        </div>
+                        <div class="m_shareLink_container" data-bind="template: {name: 'shareTemplate', foreach:linkFun.shareList}"></div>
+                        <p class="noLinkSearch" id="noLinkSearch">未找到搜索结果，请重试</p>
+                        <script type="text/html" id="shareTemplate">
+                            <div class="m_file_box shareLink_file_box" data-bind="click:$root.linkFun.linkListClick,css:{fileBox_checked:isChecked}">
+                                <div class="shareLink_file_checkbox" data-bind="click:$root.linkFun.linkCheckbox">
+                                    <div class="shareLink_checkbox_text" data-bind="css:{content_display:isChecked}"></div>
+                                </div>
+                                <div class="shareLink_file_expand" data-bind="click:function(data,event){$root.linkFun.fileExpand(data,event)}"></div>
+                                <div class="shareLink_file_name">
+                                    <p data-bind="html:hightDisplayName, attr:{title:DisplayName}"></p>
+                                </div>
+                                <div class="shareLink_file_more" data-bind="click:function(data,event){$root.linkFun.linkMore(data,event)},css:{fileMore_btn:isChecked}">...</div>
+                                <div class="shareLink_file_option">
+                                    <div class="file_option_more">
+                                        <div class="shareLink_again" data-bind="click:function(data,event){$root.linkFun.shareAgain(data,event)},css:{content_display:isInvalidShare}"></div>
+                                        <div class="shareLink_rename" data-bind="click:function(data,event){$root.linkFun.linkRename(data,event)},css:{content_display:isInvalidShare}"></div>
+                                        <div class="shareLink_cancel" data-bind="click:function(data,event){$root.linkFun.cancelShare(data,event)}"></div>
+                                    </div>
+                                </div>
+                                <div class="shareLink_file_auth" data-bind="text:AuthTypeDisplay"></div>
+                                <div class="shareLink_file_code"><span data-bind="text:ValidateCode"></span></div>
+                                <div class="shareLink_file_expire"><span data-bind="text:shareExpireTime"></span></div>
+                                <div class="shareLink_file_shareTime"><span data-bind="text:LastReviseTime"></span></div>
+                                <div class="shareLink_expand_content">
+                                    <span class="shareLink_link" data-bind="text:ShortUrl,click:function(data,event){$root.linkFun.linkDownload(data,event)}"></span>
+                                    <ul class="expand_files" data-bind="attr:{title:expandFiles},click:function(data,event){$root.linkFun.linkDownload(data,event)}">
+                                        <!-- ko foreach: $data.expandShare -->
+                                        <li data-bind="html: $data"></li>
+                                        <!-- /ko -->
+                                    </ul>
+                                    <p><span class="expand_expire">下载期限：</span><span data-bind="text:ExpireDate"></span></p>
+                                    <p><span class="expand_auth">身份验证：</span><span data-bind="text:AuthTypeName"></span></p>
+                                    <p><span class="expand_code">验证码：</span><span data-bind="text:ValidateCode"></span></p>
+                                </div>
+                            </div>
+                        </script>
+
+                        <div class="l_main_footer">
+                            <div id="shareLink_cancelShare" class="shareLink_cancelShare" data-bind="css:{share_background:$root.linkFun.linkBg(),txtHover:$root.linkFun.linkBg()},click:$root.linkFun.deleteShare">取消分享</div>
+                        </div>
+                    </div>
+                </div>
     <!-- 遮罩层 -->
     <div class="l_main_mask" id="l_main_mask"
          data-bind="css:{content_display:$root.shareSet()},click:$root.maskClose"></div>

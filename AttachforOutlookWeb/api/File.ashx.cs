@@ -42,6 +42,12 @@ namespace AttachforOutlookWeb.api
                         strJsonResult = GetFileList(context);
                         context.Response.Write(strJsonResult);
                         break;
+                    case "Search":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = Search(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                        
                     case "QuickUpload":
                         context.Response.ContentType = "text/plain";
                         strJsonResult = QuickUpload(context);
@@ -49,7 +55,7 @@ namespace AttachforOutlookWeb.api
                         break;
                     case "Upload":
                         context.Response.ContentType = "text/plain";
-                        strJsonResult = GetFileList(context);
+                        strJsonResult = Upload(context);
                         context.Response.Write(strJsonResult);
                         break;
                     case "CancelUpload":
@@ -67,8 +73,12 @@ namespace AttachforOutlookWeb.api
                         strJsonResult = DeleteFile(context);
                         context.Response.Write(strJsonResult);
                         break;
-
-
+                    case "Share":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = Share(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                        
                     default:
                         context.Response.Write(strJsonResult);
                         break;
@@ -130,6 +140,42 @@ namespace AttachforOutlookWeb.api
             return strJsonResult;
         }
 
+        private string Search(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "Search";
+            try
+            {
+                do
+                {                    
+                    int top = Convert.ToInt32(context.Request["Top"]);
+                    string keyword = context.Request["keyword"];
+
+                    Guid userid = this.CheckCookie(context);
+                    if (userid == Guid.Empty)
+                    {
+                        //error?
+                        break;
+                    }
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.Search(transactionid, userid, keyword, top, out strJsonResult);
+                    
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error($"File.ashx调用接口{funname}异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
         private string RenameFile(HttpContext context)
         {
             string strJsonResult = string.Empty;
@@ -181,10 +227,16 @@ namespace AttachforOutlookWeb.api
             {
                 do
                 {
-                    string id = context.Request.Form["fileID"];
-                   
-                    BigFileItemInfo info = new BigFileItemInfo();
-                    info.ID = Guid.Parse(id);                 
+                    string ids = context.Request.Form["fileID"];
+                    string[] idarr = ids.Split(',');
+                    List<BigFileItemInfo> infolist = new List<BigFileItemInfo>();
+                    for(int i = 0;i< idarr.Length;i++)
+                    {
+                        BigFileItemInfo info = new BigFileItemInfo();
+                        info.ID = Guid.Parse(idarr[i]);
+                        infolist.Add(info);
+                    }
+                            
 
                     Guid userid = this.CheckCookie(context);
                     if (userid == Guid.Empty)
@@ -193,8 +245,52 @@ namespace AttachforOutlookWeb.api
                         break;
                     }
                     BigAttachManager dll = new BigAttachManager(ClientIP);
-                    dll.DeleteFile(transactionid, userid, info, out strJsonResult);
+                    dll.DeleteFile(transactionid, userid, infolist, out strJsonResult);
                    
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error($"File.ashx调用接口{funname}异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string Share(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "Share";
+            try
+            {
+                do
+                {
+                    string ids = context.Request.Form["fileID"];
+                    string[] idarr = ids.Split(',');
+                    List<BigFileItemInfo> infolist = new List<BigFileItemInfo>();
+                    for (int i = 0; i < idarr.Length; i++)
+                    {
+                        BigFileItemInfo info = new BigFileItemInfo();
+                        info.ID = Guid.Parse(idarr[i]);
+                        infolist.Add(info);
+                    }
+
+
+                    Guid userid = this.CheckCookie(context);
+                    if (userid == Guid.Empty)
+                    {
+                        //error?
+                        break;
+                    }
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.Share(transactionid, userid, infolist, out strJsonResult);
+
                 } while (false);
             }
             catch (Exception ex)
@@ -292,7 +388,7 @@ namespace AttachforOutlookWeb.api
             string userAccount = string.Empty;
             ErrorCodeInfo error = new ErrorCodeInfo();
             Guid transactionid = Guid.NewGuid();
-            string funname = "CancelUpload";
+            string funname = "Upload";
             try
             {
                 do
@@ -338,7 +434,7 @@ namespace AttachforOutlookWeb.api
                     info.Position = Convert.ToInt32(Position);
                     info.Data = filedata;
                     BigAttachManager dll = new BigAttachManager(ClientIP);
-                    dll.CancelUpload(transactionid, userid, info, out strJsonResult);
+                    dll.Upload(transactionid, userid, info, out strJsonResult);
 
                 } while (false);
             }

@@ -10,7 +10,7 @@
                 opts.language = app.cookie('language') || _.getLanguage();
             }
 
-            var cookieUsers = app.cookie('users');
+            var cookieUsers = app.cookie('BGQTUserToken')('Token');
             if (cookieUsers) {
                 var users = JSON.parse(cookieUsers);
 

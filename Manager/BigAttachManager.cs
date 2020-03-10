@@ -125,6 +125,58 @@ namespace Manager
             return result;
         }
 
+        public bool Search(
+            Guid transactionid,
+            Guid userid,
+            string keyword,
+            int top,           
+            out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||keyword:{keyword}";
+            paramstr += $"||top:{top}";
+            string funname = "Search";
+
+            try
+            {
+                do
+                {
+                    AttachResultInfo resultinfo = new AttachResultInfo();
+                    BigFileListInfo bfli = new BigFileListInfo();
+
+
+                    BigAttachDBProvider Provider = new BigAttachDBProvider();
+                    result = Provider.Search(transactionid, userid, keyword, top, out bfli, out error);
+                    if (result == true)
+                    {
+                        resultinfo.data = bfli;
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("BigAttachManager调用GetFileList异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
         public bool RenameFile(
             Guid transactionid,
             Guid userid,
@@ -176,7 +228,7 @@ namespace Manager
         public bool DeleteFile(
             Guid transactionid,
             Guid userid,
-            BigFileItemInfo info,
+            List<BigFileItemInfo> infolist,
             out string strJsonResult)
         {
             bool result = true;
@@ -184,7 +236,11 @@ namespace Manager
             ErrorCodeInfo error = new ErrorCodeInfo();
             string paramstr = string.Empty;
             paramstr += $"userid:{userid}";
-            paramstr += $"||ID:{info.ID}";
+            foreach(BigFileItemInfo bi in infolist)
+            {
+                paramstr += $"||ID:{bi.ID}";
+            }
+        
             string funname = "DeleteFile";
 
             try
@@ -193,19 +249,25 @@ namespace Manager
                 {
                     AttachResultInfo resultinfo = new AttachResultInfo();
                     BigAttachDBProvider Provider = new BigAttachDBProvider();
-                    result = Provider.DeleteFile(transactionid, userid, ref info, out error);
-                    if (result == true)
+                    for (int i = 0; i < infolist.Count; i++)
                     {
-                        //delete temp file 
-                        if (info.FilePath != string.Empty)
+                        BigFileItemInfo info = infolist[i];
+                        result = Provider.DeleteFile(transactionid, userid, ref info, out error);
+                        if (result == true)
                         {
-                            FileInfo fi = new FileInfo(info.FilePath);
-                            if (fi.Exists)
+                            //delete temp file 
+                            if (info.FilePath != string.Empty)
                             {
-                                fi.Delete();
+                                FileInfo fi = new FileInfo(info.FilePath);
+                                if (fi.Exists)
+                                {
+                                    fi.Delete();
+                                }
                             }
                         }
-                        // to do
+                    }                       
+                    if (result == true)
+                    {                        
                         resultinfo.data = true;
                         strJsonResult = JsonConvert.SerializeObject(resultinfo);
                         LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
@@ -374,7 +436,7 @@ namespace Manager
 
                     if (info.FileName.IndexOf('.') > 0)
                     {
-                        info.ExtensionName = info.FileName.Substring(info.FileName.LastIndexOf('.'));
+                        infonow.ExtensionName = info.FileName.Substring(info.FileName.LastIndexOf('.'));
                     }
 
                     result = Provider.CheckFile(transactionid, userid, ref infonow, out error);
@@ -382,14 +444,24 @@ namespace Manager
                     {
                         //error
                         //?
+                        break;
                     }
                     
                     //check file exists and create
                     FileInfo finfo = new FileInfo(infonow.FilePath);
+                    if (finfo.Exists == false && infonow.ChunkIndex != 0)
+                    {
+                        //error
+                        //?
+                        break;
+                    }
                     if (finfo.Exists == false && infonow.ChunkIndex == 0)
                     {
-                        finfo.Create();
+                        FileStream createfs = finfo.Create();
+                        createfs.Close();
                     }
+                    finfo.Refresh();
+                    
                     long sizenow = finfo.Length;
                     
                     FileStream fs = null;
@@ -398,12 +470,13 @@ namespace Manager
                         if(sizenow != info.Position)
                         {
                             //delete file
-                            finfo.Create();
+                            finfo.Delete();
                             BigFileItemInfo deleteinfo = new BigFileItemInfo();
                             deleteinfo.TempID = infonow.TempID;
                             Provider.CancelUpload(transactionid, userid, ref deleteinfo, out error);
                             //error
                             // to do
+                            break;
                         }
                         else
                         {
@@ -432,11 +505,14 @@ namespace Manager
                         // upload finish
                         // move file to new folder
                         string newpath = infonow.FilePath.Substring(0, infonow.FilePath.LastIndexOf("\\temp\\")) +
-                            @"\" + DateTime.Now.ToString("yyyy-MM-dd") + 
-                            infonow.FilePath.Substring(infonow.FilePath.LastIndexOf('\\'));
-
-                        finfo.MoveTo(newpath);
-                        info.FilePath = newpath;
+                            @"\" + DateTime.Now.ToString("yyyy-MM-dd") ;
+                        string newfilepath = newpath + infonow.FilePath.Substring(infonow.FilePath.LastIndexOf('\\'));
+                        if (Directory.Exists(newpath) == false)
+                        {
+                            Directory.CreateDirectory(newpath);
+                        }
+                        finfo.MoveTo(newfilepath);
+                        info.FilePath = newfilepath;
                         result = Provider.UploadFinish(transactionid, userid, ref info, out error);
                         if (result == true)
                         {
@@ -596,6 +672,100 @@ namespace Manager
                     }
                     else
                     {
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error($"BigAttachManager调用{funname}异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool Share(
+            Guid transactionid,
+            Guid userid,
+            List<BigFileItemInfo> infolist,
+            out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            foreach (BigFileItemInfo bi in infolist)
+            {
+                paramstr += $"||ID:{bi.ID}";
+            }
+
+            string funname = "Share";
+
+            try
+            {
+                do
+                {
+                    AttachResultInfo resultinfo = new AttachResultInfo();
+                    BigAttachDBProvider Provider = new BigAttachDBProvider();
+                   
+                    ShareSettingsInfo ssi = new ShareSettingsInfo();
+                    result = Provider.GetShareSettings(transactionid, userid, ref ssi, out error);
+                    if (result == false)
+                    {
+                        resultinfo.data = false;
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    string template = ssi.ShareNotificationTemplate;
+                    string filestr = string.Empty;
+                    for (int i = 0; i < infolist.Count; i++)
+                    {
+                        BigFileItemInfo info = infolist[i];
+                        result = Provider.GetFileByID(transactionid, userid, ref info, out error);
+                        if (result == true)
+                        {
+                            filestr += $"<span>{info.FileName}<br /></span>";
+                        }
+                    }
+                    template = template.Replace("{filename}", filestr);
+                    ShareInfo si = new ShareInfo();                    
+                    result = Provider.AddShare(transactionid, userid, ref si, out error);
+                    if (result == false)
+                    {
+                        resultinfo.data = false;
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+
+                    template = template.Replace("{exptime}", si.ExpireTime.ToString("yyyy-MM-dd"));
+                    template = template.Replace("{url}", si.ShortUrl);
+                    template = template.Replace("{validatecode}", si.ValCode);
+                    if (result == true)
+                    {
+                        for (int i = 0; i < infolist.Count; i++)
+                        {
+                            BigFileItemInfo info = infolist[i];
+                            result = Provider.AddShareFile(transactionid, si.ShareID, info.ID, out error);                          
+                        }
+                        resultinfo.data = template;
+                        JsonSerializerSettings jsetting = new JsonSerializerSettings();
+                        jsetting.StringEscapeHandling = StringEscapeHandling.EscapeHtml;
+                        
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        resultinfo.data = false;
                         LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;
                     }

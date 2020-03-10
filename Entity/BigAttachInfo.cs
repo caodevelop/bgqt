@@ -58,7 +58,7 @@ namespace Entity
 
     public class BigFileListInfo
     {
-        public List<BigFileItemInfo> files { get; set; }
+        public List<BigFileItemInfo> files { get; set; } = new List<BigFileItemInfo>();
         public int pageCount { get; set; } = 0;
         public int recordCount { get; set; } = 0;
     }
@@ -132,28 +132,14 @@ namespace Entity
         public byte[] Data { get; set; } 
     }
 
-    public class Rootobject
-    {
-        public object error { get; set; }
-        public Data data { get; set; }
+    public class ShareInfo
+    {        
+        public Guid ShareID { get; set; } = Guid.Empty;
+        public string ShortUrl { get; set; } = string.Empty;
+        public DateTime ExpireTime { get; set; } = DateTime.Now;
+        public string ValCode { get; set; } = string.Empty;
     }
 
-    public class Data
-    {
-        public string ID { get; set; }
-        public string FileName { get; set; }
-        public string FileFullName { get; set; }
-        public string HashCode { get; set; }
-        public string ExtensionName { get; set; }
-        public float FileSize { get; set; }
-        public string DisplayName { get; set; }
-        public string UserID { get; set; }
-        public string AuthorName { get; set; }
-        public int FileStatus { get; set; }
-        public string FolderID { get; set; }
-        public string StoreID { get; set; }
-        public DateTime UploadTime { get; set; }
-        public DateTime LastUpdateTime { get; set; }
-    }
+   
 
 }

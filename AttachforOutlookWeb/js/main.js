@@ -223,7 +223,7 @@
                     var files = json.data.files;
                     _.timeShift(files);
                     callback(json.data);
-                    $('.m_file_download').html(win.currLanguageDic['fileDownload']);
+                    //$('.m_file_download').html(win.currLanguageDic['fileDownload']);
                     $('.m_file_rename').html(win.currLanguageDic['fileRename']);
                     $('.m_file_delete').html(win.currLanguageDic['fileRemove']);
                 }
@@ -352,7 +352,7 @@
                 _.opts.search.scrollTop(0);
                 opts.searchIcon.removeClass('icon_showtoggle');
                 opts.resultWrap.slideDown();
-                $('.m_file_download').html(win.currLanguageDic['fileDownload']);
+                //$('.m_file_download').html(win.currLanguageDic['fileDownload']);
                 $('.m_file_rename').html(win.currLanguageDic['fileRename']);
                 $('.m_file_delete').html(win.currLanguageDic['fileRemove']);
             })
@@ -2292,14 +2292,17 @@
     page.quickShare = function () { //分享文件快速分享
         var _ = this;
         var arr = [], i;
+        var idarr = [];
         for (i = 0; i < page.search().length; i++) {
             if (page.search()[i].isChecked() == true) {
-                arr.push(page.search()[i]);
+                arr.push(page.search()[i]); 
+                idarr.push(page.search()[i].ID());
             }
         }
         for (i = 0; i < page.files().length; i++) {
             if (page.files()[i].isChecked() == true) {
                 arr.push(page.files()[i]);
+                idarr.push(page.files()[i].ID());
             }
         }
 
@@ -2314,6 +2317,7 @@
 
 
         var fileObjs = [];
+       
         arr = ko.mapping.toJS(arr); //变成原生的js
         for (var i = 0; i < arr.length; i++) {
             fileObjs.push({
@@ -2323,7 +2327,7 @@
             })
         }
         var shareParams = {
-            "Objects": fileObjs,
+            "fileID": idarr.join(),
             "IsAuth": null,
             "IsValidate": null,
             "ValidateCode": null,
@@ -2355,10 +2359,12 @@
         var _ = this,
             opts = _.opts;
         var arr = [];
+        var idarr = [];
         opts.arrayWrap.find('.upload_text').each(function () {
             var $this = $(this);
             if ($this.hasClass('upload_text_content')) {
                 arr.push($this.parent().parent().parent().attr('id'));
+               
             }
         });
         if (arr.length <= 0) return;
@@ -2372,6 +2378,7 @@
         var fileObjs = [];
         for (var i = 0; i < arr.length; i++) {
             var tempFile = page.tasks[arr[i]].remoteFileInfo;
+            idarr.push(tempFile.FileID);
             fileObjs.push({
                 "ObjectId": tempFile.FileID,
                 "ObjectClass": "file",
@@ -2379,7 +2386,7 @@
             });
         }
         var shareParams = {
-            "Objects": fileObjs,
+            "fileID": idarr.join(),
             "IsAuth": null,
             "IsValidate": null,
             "ValidateCode": null,
@@ -2787,9 +2794,9 @@
             files: 'api/file.ashx?op=GetFileList', //获取用户的所有文件
             rename: 'api/file.ashx?op=RenameFile', //重命名文件
             deleteFile: 'api/file.ashx?op=DeleteFile', //删除文件
-            search: 'api/file/search',
-            share: 'api/share/share',
-            strategy: 'api/setting/getShareSettings',
+            search: 'api/file.ashx?op=Search',
+            share: 'api/file.ashx?op=Share',
+            strategy: 'api/setting.ashx?op=GetShareSettings',
             buildValidateCode: 'api/share/buildValidateCode',
             getdownloadhashvalue: 'api/file/getdownloadhashvalue',
             singleFileDownload: 'api/file/downloadFileById',
