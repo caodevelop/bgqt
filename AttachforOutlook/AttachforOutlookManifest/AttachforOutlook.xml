@@ -113,9 +113,9 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://10.9.10.32:9443/Images/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://10.9.10.32:9443/Images/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://10.9.10.32:9443/Images/icon-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://10.9.10.32:9443/Images/logo16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://10.9.10.32:9443/Images/logo32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://10.9.10.32:9443/Images/logo64.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Commands.Url" DefaultValue="https://10.9.10.32:9443/home.html"/>

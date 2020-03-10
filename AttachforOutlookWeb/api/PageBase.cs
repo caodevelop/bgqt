@@ -89,7 +89,7 @@ namespace AttachforOutlookWeb.api
         public Guid CheckCookie(HttpContext context)
         {
             Guid userid = Guid.Empty;
-            if (context.Request.Cookies["BGQTUserToken"] != null)
+            if (context.Request.Cookies["BGQTUserToken"] == null)
             {
                 // return error?
             }

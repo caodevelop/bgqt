@@ -21,6 +21,11 @@
                     return;
                 }
             }
+            else {
+                _.autoSignin(function () {
+                    _.redirectMain(opts.language, opts.currentEmailAddress);
+                });
+            }
 
             opts.lDefaultLoading.hide();
             opts.lDemoMainWrap.show();
@@ -73,7 +78,7 @@
         },
         redirectMain: function (language, userName) {
             win.location.assign(app.global.mainUri
-                + '?language=' + language
+                + '?language=zh-CN' //+ language
                 + '&userName=' + userName
                 + '&hidesignout=' + '1');
         },
@@ -163,7 +168,7 @@
     page.server = page.server(app.global.debug ? {
         autoSignin: '/data/autosignin.json'
     } : {
-            autoSignin: 'api/account/autosignin'
+            autoSignin: 'api/setting.ashx?op=AutoLogin'
         });
 
     page.beginBtn = ko.observable(false);

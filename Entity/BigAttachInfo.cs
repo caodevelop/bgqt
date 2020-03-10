@@ -9,6 +9,11 @@ namespace Entity
     class BigAttachInfo
     {
     }
+    public class AttatchUserInfo
+    {
+        public string currentEmailAddress { get; set; }
+    }
+
 
     public class AttachResultInfo
     {
@@ -37,6 +42,19 @@ namespace Entity
         public string OutlookFolderID { get; set; } = string.Empty;
     }
 
+    public class ShareSettingsInfo
+    {
+        public bool MustAuth { get; set; } = false;
+        public bool AllowChangeAtuth { get; set; } = false;
+        public bool AllowChangeExpireTime { get; set; } = false;
+        public DateTime ExpireTime { get; set; } = DateTime.MinValue;
+        public int FileShareLimit { get; set; } = 100;
+        public string ShareNotificationTemplate { get; set; } = string.Empty;
+        public bool AllowChangeValidateSetting { get; set; } = false;
+        public bool ValidateCheckBoxChecked { get; set; } = false;
+        public object DefaultValidateCode { get; set; } = "x3b6g9";
+    }
+
 
     public class BigFileListInfo
     {
@@ -48,9 +66,18 @@ namespace Entity
     public class BigFileItemInfo
     {
         public Guid ID { get; set; } = Guid.Empty;
+
+        public Guid FileID { get; set; } = Guid.Empty;
+
+        public Guid TempID { get; set; } = Guid.Empty;
         public string FileName { get; set; } = string.Empty;
+
+        public string FilePath { get; set; } = string.Empty;
+
         public string FileFullName { get; set; } = string.Empty;
         public string HashCode { get; set; } = string.Empty;
+     
+        
         public string ExtensionName { get; set; } = string.Empty;
         public double FileSize { get; set; } = 0.00;
         public string DisplayName { get; set; } = string.Empty;
@@ -92,9 +119,18 @@ namespace Entity
                 return str;
             }
         }
+
+        public bool Succeed { get; set; } = true;
     }
 
-
+    public class UploadFileItemInfo : BigFileItemInfo
+    {
+        public long TotalChunks { get; set; } = 0;
+        public long ChunkIndex { get; set; } = 0;
+        public long FileSizeInt { get; set; } = 0;
+        public long Position { get; set; } = 0;
+        public byte[] Data { get; set; } 
+    }
 
     public class Rootobject
     {

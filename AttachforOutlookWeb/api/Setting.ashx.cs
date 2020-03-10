@@ -44,14 +44,25 @@ namespace AttachforOutlookWeb.api
                         break;
                     case "GetUploadBar":
                         context.Response.ContentType = "text/plain";
-                        strJsonResult = GetUploadBar(context);
+                        strJsonResult = GetUploadPar(context);
                         context.Response.Write(strJsonResult);
                         break;
+                    case "GetShareSettings":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetShareSettings(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                        
                     case "AutoLogin":
                         context.Response.ContentType = "text/plain";
                         strJsonResult = AutoLogin(context);
                         context.Response.Write(strJsonResult);
                         break;
+                    case "GetServerTime":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetServerTime(context);
+                        context.Response.Write(strJsonResult);
+                        break;                        
                     default:
                         context.Response.Write(strJsonResult);
                         break;
@@ -107,7 +118,7 @@ namespace AttachforOutlookWeb.api
             return strJsonResult;
         }
 
-        private string GetUploadBar(HttpContext context)
+        private string GetUploadPar(HttpContext context)
         {
             string strJsonResult = string.Empty;
             string userAccount = string.Empty;
@@ -153,7 +164,40 @@ namespace AttachforOutlookWeb.api
 
             return strJsonResult;
         }
+        private string GetShareSettings(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetShareSettings";
+            try
+            {
+                do
+                {
+                
+                    Guid userid = this.CheckCookie(context);
+                    if (userid == Guid.Empty)
+                    {
+                        //error?
+                        break;
+                    }
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.GetShareSettings(transactionid, userid, out strJsonResult);
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("Setting.ashx调用接口GetShareSettings异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
 
+            return strJsonResult;
+        }
+
+        
         private string AutoLogin(HttpContext context)
         {
             string strJsonResult = string.Empty;
@@ -165,10 +209,46 @@ namespace AttachforOutlookWeb.api
             {
                 do
                 {
-                    HttpCookie myCookie = new HttpCookie("BGQTUserToken");
-                    myCookie["Token"] = Guid.NewGuid().ToString();
-                    myCookie.Expires = DateTime.Now.AddHours(1);
-                    context.Response.Cookies.Add(myCookie);
+                    string email = context.Request["mailAddress"];
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    Guid userid = Guid.Empty;
+                    bool result = dll.GetUserIDByEmail(transactionid, email, out userid, out strJsonResult);
+                    if (result == true)
+                    {
+                        HttpCookie myCookie = new HttpCookie("BGQTUserToken");
+                        myCookie["Token"] = userid.ToString();
+                        myCookie["Account"] = email;
+                        myCookie.Expires = DateTime.Now.AddHours(1);
+                        context.Response.Cookies.Add(myCookie);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("Setting.ashx调用接口AutoLogin异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetServerTime(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetServerTime";
+            try
+            {
+                do
+                {
+
+                    AttachResultInfo ar = new AttachResultInfo();
+                    ar.data = DateTime.Now.ToString("yyyy-MM-dd");
+                    strJsonResult = JsonConvert.SerializeObject(ar);
                 } while (false);
             }
             catch (Exception ex)

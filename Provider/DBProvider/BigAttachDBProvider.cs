@@ -15,6 +15,92 @@ namespace Provider.DBProvider
 {
     public class BigAttachDBProvider
     {
+        public bool GetUserIDByEmail(
+            Guid transactionid,
+            string email,
+            out Guid userid,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            userid = Guid.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"email:{email}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraUserID = new SqlParameter("@Email", email);
+                paras.Add(paraUserID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_GetUserIDByEmail]", out ds, out strError))
+                    {
+                        strError = "GetUserIDByEmail异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用GetUserIDByEmail异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        DataRow sdr = ds.Tables[1].Rows[0];                                    
+                                        userid = Guid.Parse(Convert.ToString(sdr["UserID"]));
+                                    }
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotExist;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用GetGlobalUploadSetting异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用GetGlobalUploadSetting异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用GetGlobalUploadSetting异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
         public bool GetFileList(
             Guid transactionid,
             Guid userid, 
@@ -264,6 +350,175 @@ namespace Provider.DBProvider
             return bResult;
         }
 
+        public bool GetShareSettings(
+            Guid transactionid,
+            Guid userid,
+            ref ShareSettingsInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraUserID = new SqlParameter("@UserID", userid);
+                paras.Add(paraUserID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_GetShareSettings]", out ds, out strError))
+                    {
+                        strError = "GetShareSettings异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用GetShareSettings异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        DataRow sdr = ds.Tables[1].Rows[0];
+                                        info.DefaultValidateCode = null;
+                                        int expireday = Convert.ToInt32(sdr["ExpireTime"]);
+                                        info.ExpireTime = DateTime.Now.AddDays(expireday);
+                                        info.ShareNotificationTemplate = Convert.ToString(sdr["ShareNotificationTemplate"]);
+                                        info.FileShareLimit = Convert.ToInt32(sdr["FileShareLimit"]);
+                                    }
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用GetShareSettings异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用GetShareSettings异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用GetGlobalUploadSetting异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool RenameFile(
+            Guid transactionid,
+            Guid userid,
+            ref BigFileItemInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||ID:{info.ID}";
+            paramstr += $"||FileName:{info.FileName}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraID = new SqlParameter("@ID", info.ID);
+                SqlParameter paraFileName = new SqlParameter("@FileName", info.FileName);
+                paras.Add(paraID);
+                paras.Add(paraFileName);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_RenameFile]", out ds, out strError))
+                    {
+                        strError = "RenameFile异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.FileNotExist;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
         public bool DeleteFile(
             Guid transactionid,
             Guid userid,
@@ -279,10 +534,8 @@ namespace Provider.DBProvider
             try
             {
                 CParameters paras = new CParameters();
-                SqlParameter paraUserID = new SqlParameter("@UserID", userid);
-                SqlParameter paraFileID = new SqlParameter("@FileID", info.ID);
-                paras.Add(paraUserID);
-                paras.Add(paraFileID);
+                SqlParameter paraID = new SqlParameter("@ID", info.ID);
+                paras.Add(paraID);
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
@@ -305,12 +558,15 @@ namespace Provider.DBProvider
                             switch (iResult)
                             {
                                 case 0:
-                                    bResult = true;                                  
-                                    break;
                                 case -1:
-                                    bResult = false;
-                                    error.Code = ErrorCode.HaveSameOu;
-                                    break;
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        DataRow sdr = ds.Tables[1].Rows[0];
+                                        info.FilePath = Convert.ToString(sdr["FilePath"]);
+                                    }
+                                    break;                             
+                                    
                                 case -9999:
                                     bResult = false;
                                     error.Code = ErrorCode.SQLException;
@@ -347,7 +603,7 @@ namespace Provider.DBProvider
             return bResult;
         }
 
-        public bool RenameFile(
+        public bool QuickUpload(
             Guid transactionid,
             Guid userid,
             ref BigFileItemInfo info,
@@ -356,26 +612,26 @@ namespace Provider.DBProvider
             error = new ErrorCodeInfo();
             string paramstr = string.Empty;
             paramstr += $"userid:{userid}";
-            paramstr += $"||ID:{info.ID}";
-            paramstr += $"||FileName:{info.FileName}";
+            paramstr += $"||HashCode:{info.HashCode}";
+            info.Succeed = false;
             string strError = string.Empty;
             bool bResult = true;
             try
             {
                 CParameters paras = new CParameters();
+                SqlParameter paraHashCode = new SqlParameter("@HashCode", info.HashCode);
                 SqlParameter paraUserID = new SqlParameter("@UserID", userid);
-                SqlParameter paraFileName = new SqlParameter("@FileName", info.FileName);
+                paras.Add(paraHashCode);
                 paras.Add(paraUserID);
-                paras.Add(paraFileName);
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
                 {
                     DataSet ds = new DataSet();
-                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_RenameFile]", out ds, out strError))
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_QuickUpload]", out ds, out strError))
                     {
-                        strError = "RenameFile异常,Error:" + strError;
-                        LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, strError, transactionid);
+                        strError = "QuickUpload异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用QuickUpload异常", paramstr, strError, transactionid);
                         bResult = false;
                         error.Code = ErrorCode.SQLException;
                         break;
@@ -390,11 +646,16 @@ namespace Provider.DBProvider
                             {
                                 case 0:
                                     bResult = true;
-                                    break;                            
+                                    info.Succeed = true;
+                                    break;
+                                case -1:
+                                    bResult = true;
+                                    info.Succeed = false;
+                                    break;
                                 case -9999:
                                     bResult = false;
                                     error.Code = ErrorCode.SQLException;
-                                    LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, "-9999", transactionid);
+                                    LoggerHelper.Error("BigAttachDBProvider调用QuickUpload异常", paramstr, "-9999", transactionid);
                                     break;
 
                                 default:
@@ -414,7 +675,7 @@ namespace Provider.DBProvider
                     {
                         bResult = false;
                         error.Code = ErrorCode.Exception;
-                        LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                        LoggerHelper.Error("BigAttachDBProvider调用QuickUpload异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
                     }
                 } while (false);
             }
@@ -422,9 +683,358 @@ namespace Provider.DBProvider
             {
                 bResult = false;
                 error.Code = ErrorCode.Exception;
-                LoggerHelper.Error("BigAttachDBProvider调用RenameFile异常", paramstr, ex.ToString(), transactionid);
+                LoggerHelper.Error("BigAttachDBProvider调用QuickUpload异常", paramstr, ex.ToString(), transactionid);
             }
             return bResult;
         }
+
+        public bool CancelUpload(
+            Guid transactionid,
+            Guid userid,
+            ref BigFileItemInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||TempID:{info.TempID}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraTempID = new SqlParameter("@TempID", info.TempID);
+                paras.Add(paraTempID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_CancelUpload]", out ds, out strError))
+                    {
+                        strError = "CancelUpload异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用CancelUpload异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                case -1:
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        DataRow sdr = ds.Tables[1].Rows[0];                                        
+                                        info.FilePath = Convert.ToString(sdr["FilePath"]);
+                                    }
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用CancelUpload异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用CancelUpload异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用QuickUpload异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool CheckFile(
+            Guid transactionid,
+            Guid userid,
+            ref UploadFileItemInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||TempID:{info.TempID}";
+            paramstr += $"||HashCode:{info.HashCode}";
+            paramstr += $"||FileName:{info.FileName}";
+            paramstr += $"||ExtensionName:{info.ExtensionName}";
+            paramstr += $"||FileSize:{info.FileSize}";
+            paramstr += $"||ChunkIndex:{info.ChunkIndex}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraTempID = new SqlParameter("@TempID", info.TempID);
+                SqlParameter paraFileName = new SqlParameter("@FileName", info.FileName);
+                SqlParameter paraExtensionName = new SqlParameter("@ExtensionName", info.ExtensionName);
+                SqlParameter paraFileSize = new SqlParameter("@FileSize", info.FileSize);
+                SqlParameter paraChunkIndex = new SqlParameter("@ChunkIndex", info.ChunkIndex);
+                SqlParameter paraUserD = new SqlParameter("@UserD", userid);
+                SqlParameter paraHashCode = new SqlParameter("@HashCode", info.HashCode);
+
+                paras.Add(paraTempID);
+                paras.Add(paraFileName);
+                paras.Add(paraExtensionName);
+                paras.Add(paraFileSize);
+                paras.Add(paraChunkIndex);
+                paras.Add(paraUserD);
+                paras.Add(paraHashCode);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_CheckFile]", out ds, out strError))
+                    {
+                        strError = "CheckFile异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用CheckFile异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                case 1:
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        DataRow sdr = ds.Tables[1].Rows[0];
+                                        info.FilePath = Convert.ToString(sdr["FilePath"]);
+                                        info.ChunkIndex = Convert.ToInt64(sdr["ChunkIndex"]);
+                                        info.FileSizeInt = Convert.ToInt64(sdr["FileSize"]);
+                                    }
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用CheckFile异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用CheckFile异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用CheckFile异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool Upload(
+            Guid transactionid,
+            Guid userid,
+            ref UploadFileItemInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||ChunkIndex:{info.ChunkIndex}";
+            paramstr += $"||TempID:{info.TempID}";
+            info.Succeed = false;
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraTempID = new SqlParameter("@TempID", info.TempID);
+                SqlParameter paraChunkIndex = new SqlParameter("@ChunkIndex", info.ChunkIndex);
+                paras.Add(paraTempID);
+                paras.Add(paraChunkIndex);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_Upload]", out ds, out strError))
+                    {
+                        strError = "Upload异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用Upload异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;  
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用Upload异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用Upload异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用Upload异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool UploadFinish(
+            Guid transactionid,
+            Guid userid,
+            ref UploadFileItemInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||FilePath:{info.FilePath}";
+            paramstr += $"||TempID:{info.TempID}";
+            info.Succeed = false;
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraTempID = new SqlParameter("@TempID", info.TempID);
+                SqlParameter paraFilePath = new SqlParameter("@FilePath", info.FilePath);
+                paras.Add(paraTempID);
+                paras.Add(paraFilePath);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_UploadFinish]", out ds, out strError))
+                    {
+                        strError = "UploadFinish异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用UploadFinish异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用UploadFinish异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用UploadFinish异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用UploadFinish异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
     }
 }

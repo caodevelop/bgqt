@@ -2784,23 +2784,23 @@
         linkRename: '/data/renameShare.json',
         reuseShare: '/data/reuseShare.json'
     } : {
-            files: 'api/file/list', //获取用户的所有文件
-            rename: 'api/file/reName', //重命名文件
-            deleteFile: 'api/file/delete', //删除文件
+            files: 'api/file.ashx?op=GetFileList', //获取用户的所有文件
+            rename: 'api/file.ashx?op=RenameFile', //重命名文件
+            deleteFile: 'api/file.ashx?op=DeleteFile', //删除文件
             search: 'api/file/search',
             share: 'api/share/share',
             strategy: 'api/setting/getShareSettings',
             buildValidateCode: 'api/share/buildValidateCode',
             getdownloadhashvalue: 'api/file/getdownloadhashvalue',
             singleFileDownload: 'api/file/downloadFileById',
-            getuploadpar: 'api/setting.ashx?op=getuploadpar',
-            upload: 'api/file/upload',
-            quickUpload: 'api/file/QuickUpload',
-            cancelUpload: 'api/file/cancelupload',
+            getuploadpar: 'api/setting.ashx?op=GetUploadPar',
+            upload: 'api/file.ashx?op=Upload',
+            quickUpload: 'api/file.ashx?op=QuickUpload',
+            cancelUpload: 'api/file.ashx?op=CancelUpload',
             getGlobalUploadSetting: 'api/setting.ashx?op=getGlobalUploadSetting',
             getCurrentUserInfo: 'api/account/getCurrentUserInfo',
             logOff: 'api/account/LogOff',
-            getServerTime: 'api/share/GetServerTime',
+            getServerTime: 'api/setting.ashx?op=GetServerTime',
 
             recycleList: 'api/recyclebin/list',
             recycleSearch: 'api/recyclebin/search',

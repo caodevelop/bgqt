@@ -274,6 +274,11 @@ namespace Entity
                         case ErrorCode.SNKeyExpire:
                             codeInfo = "系统异常，请联系超级管理员。";
                             break;
+                        case ErrorCode.FileNotExist:
+                            codeInfo = "文件不存在。";
+                            break;
+
+                            
                         default:
                             break;
                     }
@@ -324,6 +329,10 @@ namespace Entity
         PageSizeEmpty = 1002,
         CurPageEmpty = 1003,
         CurPageIllegal = 1004,
+
+        // bigattach
+        FileNotExist = 2001,
+
         SearchNameEmpty = 1005,
         IPPeriodForbidden = 7001,
         JsonRequestEmpty = 8001,
