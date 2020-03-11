@@ -3854,43 +3854,64 @@
                         var self = this,
                             newFiles = [],
                             arr = [],
-                            arr1 = [];
+                            arr1 = [],
+                            arr2 = [];
 
                         if (!files || files.length == 0) {
                             $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_extension'] });
                             return;
                         }
-
+                        
                         for (var i = 0; i < files.length; i++) {
                             var file = files[i];
-                            if (self.acceptFile(file)) {
-                                if (file.size > self.maxFileSize) {
-                                    arr.push(file);
-                                } else {
-                                    newFiles.push(file);
+                            var existfile = false;
+                            win.md5File({
+                                file: file,
+                                md5Complete: function (hash) {
+                                    file.md5FileHash = hash;
+                                    
+                                    if (self.acceptFile(file)) {
+                                        if (file.size > self.maxFileSize) {
+                                            arr.push(file);
+                                        } else {
+                                            for (var j = 0; j < self.tasks.length; j++) {
+                                                if (self.tasks[j].md5FileHash == hash) {
+                                                    arr2.push(file);
+                                                    existfile = true;
+                                                }
+                                            }
+                                            if (existfile == false) {
+                                                newFiles.push(file);
+                                            }
+                                        }
+                                    } else {
+                                        arr1.push(file);
+                                    }
+                                    if (arr2.length > 0) {
+                                        $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_samefile'] });
+                                    }
+                                    if (arr1.length > 0) {
+                                        $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_extension'] });
+                                    }
+                                    if (arr.length > 0) {
+                                        $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_size'] });
+                                    }
+
+                                    //every upload file, get file upload params
+                                    //file upload completed,set current task file size zero
+                                    self.getFileUploadParams(function () {
+                                        if ((self.tasksFileSize() + self.totalFileSize(newFiles) + self.userUsedQuota) >= self.userQuota) {
+                                            $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_freeSpace'] });
+                                            return;
+                                        }
+                                        callback && callback(newFiles);
+                                    });
                                 }
-                            } else {
-                                arr1.push(file);
-                            }
+                            });
+                           
                         }
 
-
-                        if (arr1.length > 0) {
-                            $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_extension'] });
-                        }
-                        if (arr.length > 0) {
-                            $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_size'] });
-                        }
-
-                        //every upload file, get file upload params
-                        //file upload completed,set current task file size zero
-                        self.getFileUploadParams(function () {
-                            if ((self.tasksFileSize() + self.totalFileSize(newFiles) + self.userUsedQuota) >= self.userQuota) {
-                                $().prompt({ type: 'warning', msg: win.currLanguageDic['uploadFile_freeSpace'] });
-                                return;
-                            }
-                            callback && callback(newFiles);
-                        });
+                        
                     },
                     startUp: function () {
                         var self = this, tasksFileUpings = self.tasksFileUpings();
@@ -3947,7 +3968,7 @@
                             });
                             self.mArraryWrapList.prepend(fileDom);
                             var taskNameDom = $('#' + taskName);
-
+                            self.tasks[taskName].md5FileHash = file.md5FileHash;
                             self.tasks[taskName].taskNameDom = taskNameDom;
                             self.tasks[taskName].progressDivIng = taskNameDom.find('.m_array_bottom_progress');
                             self.tasks[taskName].timeSpan = taskNameDom.find('.m_array_mid3');

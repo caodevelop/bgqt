@@ -67,6 +67,8 @@
                                     }
                                 } else {
                                     if (!self.isUploaded) {
+                                        self.taskName = fileInfo.TempID;
+                                        self.currentChunk = fileInfo.ChunkIndex;
                                         self.initInterval();
                                         self._upload();
                                     }
@@ -116,6 +118,7 @@
                     if (self.xhr.status == 200) {
                         if (rData.error) {
                             if (rData.error.ErrorCode == '3003') {
+                                self.currentChunk = rData.error.ChunkIndex;
                                 self._upload();
                             } else {
                                 self.pause(rData.error.ErrorCode);

@@ -10,9 +10,9 @@
                 opts.language = app.cookie('language') || _.getLanguage();
             }
 
-            var cookieUsers = app.cookie('BGQTUserToken')('Token');
+            var cookieUsers = app.cookie('BGQTUserToken');
             if (cookieUsers) {
-                var users = JSON.parse(cookieUsers);
+                var users = cookieUsers;//JSON.parse(cookieUsers);
 
                 if (users.indexOf(win.currEmailAddr) !== -1) {
                     _.autoSignin(function () {

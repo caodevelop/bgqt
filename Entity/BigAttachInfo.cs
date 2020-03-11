@@ -140,6 +140,12 @@ namespace Entity
         public string ValCode { get; set; } = string.Empty;
     }
 
-   
+    public class ErrorResult
+    {
+       
+        public string ErrorCode { get; set; } = string.Empty;
+        public long ChunkIndex { get; set; } = 0;
+    }
+
 
 }

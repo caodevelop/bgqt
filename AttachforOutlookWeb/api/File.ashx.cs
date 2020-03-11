@@ -318,7 +318,7 @@ namespace AttachforOutlookWeb.api
                     string filename = context.Request.Form["FileName"];
                     string hashcode = context.Request.Form["HashCode"];
 
-                    BigFileItemInfo info = new BigFileItemInfo();
+                    UploadFileItemInfo info = new UploadFileItemInfo();
                     info.FileName = filename;
                     info.HashCode = hashcode;
 

@@ -128,6 +128,7 @@
     <Content Include="Images\checked.png" />
     <Content Include="Images\Close.png" />
     <Content Include="Images\close_icon.png" />
+    <Content Include="Images\filespic.png" />
     <Content Include="Images\Icon16.png" />
     <Content Include="Images\Icon32.png" />
     <Content Include="Images\Icon64.png" />
@@ -135,8 +136,14 @@
     <Content Include="Images\img_error_24.png" />
     <Content Include="Images\img_success_24.png" />
     <Content Include="Images\img_warning_24.png" />
+    <Content Include="Images\logo16.png" />
+    <Content Include="Images\logo32.png" />
+    <Content Include="Images\logo80.png" />
     <Content Include="Images\main_top_icon.png" />
     <Content Include="Images\pause_icon.png" />
+    <Content Include="Images\result_drop_down.png" />
+    <Content Include="Images\share_btn_icon.png" />
+    <Content Include="Images\share_refresh_icon.png" />
     <Content Include="Images\start_icon.png" />
     <Content Include="Images\upload_icon.png" />
     <Content Include="js\config.js" />

@@ -679,7 +679,7 @@ namespace Provider.DBProvider
         public bool QuickUpload(
             Guid transactionid,
             Guid userid,
-            ref BigFileItemInfo info,
+            ref UploadFileItemInfo info,
             out ErrorCodeInfo error)
         {
             error = new ErrorCodeInfo();
@@ -727,8 +727,21 @@ namespace Provider.DBProvider
                                     }
                                     info.Succeed = true;
                                     break;
+                                case 1:
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        DataRow sdr = ds.Tables[1].Rows[0];
+                                        info.TempID = Guid.Parse(Convert.ToString(sdr["TempID"]));
+                                        info.FileName = Convert.ToString(sdr["FileName"]);
+                                        info.ChunkIndex = Convert.ToInt32(sdr["ChunkIndex"]);
+                                    }
+                                    info.Succeed = false;
+                                    break;
                                 case -1:
                                     bResult = true;
+                                    info.TempID = Guid.NewGuid();
+                                    info.ChunkIndex = 0;
                                     info.Succeed = false;
                                     break;
                                 case -9999:

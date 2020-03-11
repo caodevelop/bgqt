@@ -297,7 +297,7 @@ namespace Manager
         public bool QuickUpload(
             Guid transactionid,
             Guid userid,
-            BigFileItemInfo info,
+            UploadFileItemInfo info,
             out string strJsonResult)
         {
             bool result = true;
@@ -411,6 +411,8 @@ namespace Manager
             bool result = true;
             strJsonResult = string.Empty;
             ErrorCodeInfo error = new ErrorCodeInfo();
+
+            AttachResultInfo resultinfo = new AttachResultInfo();
             string paramstr = string.Empty;
             paramstr += $"userid:{userid}";
             paramstr += $"||FileName:{info.FileName}";
@@ -467,20 +469,36 @@ namespace Manager
                     FileStream fs = null;
                     try
                     {             
-                        if(sizenow != info.Position)
+                        if(sizenow < info.Position)
                         {
+                            ErrorResult er = new ErrorResult();
+                            er.ErrorCode = "3003";
+                            er.ChunkIndex = infonow.ChunkIndex;
+                            resultinfo.data = info;
+                            strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                            result = true;
                             //delete file
-                            finfo.Delete();
-                            BigFileItemInfo deleteinfo = new BigFileItemInfo();
-                            deleteinfo.TempID = infonow.TempID;
-                            Provider.CancelUpload(transactionid, userid, ref deleteinfo, out error);
+                            //finfo.Delete();
+                            //BigFileItemInfo deleteinfo = new BigFileItemInfo();
+                            //deleteinfo.TempID = infonow.TempID;
+                            //Provider.CancelUpload(transactionid, userid, ref deleteinfo, out error);
                             //error
                             // to do
                             break;
                         }
+                        else if(sizenow > info.Position)
+                        {
+                            ErrorResult er = new ErrorResult();
+                            er.ErrorCode = "3003";
+                            er.ChunkIndex = infonow.ChunkIndex;
+                            resultinfo.data = info;
+                            strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                            result = true;
+                        }
                         else
                         {
                             fs = new FileStream(infonow.FilePath, FileMode.Append, FileAccess.Write, FileShare.Read, 1024);
+                            
                             fs.Write(info.Data, 0, info.Data.Length);
                             fs.Close();
                         }                      
@@ -498,7 +516,6 @@ namespace Manager
                     }
 
                     finfo.Refresh();
-                    AttachResultInfo resultinfo = new AttachResultInfo();
                     info.TempID = infonow.TempID;
                     if (finfo.Length == infonow.FileSizeInt)
                     {

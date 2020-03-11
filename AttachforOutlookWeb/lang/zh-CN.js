@@ -88,6 +88,7 @@
     'renameFile_exceed': '文件名不能超过255个字符',
     'advanced_data': '选择的日期早于今天，请重新选择',
     'useSpace': '使用空间已超过90%(当前使用：',
+    'uploadFile_samefile': '该文件正在上传',
     'uploadFile_extension': '有不符合规定的扩展名，已放弃该文件上传',
     'uploadFile_size': '有不符合规定的文件尺寸，已放弃该文件上传',
     'uploadFile_freeSpace': '使用空间不足，请回收空间后继续上传',
