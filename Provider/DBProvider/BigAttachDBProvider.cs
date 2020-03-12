@@ -1291,7 +1291,7 @@ namespace Provider.DBProvider
                     {
                         bResult = false;
                         error.Code = ErrorCode.Exception;
-                        LoggerHelper.Error("BigAttachDBProvider调用GetFileByID异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                        LoggerHelper.Error("BigAttachDBProvider调用AddShare异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
                     }
                 } while (false);
             }
@@ -1299,7 +1299,7 @@ namespace Provider.DBProvider
             {
                 bResult = false;
                 error.Code = ErrorCode.Exception;
-                LoggerHelper.Error("BigAttachDBProvider调用QuickUpload异常", paramstr, ex.ToString(), transactionid);
+                LoggerHelper.Error("BigAttachDBProvider调用AddShare异常", paramstr, ex.ToString(), transactionid);
             }
             return bResult;
         }
@@ -1384,5 +1384,399 @@ namespace Provider.DBProvider
             }
             return bResult;
         }
+
+        public bool GetShareFiles(
+            Guid transactionid,
+            string urlcode,
+            string valcode,
+            ref DownResult drinfo,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            drinfo = new DownResult();
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"urlcode:{urlcode}";
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraUrlCode = new SqlParameter("@UrlCode", urlcode);
+                SqlParameter paraValCode = new SqlParameter("@ValCode", valcode);
+                paras.Add(paraUrlCode);
+                paras.Add(paraValCode);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_GetShareFiles]", out ds, out strError))
+                    {
+                        strError = "prc_GetShareFiles数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    drinfo.data = new List<DownFileInfo>();
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                        {
+                                            DataRow sdr = ds.Tables[1].Rows[i];
+                                            DownFileInfo info = new DownFileInfo();
+                                            info.ObjectID = Convert.ToString(sdr["ID"]);
+                                            info.DisplayName = Convert.ToString(sdr["FileName"]);
+                                            info.ExtensionName = Convert.ToString(sdr["ExtensionName"]);
+                                            info.FileSize = Convert.ToDouble(sdr["FileSize"]);
+                                            info.ObjectClass = "file";
+                                            if (info.FileSize > 1024 * 1024 * 1024)
+                                            {
+                                                info.FileDisplaySize = (info.FileSize / (1024 * 1024 * 1024)).ToString("0.0GB");
+                                            }
+                                            else if (info.FileSize > 1024 * 1024)
+                                            {
+                                                info.FileDisplaySize = (info.FileSize / (1024 * 1024)).ToString("0.0MB");
+                                            }
+                                            else if (info.FileSize > 1024)
+                                            {
+                                                info.FileDisplaySize = (info.FileSize / 1024).ToString("0.0KB");
+                                            }
+                                            else
+                                            {
+                                                info.FileDisplaySize = "1KB";
+                                            }
+
+                                            drinfo.data.Add(info);
+                                        }
+
+                                        if(ds.Tables[1].Rows.Count == 0)
+                                        {
+                                            drinfo.error = "Unauthorized";
+                                            drinfo.data = null;
+                                        }
+                                    }
+                                    break;                              
+                                case -1:
+                                    bResult = false;
+                                    drinfo.error = "302";
+                                    drinfo.data = null;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用AddShareFile异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider数据库执行prc_GetFileList失败", string.Empty, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用prc_GetFileList异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetShareDetail(
+            Guid transactionid,
+            string urlcode,
+            ref AttachResultInfo arinfo,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            arinfo = new AttachResultInfo();
+            string paramstr = string.Empty;
+            paramstr += $"urlcode:{urlcode}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraUrlCode = new SqlParameter("@UrlCode", urlcode);
+                paras.Add(paraUrlCode);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_GetShareDetail]", out ds, out strError))
+                    {
+                        strError = "prc_GetShareDetail数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    DownDetailInfo ddinfo = new DownDetailInfo();
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                        {
+                                            DataRow sdr = ds.Tables[1].Rows[i];
+                                            DownFileInfo info = new DownFileInfo();
+                                            ddinfo.VerificationCode = null;
+                                            ddinfo.ShareUri = "";
+                                            ddinfo.DisplayExpireTime = "";
+                                            
+                                            ddinfo.ExpireTime = Convert.ToDateTime(sdr["ExpireTime"]).ToString("yyyy-MM-dd");
+                                            ddinfo.NeedVerificationCode = true;
+                                        }
+                                    }
+                                    arinfo.data = ddinfo;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用GetShareDetail异常", paramstr, "-9999", transactionid);
+                                    break;
+
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider数据库执行prc_GetShareDetail失败", string.Empty, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用prc_GetShareDetail异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool CheckVerificationCode(
+            Guid transactionid,
+            string urlcode,
+            string valcode,
+            ref AttachResultInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            info = new AttachResultInfo();
+            paramstr += $"urlcode:{urlcode}";
+            paramstr += $"||valcode:{valcode}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraUrlCode = new SqlParameter("@UrlCode", urlcode);
+                SqlParameter paraValCode = new SqlParameter("@ValCode", valcode);
+                paras.Add(paraUrlCode);
+                paras.Add(paraValCode);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_CheckVerificationCode]", out ds, out strError))
+                    {
+                        strError = "CheckVerificationCode异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用CheckVerificationCode异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    info.data = true;
+                                    break;
+                                case 1:
+                                    bResult = true;
+                                    info.data = false;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用CheckVerificationCode异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用CheckVerificationCode异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用CheckVerificationCode异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool DownloadFileById(
+            Guid transactionid,
+            string urlcode,
+            Guid fileid,
+            ref BigFileItemInfo info,
+            out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            info = new BigFileItemInfo();
+            paramstr += $"urlcode:{urlcode}";
+            paramstr += $"||fileid:{fileid}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraUrlCode = new SqlParameter("@UrlCode", urlcode);
+                SqlParameter paraFileID = new SqlParameter("@FileID", fileid);
+                paras.Add(paraUrlCode);
+                paras.Add(paraFileID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_DownloadFileById]", out ds, out strError))
+                    {
+                        strError = "DownloadFileById异常,Error:" + strError;
+                        LoggerHelper.Error("BigAttachDBProvider调用DownloadFileById异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    bResult = true;
+                                    if (ds.Tables.Count > 1)
+                                    {
+                                        for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                        {
+                                            DataRow sdr = ds.Tables[1].Rows[i];
+                                            info.FileName = Convert.ToString(sdr["FileName"]);
+                                            info.FilePath = Convert.ToString(sdr["FilePath"]);
+                                        }
+                                    }
+                                    break;                              
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("BigAttachDBProvider调用DownloadFileById异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("BigAttachDBProvider调用DownloadFileById异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("BigAttachDBProvider调用DownloadFileById异常", paramstr, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+        
     }
 }

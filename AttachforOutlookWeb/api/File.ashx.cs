@@ -78,7 +78,26 @@ namespace AttachforOutlookWeb.api
                         strJsonResult = Share(context);
                         context.Response.Write(strJsonResult);
                         break;
-                        
+                    case "GetShareFiles":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetShareFiles(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "GetShareDetail":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetShareDetail(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "CheckVerificationCode":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = CheckVerificationCode(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "DownloadFileById":
+                        //context.Response.ContentType = "text/plain";
+                        strJsonResult = DownloadFileById(context);
+                        //context.Response.Write(strJsonResult);
+                        break;
                     default:
                         context.Response.Write(strJsonResult);
                         break;
@@ -447,6 +466,195 @@ namespace AttachforOutlookWeb.api
             }
 
             return strJsonResult;
+        }
+
+        private string GetShareFiles(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetShareFiles";
+            try
+            {
+                do
+                {
+                    string urlcode = context.Request["code"];
+                    string valcode = context.Request["valcode"];
+                    DownResult arinfo = new DownResult();
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.GetShareFiles(transactionid, urlcode, valcode, ref arinfo, out strJsonResult);
+                    if(arinfo.error == "Unauthorized")
+                    {
+                        context.Response.StatusCode = 401;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error($"File.ashx调用接口{funname}异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetShareDetail(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetShareDetail";
+            try
+            {
+                do
+                {
+                    string urlcode = context.Request["code"];
+
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.GetShareDetail(transactionid, urlcode, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error($"File.ashx调用接口{funname}异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string CheckVerificationCode(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "CheckVerificationCode";
+            try
+            {
+                do
+                {
+                    string urlcode = context.Request["code"];
+                    string valcode = context.Request["VerificationCode"];
+                    
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    dll.CheckVerificationCode(transactionid, urlcode, valcode, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error($"File.ashx调用接口{funname}异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string DownloadFileById(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "CheckVerificationCode";
+            try
+            {
+                do
+                {
+                    string urlcode = context.Request["code"];
+                    string fileid = context.Request["fileid"];
+                    Guid id = Guid.Parse(fileid);
+                    BigFileItemInfo info = new BigFileItemInfo();
+                    BigAttachManager dll = new BigAttachManager(ClientIP);
+                    bool result = dll.DownloadFileById(transactionid, urlcode, id, ref info, out strJsonResult);
+                    if(result && info.FilePath != string.Empty)
+                    {
+                        downfile2(context, info.FilePath, info.FileName);
+                    }
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error($"File.ashx调用接口{funname}异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        protected void downfile2(HttpContext context, string filePath, string filename)
+        {
+            System.IO.Stream iStream = null;
+            // Buffer to read 10K bytes in chunk:
+            byte[] buffer = new Byte[10000];
+            // Length of the file:
+            int length;
+            // Total bytes to read.
+            long dataToRead;
+
+
+            //string filename = System.IO.Path.GetFileName(filePath);
+            try
+            {
+                // Open the file.
+                iStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open,
+                            System.IO.FileAccess.Read, System.IO.FileShare.Read);
+                // Total bytes to read.
+                dataToRead = iStream.Length;
+                context.Response.Clear();
+                context.Response.ClearHeaders();
+                context.Response.ClearContent();
+                context.Response.AddHeader("Content-Length", dataToRead.ToString());
+                context.Response.AddHeader("Content-Disposition", "attachment; filename=" + filename);
+                // Read the bytes.
+                while (dataToRead > 0)
+                {
+                    // Verify that the client is connected.
+                    if (context.Response.IsClientConnected)
+                    {
+                        // Read the data in buffer.
+                        length = iStream.Read(buffer, 0, 10000);
+                        // Write the data to the current output stream.
+                        context.Response.OutputStream.Write(buffer, 0, length);
+                        // Flush the data to the HTML output.
+                        context.Response.Flush();
+                        buffer = new Byte[10000];
+                        dataToRead = dataToRead - length;
+                    }
+                    else
+                    {
+                        // Prevent infinite loop if user disconnects
+                        dataToRead = -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trap the error, if any.
+                context.Response.Write("Error : " + ex.Message);
+            }
+            finally
+            {
+                if (iStream != null)
+                {
+                    //Close the file.
+                    iStream.Close();
+                }
+                context.Response.End();
+            }
         }
 
         public bool IsReusable
