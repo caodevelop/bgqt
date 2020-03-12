@@ -799,6 +799,205 @@ namespace Manager
             return result;
         }
 
+        public bool GetShareFiles(
+            Guid transactionid,
+            string urlcode,       
+            string valcode,
+            ref DownResult resultinfo,
+            out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"urlcode:{urlcode}";
+            string funname = "GetShareFiles";
+            Guid userid = Guid.Empty;
+            try
+            {
+                do
+                {
+                    resultinfo = new DownResult();
+                 
+                    BigAttachDBProvider Provider = new BigAttachDBProvider();
+                    result = Provider.GetShareFiles(transactionid, urlcode, valcode, ref resultinfo, out error);
+                    if (result == true)
+                    {                       
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        resultinfo.error = "302";
+                        resultinfo.data = null;
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("BigAttachManager调用GetShareFiles异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetShareDetail(
+            Guid transactionid,
+            string urlcode,
+            out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"urlcode:{urlcode}";
+            string funname = "GetShareDetail";
+            Guid userid = Guid.Empty;
+            try
+            {
+                do
+                {
+                    AttachResultInfo resultinfo = new AttachResultInfo();
+
+                    BigAttachDBProvider Provider = new BigAttachDBProvider();
+                    result = Provider.GetShareDetail(transactionid, urlcode, ref resultinfo, out error);
+                    if (result == true)
+                    {
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        resultinfo.error = "302";
+                        resultinfo.data = null;
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("BigAttachManager调用GetShareDetail异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool CheckVerificationCode(
+            Guid transactionid,
+            string urlcode,
+            string valcode,
+            out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"urlcode:{urlcode}";
+            paramstr += $"||valcode:{valcode}";
+            string funname = "CheckVerificationCode";
+            Guid userid = Guid.Empty;
+            try
+            {
+                do
+                {
+                    AttachResultInfo resultinfo = new AttachResultInfo();
+
+                    BigAttachDBProvider Provider = new BigAttachDBProvider();
+                    result = Provider.CheckVerificationCode(transactionid, urlcode, valcode, ref resultinfo, out error);
+                    if (result == true)
+                    {
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        resultinfo.error = null;
+                        resultinfo.data = false;
+                        strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("BigAttachManager调用CheckVerificationCode异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool DownloadFileById(
+            Guid transactionid,
+            string urlcode,
+            Guid fileid,
+            ref BigFileItemInfo info,
+            out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"urlcode:{urlcode}";
+            paramstr += $"||fileid:{fileid}";
+            string funname = "DownloadFileById";
+            Guid userid = Guid.Empty;
+            try
+            {
+                do
+                {
+                 
+
+                    BigAttachDBProvider Provider = new BigAttachDBProvider();
+                    result = Provider.DownloadFileById(transactionid, urlcode, fileid, ref info, out error);
+                    if (result == true)
+                    {                       
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        //resultinfo.error = null;
+                        //resultinfo.data = false;
+                        //strJsonResult = JsonConvert.SerializeObject(resultinfo);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("BigAttachManager调用DownloadFileById异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+        
+
     }
 
 

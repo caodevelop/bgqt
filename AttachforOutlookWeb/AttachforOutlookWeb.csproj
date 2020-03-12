@@ -115,8 +115,13 @@
     <Content Include="api\Setting.ashx" />
     <Content Include="api\File.ashx" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="css\common\reset.css" />
+    <Content Include="css\download.css" />
+    <Content Include="css\downloadnotfound.css" />
     <Content Include="css\main.css" />
     <Content Include="css\reset.css" />
+    <Content Include="download.html" />
+    <Content Include="downloadnotfound.htm" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
     <Content Include="home.html" />
@@ -133,6 +138,8 @@
     <Content Include="Images\Icon32.png" />
     <Content Include="Images\Icon64.png" />
     <Content Include="Images\Icon80.png" />
+    <Content Include="Images\icon_16.png" />
+    <Content Include="Images\icon_64.png" />
     <Content Include="Images\img_error_24.png" />
     <Content Include="Images\img_success_24.png" />
     <Content Include="Images\img_warning_24.png" />
@@ -148,6 +155,7 @@
     <Content Include="Images\upload_icon.png" />
     <Content Include="js\config.js" />
     <Content Include="js\demo.js" />
+    <Content Include="js\download.js" />
     <Content Include="js\fileupload.js" />
     <Content Include="js\libs\app.min.js" />
     <Content Include="js\libs\filehash.js" />

@@ -76,8 +76,8 @@ namespace Entity
 
         public string FileFullName { get; set; } = string.Empty;
         public string HashCode { get; set; } = string.Empty;
-     
-        
+
+
         public string ExtensionName { get; set; } = string.Empty;
         public double FileSize { get; set; } = 0.00;
         public string DisplayName { get; set; } = string.Empty;
@@ -129,11 +129,11 @@ namespace Entity
         public long ChunkIndex { get; set; } = 0;
         public long FileSizeInt { get; set; } = 0;
         public long Position { get; set; } = 0;
-        public byte[] Data { get; set; } 
+        public byte[] Data { get; set; }
     }
 
     public class ShareInfo
-    {        
+    {
         public Guid ShareID { get; set; } = Guid.Empty;
         public string ShortUrl { get; set; } = string.Empty;
         public DateTime ExpireTime { get; set; } = DateTime.Now;
@@ -142,9 +142,40 @@ namespace Entity
 
     public class ErrorResult
     {
-       
         public string ErrorCode { get; set; } = string.Empty;
         public long ChunkIndex { get; set; } = 0;
+    }
+
+
+    public class DownResult
+    {
+        public object error { get; set; }
+        public List<DownFileInfo> data { get; set; }
+    }
+
+    public class DownFileInfo
+    {
+        public string DisplayName { get; set; } = string.Empty;
+        public string ExtensionName { get; set; } = string.Empty;
+        public string ObjectID { get; set; } = string.Empty;
+        public string ObjectClass { get; set; } = string.Empty;
+        public double FileSize { get; set; } = 0.00;
+        public string FileDisplaySize { get; set; } = string.Empty;
+        public string OwnerUserID { get; set; } = string.Empty;
+        public string OwnerUserDisplayName { get; set; } = string.Empty;
+        public string OwnerUserLoginName { get; set; } = string.Empty;
+    }
+
+
+    
+    public class DownDetailInfo
+    {
+        public bool NeedAuthenticatioe { get; set; } = false;
+        public bool NeedVerificationCode { get; set; } = false;
+        public object VerificationCode { get; set; }
+        public string ShareUri { get; set; }
+        public string DisplayExpireTime { get; set; }
+        public string ExpireTime { get; set; }
     }
 
 

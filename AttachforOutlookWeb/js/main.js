@@ -3874,8 +3874,9 @@
                                         if (file.size > self.maxFileSize) {
                                             arr.push(file);
                                         } else {
-                                            for (var j = 0; j < self.tasks.length; j++) {
-                                                if (self.tasks[j].md5FileHash == hash) {
+                                            
+                                            for (var filetask in self.tasks) {
+                                                if (self.tasks[filetask].md5FileHash == hash) {
                                                     arr2.push(file);
                                                     existfile = true;
                                                 }

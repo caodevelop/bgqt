@@ -1,0 +1,86 @@
+@charset "utf-8";
+body{
+    overflow:hidden;
+    min-height: 600px;
+}
+.disNone{
+    display:none;
+}
+.disBlock{
+    display:block !important;
+}
+.list{
+    background-color: #E0F4FF;
+}
+.por {
+    position: relative;
+}
+.poa {
+    position: absolute;
+}
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.clearfix {
+    *zoom:1;
+}
+.wrapper{
+    width:1000px;
+    margin:0 auto;
+    min-width:1000px;
+
+}
+/*头部开始*/
+.l_d_header{
+    height:40px;
+    width:100%;
+    background-color:#f1f1f1;
+    overflow: hidden;
+}
+.l_d_header .l_d_header_logo{
+    margin:4px 4px 0px 19px;
+}
+.l_d_header .l_d_header_logo .l_d_header_img{
+    width:32px;
+    height:32px;
+    margin-right:4px;
+}
+.l_d_header .l_d_header_logo p{
+    font-size: 23px;
+    display: inline-block;
+    *display: inline;
+    vertical-align:top;
+    margin-top:3px;
+    color:#0173c7;
+}
+/*主体部分*/
+.error{
+    margin-top:12px;
+
+
+}
+.error p{
+    margin:10px 0 16px 0;
+     margin-left: 20px;
+     font-size: 14px;
+}
+.error .resourceNoing{
+    font-size: 18px;
+}
+
+/*footer部分*/
+
+.l_d_footer{
+    position: fixed;
+    width:100%;
+    min-width: 1000px;
+    height:60px;
+    background-color:#f1f1f1;
+    bottom:0px;
+    left: 0px;
+}

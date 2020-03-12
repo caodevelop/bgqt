@@ -79,10 +79,31 @@
                 });
             } else {
                 //上传
-                if (!self.isUploaded) {
-                    self.initInterval();
-                    self._upload();
+                if (self.remoteMd5FileHash && typeof self.remoteMd5FileHash == 'function') {
+                    self.remoteMd5FileHash(self.folderID, self.file.name, self.md5FileHash, function (fileInfo) {
+                        if (fileInfo.Succeed) {
+                            self.initInterval();
+                            self.isUploaded = true;
+                            self.isUploading = false;
+                            self.upProgress && typeof self.upProgress == 'function' && self.upProgress(1, 1);
+                            if (self.upComplete && typeof self.upComplete == 'function') {
+                                if (self.time) win.clearInterval(self.time);
+                                self.upComplete(fileInfo);
+                            }
+                        } else {
+                            if (!self.isUploaded) {
+                                self.taskName = fileInfo.TempID;
+                                self.currentChunk = fileInfo.ChunkIndex;
+                                self.initInterval();
+                                self._upload();
+                            }
+                        }
+                    });
                 }
+                //if (!self.isUploaded) {
+                //    self.initInterval();
+                //    self._upload();
+                //}
             }
         },
         pause: function (error) {

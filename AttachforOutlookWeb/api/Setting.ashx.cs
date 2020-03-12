@@ -218,7 +218,7 @@ namespace AttachforOutlookWeb.api
                         HttpCookie myCookie = new HttpCookie("BGQTUserToken");
                         myCookie["Token"] = userid.ToString();
                         myCookie["Account"] = email;
-                        myCookie.Expires = DateTime.Now.AddHours(1);
+                        myCookie.Expires = DateTime.Now.AddHours(1);                        
                         context.Response.Cookies.Add(myCookie);
                     }
                 } while (false);
