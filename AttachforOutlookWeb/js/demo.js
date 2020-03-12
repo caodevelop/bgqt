@@ -195,7 +195,7 @@
                 win.language = window.external.GetMailItemLanguage == '2052' ? 'zh-CN' : 'en-US';
                 win.initPage();
             } else {
-                win.currEmailAddr = "zhuxiaojian@it-first.com.cn";
+                win.currEmailAddr = "";
                 win.language = "zh-CN";
                 win.initPage();
             }

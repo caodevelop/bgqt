@@ -99,6 +99,7 @@ namespace SyncADControl
                                                                                   + ",displayName"
                                                                                   + ",distinguishedName"
                                                                                   + ",UserPrincipalName"
+                                                                                  + ",Mail"
                                                                                   + ",PasswordNerverExpire"
                                                                                   + ",PasswordExpireTime"
                                                                                   + ",PasswordExpired"
@@ -108,12 +109,13 @@ namespace SyncADControl
                                                                                   + ",LastLogon"
                                                                                   + ",Company"
                                                                                   + ",department)"
-                                                      + " values (N'{0}',N'{1}',N'{2}',N'{3}',N'{4}',N'{5}',N'{6}',N'{7}',N'{8}',N'{9}',N'{10}',N'{11}',N'{12}',N'{13}') ",
+                                                      + " values (N'{0}',N'{1}',N'{2}',N'{3}',N'{4}',N'{5}',N'{6}',N'{7}',N'{8}',N'{9}',N'{10}',N'{11}',N'{12}',N'{13}',N'{14}') ",
                                 entity.UserID
-                                ,entity.SAMAccountName
+                                , entity.SAMAccountName
                                , entity.Displayname
                                , entity.DistinguishedName
                                , entity.UserPrincipalName
+                               , entity.Mail
                                , Convert.ToInt32(entity.PasswordNerverExpire)
                                , entity.PasswordExpireTime
                                , Convert.ToInt32(entity.PasswordExpired)
@@ -302,6 +304,7 @@ namespace SyncADControl
                             user.Displayname = CN.Properties["displayname"].Value == null ? "" : Convert.ToString(CN.Properties["displayname"].Value);
                             user.DistinguishedName = CN.Properties["distinguishedName"].Value == null ? "" : Convert.ToString(CN.Properties["distinguishedName"].Value);
                             user.UserPrincipalName = CN.Properties["userPrincipalName"].Value == null ? "" : Convert.ToString(CN.Properties["userPrincipalName"].Value);
+                            user.Mail = CN.Properties["mail"].Value == null ? "" : Convert.ToString(CN.Properties["mail"].Value);
 
                             user.PasswordExpired = (TempuserAccountControl & 8388608) != 0 ? true : false;
                             ActiveDs.IADsUser native = (ActiveDs.IADsUser)CN.NativeObject;

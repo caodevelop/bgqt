@@ -70,6 +70,11 @@ namespace SyncADControl.Entity
             set { _UserPrincipalName = value; }
         }
 
+
+        public string Mail
+        {
+            get; set;
+        } = string.Empty;
         /// <summary>
         /// AD用户密码永不过期 属性
         /// </summary>

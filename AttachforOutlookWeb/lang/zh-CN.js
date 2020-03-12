@@ -106,7 +106,7 @@
     'loginJudge_encount': '服务器发生错误，请稍后再试',
     'netWork_interrupted': '网络中断，请在网络恢复后续传',
     'sessionExpire': '会话已过期，请重新登录',
-    'defaultJudge': 'ExDrivePlus不支持您的浏览器，请更新到IE10或以上版本',
+    'defaultJudge': 'AttachforOutlook不支持您的浏览器，请更新到IE10或以上版本',
 
     'settings': '你好，',
     'setting_title': '我的使用空间',
