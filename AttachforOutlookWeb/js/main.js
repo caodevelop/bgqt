@@ -4029,6 +4029,8 @@
 
                                 if (currentUpTask.isUploaded) {
                                     currentUpTask.taskNameDom.remove();
+                                    self.tasks[taskName].md5FileHash = '';
+                                    self.tasks[taskName].isUploaded = true;
                                 } else {
                                     currentUpTask.pause();
                                     currentUpTask.taskNameDom.remove();
@@ -4040,11 +4042,13 @@
                                         StorageRelativePath: currentUpTask.storageRelativePath,
                                         Identifier: currentUpTask.taskName
                                     }, function (json) {
-                                        if (json.data) {
-                                        }
-                                    });
+                                        //if (json.data) {}
+                                        });
+                                    self.tasks[taskName].md5FileHash = '';
+                                    self.tasks[taskName].isUploaded = true;
                                 }
                                 page.shareBackground();
+                                page.showUploadNumber();
                             });
                         }
                         self.startUp();

@@ -245,10 +245,9 @@ namespace AttachforOutlookWeb.api
             {
                 do
                 {
-
                     AttachResultInfo ar = new AttachResultInfo();
                     ar.data = DateTime.Now.ToString("yyyy-MM-dd");
-                    strJsonResult = JsonConvert.SerializeObject(ar);
+                    strJsonResult = JsonHelper.Obj2Json<AttachResultInfo>(ar);// JsonConvert.SerializeObject(ar);
                 } while (false);
             }
             catch (Exception ex)

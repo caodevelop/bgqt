@@ -114,6 +114,7 @@
     <Content Include="Content\sass\Fabric.Animations.Output.scss" />
     <Content Include="api\Setting.ashx" />
     <Content Include="api\File.ashx" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="css\common\reset.css" />
     <Content Include="css\download.css" />

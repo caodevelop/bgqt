@@ -516,7 +516,7 @@
         singleFileDownload: '/data/singleFileDownload.json',
         buildCompressFiles: '/data/buildCompressFiles.json',
         downloadZip: 'data/DownloadZip.json',
-        authCode: 'https://exdriveplus.ifcloud.com/api/account/authCode'
+        authCode: '/api/account/authCode'
     } : {
             getsharedetail: 'api/file.ashx?op=GetShareDetail', //链接详细信息
         signin: 'api/account/signin ',
