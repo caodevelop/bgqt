@@ -25,5 +25,14 @@ namespace SendAdminNoticeMessage
 
         public string userPrincipalName
         { get; set; } = string.Empty;
+
+        public string POSN_DESCR
+        { get; set; } = string.Empty;
+
+        public string DEPT_DESCR
+        { get; set; } = string.Empty;
+
+        public string HPS_WORK_COMP_DESC
+        { get; set; } = string.Empty;
     }
 }

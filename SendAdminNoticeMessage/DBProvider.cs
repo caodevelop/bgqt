@@ -51,6 +51,9 @@ namespace SendAdminNoticeMessage
                                         info.NAME = Convert.ToString(dr["NAME"]);
                                         info.PHONE1 = Convert.ToString(dr["PHONE1"]);
                                         info.userPrincipalName = Convert.ToString(dr["userPrincipalName"]);
+                                        info.DEPT_DESCR = Convert.ToString(dr["DEPT_DESCR"]);
+                                        info.HPS_WORK_COMP_DESC = Convert.ToString(dr["COMPANY_DESCR"]);
+                                        info.POSN_DESCR = Convert.ToString(dr["POSN_DESCR"]);
                                         info.Entry_DT = Convert.ToString(dr["Entry_DT"]);
                                         newusers.Add(info);
                                     }
@@ -63,6 +66,9 @@ namespace SendAdminNoticeMessage
                                         info.PHONE1 = Convert.ToString(dr["PHONE1"]);
                                         info.userPrincipalName = Convert.ToString(dr["userPrincipalName"]);
                                         info.TERMINATION_DT = Convert.ToString(dr["TERMINATION_DT"]);
+                                        info.DEPT_DESCR = Convert.ToString(dr["DEPT_DESCR"]);
+                                        info.HPS_WORK_COMP_DESC = Convert.ToString(dr["COMPANY_DESCR"]);
+                                        info.POSN_DESCR = Convert.ToString(dr["POSN_DESCR"]);
                                         leaveusers.Add(info);
                                     }
                                     bResult = true;
