@@ -59,20 +59,20 @@ namespace SendAdminNoticeMessage
             if (nlist.Count > 0)
             {
                 mailbody += "<span>入职员工如下：</span>";
-                mailbody += "<table><tr><td style='width:100px;'>员工号</td><td style='width:120px;'>姓名</td><td style='width:120px;'>手机号码</td><td style='width:200px;'>职位</td><td style='width:200px;'>部门</td><td style='width:200px;'>公司</td><td style='width:300px;'>AD账户</td><td style='width:100px;'>创建时间</td></tr>";
+                mailbody += "<table><tr><td style='width:100px;'>员工号</td><td style='width:120px;'>姓名</td><td style='width:120px;'>手机号码</td><td style='width:200px;'>职位</td><td style='width:200px;'>部门</td><td style='width:200px;'>公司</td><td style='width:200px;'>入职时间</td></tr>";
                 foreach (var m in nlist)
                 {
-                    mailbody += "<tr><td>" + m.EMPLID + "</td><td>" + m.NAME + "</td><td>" + m.PHONE1 + "</td><td>" + m.POSN_DESCR + "</td><td>" + m.DEPT_DESCR + "</td><td>" + m.HPS_WORK_COMP_DESC + "</td><td>" + m.userPrincipalName + "</td><td>" + m.Entry_DT + "</td></tr>";
+                    mailbody += "<tr><td>" + m.EMPLID + "</td><td>" + m.NAME + "</td><td>" + m.PHONE1 + "</td><td>" + m.POSN_DESCR + "</td><td>" + m.DEPT_DESCR + "</td><td>" + m.HPS_WORK_COMP_DESC + "</td><td>" + m.Entry_DT + "</td></tr>";
                 }
                 mailbody += "</table><br>";
             }
             if (llist.Count > 0)
             {
                 mailbody += "<span>离职且AD中未禁用员工如下：</span>";
-                mailbody += "<table><tr><td style='width:100px;'>员工号</td><td style='width:120px;'>姓名</td><td style='width:120px;'>手机号码</td><td style='width:200px;'>职位</td><td style='width:200px;'>部门</td><td style='width:200px;'>公司</td><td style='width:300px;'>AD账户</td><td style='width:100px;'>离职时间</td></tr>";
+                mailbody += "<table><tr><td style='width:100px;'>员工号</td><td style='width:120px;'>姓名</td><td style='width:120px;'>手机号码</td><td style='width:200px;'>职位</td><td style='width:200px;'>部门</td><td style='width:200px;'>公司</td><td style='width:200px;'>离职时间</td></tr>";
                 foreach (var m in llist)
                 {
-                    mailbody += "<tr><td>" + m.EMPLID + "</td><td>" + m.NAME + "</td><td>" + m.PHONE1 + "</td><td>" + m.POSN_DESCR + "</td><td>" + m.DEPT_DESCR + "</td><td>" + m.HPS_WORK_COMP_DESC + "</td><td>" + m.userPrincipalName + "</td><td>" + m.TERMINATION_DT + "</td></tr>";
+                    mailbody += "<tr><td>" + m.EMPLID + "</td><td>" + m.NAME + "</td><td>" + m.PHONE1 + "</td><td>" + m.POSN_DESCR + "</td><td>" + m.DEPT_DESCR + "</td><td>" + m.HPS_WORK_COMP_DESC + "</td><td>" + m.TERMINATION_DT + "</td></tr>";
                 }
                 mailbody += "</table>";
             }
