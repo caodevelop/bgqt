@@ -11,6 +11,17 @@
             }]
         },
         cache: false,
+    }).state('GetUserPwd', {
+        url: '/GetUserPwd',
+        templateUrl: 'Admin/GetUserPwd.html?timestamp=' + new Date().getTime(),
+        controller: 'GetUserPwdCtrl',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load('js/Admin/GetUserPwd.js?timestamp=' + new Date().getTime()),
+                    $ocLazyLoad.load('css/common.css?timestamp=' + new Date().getTime());
+            }]
+        },
+        cache: false,
     }).state('resetPwd', {
         url: '/resetPwd',
         templateUrl: 'Admin/resetPwd.html?timestamp=' + new Date().getTime(),

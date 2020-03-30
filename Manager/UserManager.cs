@@ -10,6 +10,10 @@ using Provider.ADProvider;
 using Newtonsoft.Json;
 using System.DirectoryServices;
 using System.Text.RegularExpressions;
+using Aliyun.Acs.Core.Profile;
+using Aliyun.Acs.Core;
+using Aliyun.Acs.Core.Exceptions;
+using Aliyun.Acs.Core.Http;
 
 namespace Manager
 {
@@ -510,6 +514,264 @@ namespace Manager
             return result;
         }
 
+        public bool GetUserInfoByEMPLID(Guid transactionid, string EMPLID, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string message = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"EMPLID:{EMPLID}";
+         
+            string funname = "GetUserInfoByEMPLID";
+
+            try
+            {
+                do
+                {
+                    UserProvider userProvider = new UserProvider();
+                    UserInfo user = new UserInfo();
+                    if (!userProvider.GetUserInfoByEMPLID(transactionid, EMPLID, out user, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(EMPLID, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    user.Mobile = Regex.Replace(user.Mobile.Replace("+86", ""), "(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(user);
+                    LoggerHelper.Info(EMPLID, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(EMPLID, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("UserManager调用GetUserInfoByEMPLID异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool SendFUserMobileCode(Guid transactionid, Guid userid, out string strJsonResult)
+        {
+            bool result = false;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            string funname = "SendFUserMobileCode";
+           
+            try
+            {
+                do
+                {
+                    if (userid == null || userid == Guid.Empty)
+                    {
+                        error.Code = ErrorCode.AccountIllegal;
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+
+                    UserProvider userProvider = new UserProvider();
+                    UserInfo user = new UserInfo();
+                    user.UserID = userid;
+                    if (!userProvider.GetUserInfo(transactionid, ref user, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    if (!user.UserStatus)
+                    {
+                        error.Code = ErrorCode.UserIsDisable;
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+
+                    UserDBProvider dal = new UserDBProvider();
+                    string code = GetRandomString(4, true, false, false, false, string.Empty);
+                    bool bresult = dal.SendFUserMobileCode(transactionid, user.UserID, user.Mobile, code, out error);
+                    if (bresult == true)
+                    {
+                        if (SendSmsCode(transactionid, user.Mobile, code))
+                        {
+                            LoggerHelper.Info(user.UserAccount, funname, paramstr, string.Empty, true, transactionid);
+                            strJsonResult = JsonHelper.ReturnstrResult(true, "成功！");
+                            result = true;
+                        }
+                        else
+                        {
+                            LoggerHelper.Info(user.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                            strJsonResult = JsonHelper.ReturnstrResult(false, "发送安全码失败，请联系管理员。");
+                            result = false;
+                        }
+                    }
+                    else
+                    {
+                        LoggerHelper.Info(user.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        strJsonResult = JsonHelper.ReturnstrResult(false, "发送安全码失败，" + error.Info);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("UserManager调用SendFUserMobileCode异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnstrResult(false, "发送安全码失败，" + error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool CheckFUserSmsCode(Guid transactionid, Guid userid, string code, out string strJsonResult)
+        {
+            bool result = false;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userid:{userid}";
+            paramstr += $"||code:{code}";
+            string funname = "CheckFUserSmsCode";
+            Guid operaterID = Guid.Empty;
+            Guid orgID = Guid.Empty;
+            try
+            {
+                do
+                {
+                    if (userid == null || userid == Guid.Empty)
+                    {
+                        error.Code = ErrorCode.AccountIllegal;
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    UserProvider userProvider = new UserProvider();
+                    UserInfo user = new UserInfo();
+                    user.UserID = userid;
+                    if (!userProvider.GetUserInfo(transactionid, ref user, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    if (!user.UserStatus)
+                    {
+                        error.Code = ErrorCode.UserIsDisable;
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+
+                    UserDBProvider dal = new UserDBProvider();
+                    Guid codeid = Guid.Empty;
+                    bool bresult = dal.CheckFUserSmsCode(transactionid, userid, code, out codeid, out error);
+                    if (bresult == true)
+                    {
+                        Dictionary<string, object> dictionary = new Dictionary<string, object>();
+                        dictionary.Add("CodeID", codeid);
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        strJsonResult = JsonHelper.ReturnstrResult(true, "验证安全码成功！", dictionary);
+                        result = true;
+                    }
+                    else
+                    {
+                        LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        result = false;
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("UserManager调用CheckFContactLoginCode异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool SetFUserPass(Guid transactionid, Guid codeid, string password, out string strJsonResult)
+        {
+            bool result = false;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"codeid:{codeid}";
+            paramstr += $"||password:{password}";
+            string funname = "SetFUserPass";
+            Guid operaterID = Guid.Empty;
+            Guid orgID = Guid.Empty;
+            try
+            {
+                do
+                {
+                    if (codeid == null || codeid == Guid.Empty)
+                    {
+                        error.Code = ErrorCode.SmsCodeWrong;
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(string.Empty, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+
+                    UserDBProvider dal = new UserDBProvider();
+                    Guid userid = Guid.Empty;
+                    if (!dal.CheckFUserSmsByCodeID(transactionid, codeid, out userid, out error))
+                    {
+                        LoggerHelper.Info(string.Empty, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        strJsonResult = JsonHelper.ReturnstrResult(false, "重置密码失败，" + error.Info);
+                        result = false;
+                        break;
+                    }
+
+                    UserProvider userProvider = new UserProvider();
+                    AdminInfo admin = new AdminInfo();
+                    UserInfo user = new UserInfo();
+                    user.UserID = userid;
+                    user.Password = password;
+                    user.NextLoginChangePassword = false;
+                    user.PasswordNeverExpire = false;
+                    if (!userProvider.ResetUserPassword(transactionid, admin, ref user, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnstrResult(false, error.Info);
+                        LoggerHelper.Info(string.Empty, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+
+                    LoggerHelper.Info(userid.ToString(), funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                    strJsonResult = JsonHelper.ReturnstrResult(true, "重置密码成功！");
+                    result = true;
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(string.Empty, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("UserManager调用SetFUserPass异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnstrResult(false, "重置密码失败，" + error.Info);
+                result = false;
+            }
+            return result;
+        }
         #region company
         public bool AddUser(Guid transactionid, AdminInfo admin, UserInfo user, out string strJsonResult)
         {
@@ -2956,10 +3218,85 @@ namespace Manager
         }
         #endregion
 
+        public bool SendSmsCode(Guid transactionid, string mobile, string code)
+        {
+            string accessKey = ConfigHelper.ConfigInstance["SMS_AccessKeyID"];
+            string accessKeySecret = ConfigHelper.ConfigInstance["SMS_AccessKeySecret"];
+            string TemplateCode = ConfigHelper.ConfigInstance["TemplateCode"];
+            string SignName = ConfigHelper.ConfigInstance["SignName"];
+
+            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", accessKey, accessKeySecret);
+            DefaultAcsClient client = new DefaultAcsClient(profile);
+            CommonRequest request = new CommonRequest();
+            request.Method = MethodType.POST;
+            request.Domain = "dysmsapi.aliyuncs.com";
+            request.Version = "2017-05-25";
+            request.Action = "SendSms";
+            // request.Protocol = ProtocolType.HTTP;
+
+            request.AddQueryParameters("PhoneNumbers", mobile);
+            request.AddQueryParameters("SignName", SignName);
+            request.AddQueryParameters("TemplateCode", TemplateCode);
+            request.AddQueryParameters("TemplateParam", "{\"code\":\"" + code + "\"}");
+
+            try
+            {
+                CommonResponse response = client.GetCommonResponse(request);
+                string resultmessage = System.Text.Encoding.UTF8.GetString(response.HttpResponse.Content);
+                if (resultmessage.ToLower().Contains("ok"))
+                {
+                    LoggerHelper.Info(mobile, "SendSmsCode", mobile, resultmessage, true, transactionid);
+                    return true;
+                }
+                else
+                {
+                    LoggerHelper.Error("SendSmsCode", mobile, resultmessage, transactionid);
+                    return false;
+                }
+            }
+            catch (System.Runtime.Remoting.ServerException e)
+            {
+                LoggerHelper.Error("SendSmsCode", mobile, e.ToString(), transactionid);
+                return false;
+            }
+            catch (ClientException e)
+            {
+                LoggerHelper.Error("SendSmsCode", mobile, e.ToString(), transactionid);
+                return false;
+            }
+        }
+
         public bool MatchPassword(string password)
         {
             var regex = new Regex(@"(?=.*[0-9])(?=.*[a-zA-Z])(?=([\x21-\x7e]+)[^a-zA-Z0-9]).{8,20}", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
             return regex.IsMatch(password);
+        }
+
+        ///<summary>
+        ///生成随机字符串 
+        ///</summary>
+        ///<param name="length">目标字符串的长度</param>
+        ///<param name="useNum">是否包含数字，1=包含，默认为包含</param>
+        ///<param name="useLow">是否包含小写字母，1=包含，默认为包含</param>
+        ///<param name="useUpp">是否包含大写字母，1=包含，默认为包含</param>
+        ///<param name="useSpe">是否包含特殊字符，1=包含，默认为不包含</param>
+        ///<param name="custom">要包含的自定义字符，直接输入要包含的字符列表</param>
+        ///<returns>指定长度的随机字符串</returns>
+        public static string GetRandomString(int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
+        {
+            byte[] b = new byte[4];
+            new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
+            Random r = new Random(BitConverter.ToInt32(b, 0));
+            string s = null, str = custom;
+            if (useNum == true) { str += "0123456789"; }
+            if (useLow == true) { str += "abcdefghijklmnopqrstuvwxyz"; }
+            if (useUpp == true) { str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
+            if (useSpe == true) { str += "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"; }
+            for (int i = 0; i < length; i++)
+            {
+                s += str.Substring(r.Next(0, str.Length - 1), 1);
+            }
+            return s;
         }
     }
 }

@@ -4,6 +4,7 @@ using Manager;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -93,6 +94,18 @@ namespace Interface
                         break;
                     case "ResumeUser":
                         strJsonResult = ResumeUser(context);
+                        break;
+                    case "GetUserAndCheckValCode":
+                        strJsonResult = GetUserAndCheckValCode(context);
+                        break;
+                    case "SendFUserSmsCode":
+                        strJsonResult = SendFUserSmsCode(context);
+                        break;
+                    case "CheckFUserSmsCode":
+                        strJsonResult = CheckFUserSmsCode(context);
+                        break;
+                    case "SetFUserPass":
+                        strJsonResult = SetFUserPass(context);
                         break;
                     case "AddGroup":
                         strJsonResult = AddGroup(context);
@@ -1181,6 +1194,242 @@ namespace Interface
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Error("OrgAndUser.ashx调用接口ResumeUser异常", context.Request.RawUrl, ex.ToString(), transactionid);
                 LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetUserAndCheckValCode(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+
+            ////orgID = new Guid("c3e6f5f8-1ada-45fb-8bbb-7eccdbd3ea54");
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string account = string.Empty;
+            string funname = "GetUserAndCheckValCode";
+            try
+            {
+                do
+                {
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    string code = string.Empty;
+                    Guid key = Guid.Empty;
+                    Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
+
+                    foreach (KeyValuePair<string, object> kv in dictionary)
+                    {
+                        if (kv.Key.ToUpper() == "EMPLID")
+                        {
+                            account = Convert.ToString(kv.Value).Trim();
+                        }
+                        if (kv.Key.ToLower() == "key")
+                        {
+                            key = Guid.Parse(Convert.ToString(kv.Value));
+                        }
+                        if (kv.Key.ToLower() == "code")
+                        {
+                            code = Convert.ToString(kv.Value).Trim();
+                        }
+                    }
+
+                    bool result = false;
+                    string errorinfo = string.Empty;
+                    if (HttpContext.Current.Cache[key.ToString()] == null)
+                    {
+                        HttpContext.Current.Cache.Insert(key.ToString(), string.Empty, null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromSeconds(300));
+                        result = false;
+                        errorinfo = "验证码错误。";
+                    }
+                    else
+                    {
+                        string valcode = HttpContext.Current.Cache[key.ToString()].ToString().Replace(" ", "");
+                        if (valcode == string.Empty || valcode.ToLower() != code.ToLower())
+                        {
+                            result = false;
+                            errorinfo = "验证码错误。";
+                        }
+                        else
+                        {
+                            result = true;
+                        }
+                    }
+                    if (result)
+                    {
+                        UserManager dll = new UserManager(ClientIP);
+                        dll.GetUserInfoByEMPLID(transactionid, account, out strJsonResult);
+                    }
+                    else
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), errorinfo);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("OrgAndUser.ashx调用接口GetUserAndCheckValCode异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(account, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string SendFUserSmsCode(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "SendFUserSmsCode";
+            try
+            {
+                do
+                {
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    Guid userid = Guid.Empty;
+                    Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
+                    foreach (KeyValuePair<string, object> kv in dictionary)
+                    {
+                        if (kv.Key.ToLower() == "userid")
+                        {
+                            userid = Guid.Parse(Convert.ToString(kv.Value));
+                        }
+                    }
+                   
+                    UserManager dll = new UserManager(ClientIP);
+                    dll.SendFUserMobileCode(transactionid, userid, out strJsonResult);
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("Contact.ashx调用接口SendFUserSmsCode异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnstrResult(false, "发送安全码失败，" + error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string CheckFUserSmsCode(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+
+            ////orgID = new Guid("c3e6f5f8-1ada-45fb-8bbb-7eccdbd3ea54");
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string account = string.Empty;
+            string funname = "CheckFUserSmsCode";
+            try
+            {
+                do
+                {
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    string code = string.Empty;
+                    Guid userid = Guid.Empty;
+                    Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
+
+                    foreach (KeyValuePair<string, object> kv in dictionary)
+                    {
+                        if (kv.Key.ToLower() == "userid")
+                        {
+                            userid = Guid.Parse(Convert.ToString(kv.Value));
+                        }
+
+                        if (kv.Key.ToLower() == "code")
+                        {
+                            code = Convert.ToString(kv.Value).Trim();
+                        }
+                    }
+                    UserManager dll = new UserManager(ClientIP);
+                    dll.CheckFUserSmsCode(transactionid, userid, code, out strJsonResult);
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("OrgAndUser.ashx调用接口CheckFUserSmsCode异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(account, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string SetFUserPass(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+
+            ////orgID = new Guid("c3e6f5f8-1ada-45fb-8bbb-7eccdbd3ea54");
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string account = string.Empty;
+            string funname = "SetFUserPass";
+            try
+            {
+                do
+                {
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    string password = string.Empty;
+                    Guid codeid = Guid.Empty;
+                    Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
+
+                    foreach (KeyValuePair<string, object> kv in dictionary)
+                    {
+                        if (kv.Key.ToLower() == "codeid")
+                        {
+                            codeid = Guid.Parse(Convert.ToString(kv.Value));
+                        }
+
+                        if (kv.Key.ToLower() == "password")
+                        {
+                            password = Convert.ToString(kv.Value).Trim();
+                        }
+                    }
+                    UserManager dll = new UserManager(ClientIP);
+                    dll.SetFUserPass(transactionid, codeid, password, out strJsonResult);
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("OrgAndUser.ashx调用接口SetFUserPass异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(account, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
             }
 

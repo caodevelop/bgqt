@@ -36,7 +36,7 @@ namespace SendAdminNoticeMessage
                     string subject = ConfigHelper.ConfigInstance["NoticeSubject"];
                     string sender = ConfigHelper.ConfigInstance["NoticeSender"];
                     string receiver = ConfigHelper.ConfigInstance["NoticeReceiver"];
-                    string body = DateTime.Now.ToShortDateString() + " 入职员工数量为：" + nlist.Count + "，离职且AD中未禁用员工数量为：" + llist.Count;
+                    string body = DateTime.Now.ToShortDateString() + " 入职员工数量为：" + nlist.Count + "，离职员工数量为：" + llist.Count;
                     string mailbody = string.Empty;
                     BuildingEntryAndLeaveSystemMailBody(body, nlist, llist, out mailbody);
                     SendNoticeMail(transactionid, subject, sender, receiver, mailbody);
@@ -68,7 +68,7 @@ namespace SendAdminNoticeMessage
             }
             if (llist.Count > 0)
             {
-                mailbody += "<span>离职且AD中未禁用员工如下：</span>";
+                mailbody += "<span>离职用员工如下：</span>";
                 mailbody += "<table><tr><td style='width:100px;'>员工号</td><td style='width:120px;'>姓名</td><td style='width:120px;'>手机号码</td><td style='width:200px;'>职位</td><td style='width:200px;'>部门</td><td style='width:200px;'>公司</td><td style='width:200px;'>离职时间</td></tr>";
                 foreach (var m in llist)
                 {

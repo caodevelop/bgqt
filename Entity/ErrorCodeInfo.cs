@@ -277,8 +277,15 @@ namespace Entity
                         case ErrorCode.FileNotExist:
                             codeInfo = "文件不存在。";
                             break;
-
-                            
+                        case ErrorCode.UserIsDisable:
+                            codeInfo = "该账户已被停用。";
+                            break;
+                        case ErrorCode.SmsCodeWrong:
+                            codeInfo = "安全码错误。";
+                            break;
+                        case ErrorCode.SmsCodeExpired:
+                            codeInfo = "安全码已过期。";
+                            break;
                         default:
                             break;
                     }
@@ -397,7 +404,6 @@ namespace Entity
         ComplianceSearchOnlyScope = 10035,
         OuHaveMailBoxDB = 10036,
         MaxAccountLength = 10037,
-
         HaveSameDisplayName = 10038,
         HaveSameAccount = 10039,
         AccountIllegal = 10040,
@@ -422,5 +428,8 @@ namespace Entity
         LocationEmpty = 10057,
         AttendeesEmpty = 10058,
         EndTimeLessStart = 10059,
+        UserIsDisable = 10060,
+        SmsCodeWrong = 1291,
+        SmsCodeExpired = 1292,
     }
 }

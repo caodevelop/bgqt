@@ -29,9 +29,12 @@
                     </div>
                     <div class="errorMsg" ng-model="errorMsg2" ng-hide="checkTips2" ng-class="opResult2">{{errorMsg2}}</div>
                     <button class="login-btn" ng-click="ChangeUserPassword()" ng-disabled="!RePwdBtn">修改密码</button>
+                    <div class="in-block">
+                        <div class="forgetPwd" ng-click="gotoFogotPwd()" style="color: #1890ff;">忘记密码？</div>
+                    </div>
                     <div class="input-group nomargin" style="margin-top:8px;">
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">密码复杂性说明：</label>
-                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">1、密码必须 8 位以上</label>
+                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">1、密码必须 8 位及以上</label>
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">2、必须同时包含字母（区分大小写）、数字、特殊符号三种</label>
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">3、密码不能与上一次密码相同</label>
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">4、密码不能包含用户名部分连续或全部字符</label>

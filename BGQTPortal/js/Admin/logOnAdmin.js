@@ -268,4 +268,9 @@
             return modes;
         }
     }
+
+    //跳转
+    $scope.gotoFogotPwd = function () {
+        $state.go('GetUserPwd');
+    };
 });

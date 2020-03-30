@@ -315,7 +315,7 @@ namespace Provider.ADProvider
             return bResult;
         }
 
-        public bool ResetUserPassword(Guid transactionid, AdminInfo admin,ref UserInfo user, out ErrorCodeInfo error)
+        public bool ResetUserPassword(Guid transactionid, AdminInfo admin, ref UserInfo user, out ErrorCodeInfo error)
         {
             bool bResult = true;
             error = new ErrorCodeInfo();
@@ -379,20 +379,13 @@ namespace Provider.ADProvider
             }
             catch (System.Runtime.InteropServices.COMException ex)
             {
-                if (ex.Message.Contains("密码不满足密码策略的要求"))
-                {
-                    error.Code = ErrorCode.PasswordNotStrong;
-                }
-                else
-                {
-                    error.Code = ErrorCode.Exception;
-                }
+                error.Code = ErrorCode.PasswordNotStrong;
                 LoggerHelper.Error("UserProvider调用ResetUserPassword异常", paramstr, ex.ToString(), transactionid);
                 bResult = false;
             }
             catch (Exception ex)
             {
-                error.Code = ErrorCode.Exception;
+                error.Code = ErrorCode.PasswordNotStrong;
                 LoggerHelper.Error("UserProvider调用ResetUserPassword异常", paramstr, ex.ToString(), transactionid);
                 bResult = false;
             }
@@ -963,6 +956,94 @@ namespace Provider.ADProvider
                 if (item != null)
                 {
                     item.Close();
+                }
+            }
+            return bResult;
+        }
+
+        public bool GetUserInfoByEMPLID(Guid transactionid, string EMPLID, out UserInfo user, out ErrorCodeInfo error)
+        {
+            bool bResult = true;
+            error = new ErrorCodeInfo();
+            string message = string.Empty;
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"EMPLID:{EMPLID}";
+            user = new UserInfo();
+
+            DirectoryEntry UserEntry = new DirectoryEntry();
+
+            try
+            {
+                do
+                {
+                    DirectoryEntry userEntry = new DirectoryEntry();
+                    CommonProvider commonProvider = new CommonProvider();
+                    if (!commonProvider.GetEntryDataBysAMAccount(ConfigADProvider.GetCompanyADRootPath(), EMPLID, out userEntry, out message))
+                    {
+                        error.Code = ErrorCode.SearchADDataError;
+                        bResult = false;
+                        break;
+                    }
+
+                    user.UserID = userEntry.Guid;
+                    user.UserAccount = userEntry.Properties["userPrincipalName"].Value == null ? "" : Convert.ToString(userEntry.Properties["userPrincipalName"].Value);
+                    user.LastName = userEntry.Properties["sn"].Value == null ? "" : Convert.ToString(userEntry.Properties["sn"].Value);
+                    user.FirstName = userEntry.Properties["givenName"].Value == null ? "" : Convert.ToString(userEntry.Properties["givenName"].Value);
+                    user.Phone = userEntry.Properties["telephoneNumber"].Value == null ? "" : Convert.ToString(userEntry.Properties["telephoneNumber"].Value);
+                    user.Office = userEntry.Properties["physicalDeliveryOfficeName"].Value == null ? "" : Convert.ToString(userEntry.Properties["physicalDeliveryOfficeName"].Value);
+                    user.Description = userEntry.Properties["description"].Value == null ? "" : Convert.ToString(userEntry.Properties["description"].Value);
+                    user.Mobile = userEntry.Properties["mobile"].Value == null ? "" : Convert.ToString(userEntry.Properties["mobile"].Value);
+                    user.Company = userEntry.Properties["company"].Value == null ? "" : Convert.ToString(userEntry.Properties["company"].Value);
+                    user.Department = userEntry.Properties["department"].Value == null ? "" : Convert.ToString(userEntry.Properties["department"].Value);
+                    user.Post = userEntry.Properties["title"].Value == null ? "" : Convert.ToString(userEntry.Properties["title"].Value);
+                    user.DisplayName = userEntry.Properties["displayName"].Value == null ? "" : Convert.ToString(userEntry.Properties["displayName"].Value);
+                    user.ParentOuId = userEntry.Parent.Guid;
+                    user.ParentOu = userEntry.Parent.Properties["name"].Value == null ? "" : Convert.ToString(userEntry.Parent.Properties["name"].Value);
+                    user.ParentDistinguishedName = userEntry.Parent.Properties["distinguishedName"].Value == null ? "" : Convert.ToString(userEntry.Parent.Properties["distinguishedName"].Value);
+                    user.DistinguishedName = userEntry.Properties["distinguishedName"].Value == null ? "" : Convert.ToString(userEntry.Properties["distinguishedName"].Value);
+                    user.SAMAccountName = userEntry.Properties["sAMAccountName"].Value == null ? "" : Convert.ToString(userEntry.Properties["sAMAccountName"].Value);
+                    user.AliasName = userEntry.Properties["mailNickname"].Value == null ? "" : Convert.ToString(userEntry.Properties["mailNickname"].Value);
+
+                    int userAccountControl = Convert.ToInt32(userEntry.Properties["userAccountControl"][0]);
+                    user.UserStatus = UserProvider.IsAccountActive(userAccountControl);
+                    if (!user.UserStatus)
+                    {
+                        LoggerHelper.Error("UserProvider调用GetUserInfoByEMPLID异常", paramstr, "该账户已被停用", transactionid);
+                        error.Code = ErrorCode.UserIsDisable;
+                        bResult = false;
+                        break;
+                    }
+
+                    DirectoryEntry groupEntry = new DirectoryEntry();
+                    for (int i = 0; i < userEntry.Properties["memberof"].Count; i++)
+                    {
+                        string MemberofDnName = Convert.ToString(userEntry.Properties["memberof"][i]);
+
+                        if (commonProvider.GetADEntryByPath(MemberofDnName, out groupEntry, out message))
+                        {
+                            GroupInfo group = new GroupInfo();
+                            group.GroupID = groupEntry.Guid;
+                            group.DisplayName = groupEntry.Properties["name"].Value == null ? "" : Convert.ToString(groupEntry.Properties["name"].Value);
+                            group.Account = groupEntry.Properties["mail"].Value == null ? "" : Convert.ToString(groupEntry.Properties["mail"].Value);
+                            group.IsOrganizational = groupEntry.Properties["msOrg-IsOrganizational"].Value == null ? false : Convert.ToBoolean(Convert.ToInt32(groupEntry.Properties["msOrg-IsOrganizational"].Value));
+                            user.BelongGroups.Add(group);
+                        }
+                    }
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.Error("UserProvider调用GetUserInfoByEMPLID异常", paramstr, ex.ToString(), transactionid);
+                error.Code = ErrorCode.Exception;
+                bResult = false;
+            }
+            finally
+            {
+                if (UserEntry != null)
+                {
+                    UserEntry.Close();
                 }
             }
             return bResult;
