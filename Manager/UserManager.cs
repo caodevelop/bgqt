@@ -14,6 +14,7 @@ using Aliyun.Acs.Core.Profile;
 using Aliyun.Acs.Core;
 using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Http;
+using System.Threading;
 
 namespace Manager
 {
@@ -566,7 +567,7 @@ namespace Manager
             string paramstr = string.Empty;
             paramstr += $"userid:{userid}";
             string funname = "SendFUserMobileCode";
-           
+
             try
             {
                 do

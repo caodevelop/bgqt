@@ -317,10 +317,13 @@ namespace SyncADControl
 
                             user.IsDisable = (TempuserAccountControl & 2) != 0 ? true : false;
 
+
                             long Templastlogon = 0;
-                            if (CN.Properties["lastlogon"].Value != null)
-                                Templastlogon = GetLongValue((IADsLargeInteger)CN.Properties["lastlogon"].Value);
+                            if (CN.Properties["lastLogonTimestamp"].Value != null)
+                                Templastlogon = GetLongValue((IADsLargeInteger)CN.Properties["lastLogonTimestamp"].Value);
                             user.LastLogon = Templastlogon > 0 ? DateTime.FromFileTimeUtc(Templastlogon).AddHours(8) : Convert.ToDateTime("1900-01-01");
+                            #region 从两台AD取lastlogon
+                            #endregion
 
                             //AD用户 与 部门不从AD属性中读取
                             //DirectoryEntry TempParent = CN.Parent;

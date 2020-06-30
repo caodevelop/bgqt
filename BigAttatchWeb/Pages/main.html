@@ -94,7 +94,7 @@
                     </div>
                     <div id="upload_shareBtn_right" class="m_footer_btn_right"
                          data-bind="css:{share_background:$root.shareStyle(),txtHover:$root.shareStyle()},click:$root.uploadQuickBtn">
-                        快速分享
+                        增加附件
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
         <!-- 分享文件区域 -->
         <div class="m_share_wrap" data-bind="css:{content_display:$root.showShareDiv()}">
             <div class="m_share">
-                <p id="m_share_item">选择需要分享的文件</p>
+                <p id="m_share_item">选择需要上传的文件</p>
                 <div id="m_share_refresh" class="m_share_refresh txtHover" data-bind="click:$root.totalRefresh">刷新</div>
                 <div class="m_share_search">
                     <input type="text" name="share-text" class="m_share_text" id="m_share_text" />
@@ -235,7 +235,7 @@
                     </div>
                     <div id="share_shareBtn_right" class="m_footer_btn_right"
                          data-bind="css:{share_background:$root.shareBg(),txtHover:$root.shareBg()},click:$root.quickShare">
-                        快速分享
+                        增加附件
                     </div>
                 </div>
             </div>
@@ -394,7 +394,7 @@
         <!-- 分享链接 -->
         <div class="m_shareLink_wrap" data-bind="css:{content_display:$root.linkFun.showLinkDiv()}">
             <div class="m_shareLink">
-                <p id="m_shareLink_item">我的分享链接</p>
+                <p id="m_shareLink_item">我的上传附件</p>
                 <div id="m_shareLink_refresh" class="m_shareLink_refresh txtHover" data-bind="click:$root.linkFun.initShare">刷新</div>
             </div>
             <div class="m_shareLink_search">
@@ -453,7 +453,7 @@
          data-bind="css:{content_display:$root.shareSet()},click:$root.maskClose"></div>
     <div class="m_main_advancedShare" id="m_main_advancedShare">
         <div class="m_advancedShare_title">
-            <p id="advShare_title">高级分享选项</p>
+            <p id="advShare_title">高级选项</p>
             <span class="m_advancedShare_close txtHover" id="m_advancedShare_close"
                   data-bind="click:$root.advancedFileShare.close"></span>
         </div>
@@ -478,7 +478,7 @@
                   data-bind="click:$root.advancedFileShare.rebuildValidateCode,css:{txtHover:$root.advancedFileShare.mustValidateCode(),disableSpan:!$root.advancedFileShare.mustValidateCode()}">重新生成</span>
         </div>
         <div class="m_advancedShare_shareTime">
-            <p id="advShare_expire">分享期限</p>
+            <p id="advShare_expire">上传期限</p>
             <select id="adShareSeleteItem" class="adShareSeleteItem float_left" data-bind="disable:!$root.advancedFileShare.allowChangeExpireTime(),options: $root.advancedFileShare.advancedSelectItems,optionsText:'v',optionsValue:'i',
         value:$root.advancedFileShare.fileShareLimit"></select>
             <span data-bind="visible:$root.advancedFileShare.showChoseTime()">

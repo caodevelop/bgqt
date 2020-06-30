@@ -566,7 +566,7 @@ namespace AttachforOutlookWeb.api
             string userAccount = string.Empty;
             ErrorCodeInfo error = new ErrorCodeInfo();
             Guid transactionid = Guid.NewGuid();
-            string funname = "CheckVerificationCode";
+            string funname = "DownloadFileById";
             try
             {
                 do
@@ -640,6 +640,10 @@ namespace AttachforOutlookWeb.api
                         dataToRead = -1;
                     }
                 }
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
+            }
+            catch (System.Threading.ThreadAbortException)
+            {
             }
             catch (Exception ex)
             {
@@ -653,7 +657,6 @@ namespace AttachforOutlookWeb.api
                     //Close the file.
                     iStream.Close();
                 }
-                context.Response.End();
             }
         }
 

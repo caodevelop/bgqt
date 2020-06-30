@@ -15,6 +15,7 @@ namespace SendAdminNoticeMessage
             bool result = true;
             List<UserInfo> nlist = new List<UserInfo>();
             List<UserInfo> llist = new List<UserInfo>();
+            List<UserInfo> lelist = new List<UserInfo>();
 
             string error = string.Empty;
             string paramstr = string.Empty;
@@ -26,7 +27,7 @@ namespace SendAdminNoticeMessage
                 do
                 {
                     DBProvider bProvider = new DBProvider();
-                    if (!bProvider.GetSendMessageUsers(transactionid, out nlist, out llist, out error))
+                    if (!bProvider.GetSendMessageUsers(transactionid, out nlist, out llist, out lelist, out error))
                     {
                         LoggerHelper.Info("SendNoticeMessage", funname, paramstr, error, false, transactionid);
                         result = false;
@@ -36,9 +37,9 @@ namespace SendAdminNoticeMessage
                     string subject = ConfigHelper.ConfigInstance["NoticeSubject"];
                     string sender = ConfigHelper.ConfigInstance["NoticeSender"];
                     string receiver = ConfigHelper.ConfigInstance["NoticeReceiver"];
-                    string body = DateTime.Now.ToShortDateString() + " 入职员工数量为：" + nlist.Count + "，离职员工数量为：" + llist.Count;
+                    string body = DateTime.Now.ToShortDateString() + " 入职员工数量为：" + nlist.Count + "，离职员工数量为：" + llist.Count + "，离职且未禁用员工数量为：" + llist.Count;
                     string mailbody = string.Empty;
-                    BuildingEntryAndLeaveSystemMailBody(body, nlist, llist, out mailbody);
+                    BuildingEntryAndLeaveSystemMailBody(body, nlist, llist, lelist, out mailbody);
                     SendNoticeMail(transactionid, subject, sender, receiver, mailbody);
 
                     LoggerHelper.Info("SendNoticeMessage", funname, paramstr, "发送员工变更通知邮件成功", true, transactionid);
@@ -52,7 +53,7 @@ namespace SendAdminNoticeMessage
             return result;
         }
 
-        private void BuildingEntryAndLeaveSystemMailBody(string body, List<UserInfo> nlist, List<UserInfo> llist, out string mailbody)
+        private void BuildingEntryAndLeaveSystemMailBody(string body, List<UserInfo> nlist, List<UserInfo> llist, List<UserInfo> lelist, out string mailbody)
         {
             mailbody = string.Empty;
             mailbody = "<span>" + body + "</span><br>";
@@ -74,7 +75,17 @@ namespace SendAdminNoticeMessage
                 {
                     mailbody += "<tr><td>" + m.EMPLID + "</td><td>" + m.NAME + "</td><td>" + m.PHONE1 + "</td><td>" + m.POSN_DESCR + "</td><td>" + m.DEPT_DESCR + "</td><td>" + m.HPS_WORK_COMP_DESC + "</td><td>" + m.TERMINATION_DT + "</td></tr>";
                 }
-                mailbody += "</table>";
+                mailbody += "</table><br>";
+            }
+            if (lelist.Count > 0)
+            {
+                mailbody += "<span>离职且未禁用用员工如下：</span>";
+                mailbody += "<table><tr><td style='width:100px;'>员工号</td><td style='width:120px;'>姓名</td><td style='width:120px;'>手机号码</td><td style='width:200px;'>职位</td><td style='width:200px;'>部门</td><td style='width:200px;'>公司</td><td style='width:200px;'>离职时间</td></tr>";
+                foreach (var m in lelist)
+                {
+                    mailbody += "<tr><td>" + m.EMPLID + "</td><td>" + m.NAME + "</td><td>" + m.PHONE1 + "</td><td>" + m.POSN_DESCR + "</td><td>" + m.DEPT_DESCR + "</td><td>" + m.HPS_WORK_COMP_DESC + "</td><td>" + m.TERMINATION_DT + "</td></tr>";
+                }
+                mailbody += "</table><br>";
             }
         }
 

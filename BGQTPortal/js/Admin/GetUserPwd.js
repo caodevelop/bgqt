@@ -3,7 +3,7 @@
     $scope.User.VCode = '';
     $scope.User.Account = '';
     $scope.User.UserID = '';
-    $scope.formTitle = '找回密码';
+    $scope.formTitle = '邮箱和VPN 找回密码';
     $scope.getPwdStepOne = true;
     $scope.getPwdStepTwo = false;
     $scope.getPwdStepThree = false;
@@ -165,7 +165,7 @@
                 $scope.getPwdStepTwo = false;
                 $scope.getPwdStepThree = true;
                 $scope.getPwdStepFour = false;
-                $scope.formTitle = '重置密码';
+                $scope.formTitle = '邮箱和VPN  重置密码';
                 $scope.CodeID = callbackObj[0].data[0].CodeID;
             } else {
                 $scope.opResult = 'error';
@@ -194,6 +194,9 @@
             "CodeID": $scope.CodeID,
             "Password": $scope.User.Password
         }
+        angular.element(".login-btn").text("执行中");
+        $scope.RePwdStepThree = true;
+        $(".forgetPwd").css("visibility", "hidden");
         $http({
             method: 'Post',
             url: storage.getItem("InterfaceUrl") + "OrgAndUser.ashx?op=SetFUserPass",
@@ -205,11 +208,17 @@
                 $scope.getPwdStepTwo = false;
                 $scope.getPwdStepThree = false;
                 $scope.getPwdStepFour = true;
-                $scope.formTitle = '密码重置成功。';
+                $scope.formTitle = '邮箱和VPN  重置密码';
+                $scope.RePwdStepThree = false;
+                angular.element(".login-btn").text("确 定");
+                $(".forgetPwd").css("visibility", "visible");
             } else {
                 $scope.opResult = 'error';
                 $scope.checkTips = false;
                 $scope.errorMsg = callbackObj[0].errMsg;
+                $scope.RePwdStepThree = false;
+                angular.element(".login-btn").text("确 定");
+                $(".forgetPwd").css("visibility", "visible");
             }
         }, function errorCallback(e) {
 

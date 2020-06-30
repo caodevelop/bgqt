@@ -922,7 +922,8 @@ namespace Provider.ADProvider
                     string strFilter = commonProvider.GetSearchType(SearchType.MailUser, string.Empty);
                     deSearch.Filter = strFilter;
                     deSearch.SearchScope = SearchScope.Subtree;
-                    deSearch.SizeLimit = 20000;
+                    deSearch.PageSize = 100;
+                    deSearch.SizeLimit = 10000;
                     deSearch.ServerTimeLimit = TimeSpan.FromSeconds(600);
                     deSearch.ClientTimeout = TimeSpan.FromSeconds(600);
                     SearchResultCollection results = deSearch.FindAll();

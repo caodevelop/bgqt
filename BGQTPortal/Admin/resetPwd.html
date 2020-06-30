@@ -29,7 +29,7 @@
                         <input type="button" class="code floatright" id="login-code" ng-focus="checkTips=true" ng-click="RefreshCode()" ng-model="User.loginCode" />
                     </div>
                     <div class="input-group nomargin">
-                        <label class="control-label clearfix" style="display: block;color:#999999;padding-left:12px;margin-bottom:0;">说明：修改后新密码约 20 分钟后生效。</label>
+                        <label class="control-label clearfix" style="display: none;color:#999999;padding-left:12px;margin-bottom:0;">说明：修改后新密码约 20 分钟后生效。</label>
                     </div>
                     <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
                     <button class="login-btn" ng-click="ChangeUserPassword()" ng-disabled="!RePwdBtn">确 定</button>

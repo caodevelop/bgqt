@@ -35,7 +35,8 @@ namespace Manager
                     if (!commonProvider.GetCommonTreeData(nodeID, admin, SearchType.AllNoHab, out list, out errormsg))
                     {
                         strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
-                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        LoggerHelper.Error("TreeNodeManager调用GetCompanyTree异常", paramstr, errormsg, transactionid);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, errormsg, false, transactionid);
                         result = false;
                         break;
                     }
@@ -116,7 +117,7 @@ namespace Manager
                             nodelist.Add(node);
                         }
                         error.Code = ErrorCode.None;
-                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Name).ToList());
+                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Desc).ToList());
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
                         result = true;
                     }
@@ -226,7 +227,7 @@ namespace Manager
                             nodelist.Add(node);
                         }
                         error.Code = ErrorCode.None;
-                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Name).ToList());
+                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Desc).ToList());
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
                         result = true;
                     }
@@ -612,7 +613,7 @@ namespace Manager
                             nodelist.Add(node);
                         }
                         error.Code = ErrorCode.None;
-                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Name).ToList());
+                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Desc).ToList());
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
                         result = true;
                     }
@@ -1751,7 +1752,7 @@ namespace Manager
                             nodelist.Add(node);
                         }
                         error.Code = ErrorCode.None;
-                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Name).ToList());
+                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Desc).ToList());
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
                         result = true;
                     }
@@ -1797,7 +1798,7 @@ namespace Manager
                     else
                     {
                         error.Code = ErrorCode.None;
-                        strJsonResult = JsonConvert.SerializeObject(list.OrderBy(x => x.Type).ThenBy(x => x.Name).ToList());
+                        strJsonResult = JsonConvert.SerializeObject(list.OrderBy(x => x.Type).ThenBy(x => x.Desc).ToList());
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
                         result = true;
                     }
@@ -1873,7 +1874,7 @@ namespace Manager
                             nodelist.Add(node);
                         }
                         error.Code = ErrorCode.None;
-                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Name).ToList());
+                        strJsonResult = JsonConvert.SerializeObject(nodelist.OrderBy(x => x.Type).ThenBy(x => x.Desc).ToList());
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
                         result = true;
                     }

@@ -13,11 +13,13 @@ namespace SendAdminNoticeMessage
     {
 
         private string _ProviderName = "DBProvider";
-        public bool GetSendMessageUsers(Guid transactionid, out List<UserInfo> newusers, out List<UserInfo> leaveusers, out string error)
+
+        public bool GetSendMessageUsers(Guid transactionid, out List<UserInfo> newusers, out List<UserInfo> leaveusers,out List<UserInfo> leaveandenableusers, out string error)
         {
             bool bResult = true;
             newusers = new List<UserInfo>();
             leaveusers = new List<UserInfo>();
+            leaveandenableusers = new List<UserInfo>();
             error = string.Empty;
             string paramstr = string.Empty;
             string funname = "GetSendMessageUsers";
@@ -70,6 +72,20 @@ namespace SendAdminNoticeMessage
                                         info.HPS_WORK_COMP_DESC = Convert.ToString(dr["COMPANY_DESCR"]);
                                         info.POSN_DESCR = Convert.ToString(dr["POSN_DESCR"]);
                                         leaveusers.Add(info);
+                                    }
+                                    for (int i = 0; i < ds.Tables[3].Rows.Count; i++)
+                                    {
+                                        DataRow dr = ds.Tables[3].Rows[i];
+                                        UserInfo info = new UserInfo();
+                                        info.EMPLID = Convert.ToString(dr["EMPLID"]);
+                                        info.NAME = Convert.ToString(dr["NAME"]);
+                                        info.PHONE1 = Convert.ToString(dr["PHONE1"]);
+                                        info.userPrincipalName = Convert.ToString(dr["userPrincipalName"]);
+                                        info.TERMINATION_DT = Convert.ToString(dr["TERMINATION_DT"]);
+                                        info.DEPT_DESCR = Convert.ToString(dr["DEPT_DESCR"]);
+                                        info.HPS_WORK_COMP_DESC = Convert.ToString(dr["COMPANY_DESCR"]);
+                                        info.POSN_DESCR = Convert.ToString(dr["POSN_DESCR"]);
+                                        leaveandenableusers.Add(info);
                                     }
                                     bResult = true;
                                     break;

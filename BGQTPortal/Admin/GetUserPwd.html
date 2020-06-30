@@ -6,14 +6,14 @@
 </head>
 <body>
     <div class="ab-div">
-        <div style="font-size:36px;color:#003F8F;background-color:transparent;position:absolute;left:calc(50% - 126px);top:calc(46% - 390px);">AD管理平台</div>
-        <div class="resetAndLogin" style="width:860px;top:38%;text-align:center">
+        <div style="font-size:36px;color:#003F8F;background-color:transparent;position:absolute;left:calc(50% - 200px);top:calc(46% - 390px);">宝钢气体AD系统管理平台</div>
+        <div class="resetAndLogin" style="width:860px;top:42%;text-align:center">
             <div class="login-div">
                 <form>
                     <div class="form-title">{{formTitle}}</div>
                     <div class="Account-login" ng-show="getPwdStepOne">
                         <div class="input-group">
-                            <input type="text" placeholder="员工编号" ng-focus="checkTips=true" ng-model="User.Account" ng-change="checkSubmit()" />
+                            <input type="text" placeholder="账号（员工号）" ng-focus="checkTips=true" ng-model="User.Account" ng-change="checkSubmit()" />
                         </div>
                         <div class="input-group nomargin">
                             <input type="text" class="VCode floatleft" placeholder="验证码" ng-focus="checkTips=true" ng-model="User.VCode" ng-change="checkSubmit('step1')" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly',true);" />
@@ -46,7 +46,7 @@
                                 <span class="tips" ng-show="shownametips">8～20 个字符；同时包含字母（区分大小写）、数字、特殊符号三种；不支持空格，"&"，"<"；不能与上一次密码相同；不能包含用户名部分连续或全部字符</span>
                             </div>
                             <div class="input-group">
-                                <input type="password" placeholder="再次输入" ng-focus="checkTips=true" ng-model="User.rePassword" ng-change="checkSubmit('step3')" />
+                                <input type="password" placeholder="确认新密码" ng-focus="checkTips=true" ng-model="User.rePassword" ng-change="checkSubmit('step3')" />
                             </div>
                             <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
                             <button class="login-btn" ng-click="resetPwd()" ng-disabled="RePwdStepThree">确 定</button>
@@ -58,7 +58,7 @@
                     <div ng-show="getPwdStepFour">
                         <div class="Account-login">
                             <div style="text-align:center;">
-                                <div style="height:30px;line-height:30px;color:#0a78d5;">修改后新密码约 20 分钟后生效。</div>
+                                <div style="height:30px;line-height:30px;color:#0a78d5;">员工：{{User.Account}} 密码重置成功。</div>
                             </div>
                             <button class="login-btn" ng-click="gotoAdminLogin()" style="margin-top:60px;">返回首页</button>
                         </div>

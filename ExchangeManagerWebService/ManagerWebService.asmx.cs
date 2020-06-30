@@ -170,11 +170,11 @@ namespace ExchangeManagerWebService
             string paramstr = string.Empty;
             paramstr += $"||userID:{userID}";
 
-            if (!ExchangeProvider.DisableMailbox(userID, out strError))
-            {
-                Log4netHelper.Error("DisableMailbox异常", paramstr, strError, transactionid);
-                result = false;
-            }
+            //if (!ExchangeProvider.DisableMailbox(userID, out strError))
+            //{
+            //    Log4netHelper.Error("DisableMailbox异常", paramstr, strError, transactionid);
+            //    result = false;
+            //}
 
             return result;
         }
@@ -255,6 +255,7 @@ namespace ExchangeManagerWebService
             info = JsonHelper.SerializeObject(group);
             return result;
         }
+
         [WebMethod]
         public bool GetDistributionGroup(Guid transactionid, string groupID, out string strError)
         {
@@ -383,6 +384,80 @@ namespace ExchangeManagerWebService
             if (!ExchangeProvider.RemoveSensitiveMail(userMail, keywords, startTime, endTime, out resultmessage, out strError))
             {
                 Log4netHelper.Error("RemoveSensitiveMail异常", paramstr, strError, transactionid);
+                result = false;
+            }
+
+            return result;
+        }
+
+        [WebMethod]
+        public bool CreateMailContact(Guid transactionid,
+            string name,
+            string displayname,
+            string mail,
+            string organizationalUnit,
+            out string strError)
+        {
+            bool result = true;
+            strError = string.Empty;
+
+            string paramstr = string.Empty;
+            paramstr += $"||name:{name}";
+            paramstr += $"||displayName:{displayname}";
+            paramstr += $"||mail:{mail}";
+            paramstr += $"||organizationalUnit:{organizationalUnit}";
+
+            if (!ExchangeProvider.AddMailContact(name, mail, displayname, organizationalUnit, string.Empty, ref strError))
+            {
+                Log4netHelper.Error("CreateMailContact异常", paramstr, strError, transactionid);
+                result = false;
+            }
+
+            return result;
+        }
+
+        [WebMethod]
+        public bool UpdateMailContact(Guid transactionid,
+            string name,
+            string displayname,
+            string mail,
+            string organizationalUnit,
+            out string strError)
+        {
+            bool result = true;
+            strError = string.Empty;
+
+            string paramstr = string.Empty;
+            paramstr += $"||name:{name}";
+            paramstr += $"||displayName:{displayname}";
+            paramstr += $"||mail:{mail}";
+            paramstr += $"||organizationalUnit:{organizationalUnit}";
+
+            if (!ExchangeProvider.SetMailContact(name, organizationalUnit, displayname,new List<string>(),false, mail,  ref strError))
+            {
+                Log4netHelper.Error("UpdateMailContact异常", paramstr, strError, transactionid);
+                result = false;
+            }
+
+            return result;
+        }
+
+        [WebMethod]
+        public bool RemoveContact(Guid transactionid,
+           string name,
+           string organizationalUnit,
+           out string strError)
+        {
+            bool result = true;
+            strError = string.Empty;
+
+            string paramstr = string.Empty;
+            paramstr += $"||name:{name}";
+            paramstr += $"||organizationalUnit:{organizationalUnit}";
+
+            if (!ExchangeProvider.RemoveContact(name, out strError))
+            {
+                Log4netHelper.Error("RemoveContact异常", paramstr, strError, transactionid);
                 result = false;
             }
 

@@ -179,11 +179,11 @@ namespace Provider.ExchangeProvider
         /// -OrganizationalUnit
         /// -PrimarySmtpAddress
         /// </remarks>
-        public class PSCommandNewContact : WSCommandBase
+        public class PSCommandNewContact : PSCommandBase
         {
             public static ICollection<PSObject> ExecuteCmdlet(PSParameters parms)
             {
-                return WSCommandBase.ExecuteCmdlet("New-MailContact", parms);
+                return PSCommandBase.ExecuteCmdlet("New-MailContact", parms);
             }
         }
 
@@ -213,11 +213,11 @@ namespace Provider.ExchangeProvider
         /// -ExternalEmailAddress
         /// -PrimarySmtpAddress
         /// </remarks>
-        public class PSCommandSetContact : WSCommandBase
+        public class PSCommandSetContact : PSCommandBase
         {
             public static ICollection<PSObject> ExecuteCmdlet(PSParameters parms)
             {
-                return WSCommandBase.ExecuteCmdlet("Set-MailContact", parms);
+                return PSCommandBase.ExecuteCmdlet("Set-MailContact", parms);
             }
         }
 

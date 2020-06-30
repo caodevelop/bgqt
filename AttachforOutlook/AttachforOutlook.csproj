@@ -47,6 +47,7 @@
     </None>
     <Content Include="AttachforOutlookManifest\AttachforOutlook.xml">
       <OpcRelationship>manifest-oemanifest</OpcRelationship>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

@@ -501,8 +501,8 @@ namespace Provider.ExchangeProvider
             paras.AddPara("Name", pName);
             paras.AddPara("ExternalEmailAddress", pExternalEmailAddress);
             paras.AddPara("DisplayName", pDisplayName);
-            // paras.AddPara("OrganizationalUnit", System.Configuration.ConfigurationManager.AppSettings["OrganizationalUnitPath"] + pOrganizationalUnit);
-            paras.AddPara("PrimarySmtpAddress", pPrimarySmtpAddress);
+            paras.AddPara("OrganizationalUnit", pOrganizationalUnit);
+            //paras.AddPara("PrimarySmtpAddress", pPrimarySmtpAddress);
 
             try
             {
@@ -539,22 +539,22 @@ namespace Provider.ExchangeProvider
             PSParameters paras = new PSParameters();
 
             paras.AddPara("Identity", pName);
-            if (!string.IsNullOrEmpty(pOU))
-            {
-                paras.AddPara("CustomAttribute1", pOU);
-            }
+            //if (!string.IsNullOrEmpty(pOU))
+            //{
+            //    paras.AddPara("CustomAttribute1", pOU);
+            //}
             if (!string.IsNullOrEmpty(pDisplayName))
             {
                 paras.AddPara("DisplayName", pDisplayName);
             }
-            if (pEmailAddressPolicyEnabled.HasValue)
-            {
-                paras.AddPara("EmailAddressPolicyEnabled", pEmailAddressPolicyEnabled.Value);
-            }
-            if (pEmailAddresses.Count > 0)
-            {
-                paras.AddPara("EmailAddresses", pEmailAddresses);
-            }
+            //if (pEmailAddressPolicyEnabled.HasValue)
+            //{
+            //    paras.AddPara("EmailAddressPolicyEnabled", pEmailAddressPolicyEnabled.Value);
+            //}
+            //if (pEmailAddresses.Count > 0)
+            //{
+            //    paras.AddPara("EmailAddresses", pEmailAddresses);
+            //}
             if (!string.IsNullOrEmpty(pExternalEmailAddress))
             {
                 paras.AddPara("ExternalEmailAddress", pExternalEmailAddress);
@@ -586,6 +586,7 @@ namespace Provider.ExchangeProvider
         {
             PSParameters paras = new PSParameters();
             paras.AddPara("Identity", pName);
+            paras.AddPara("Confirm", false);
             try
             {
                 ExchangePSProvider.PSCommandRemoveContact.ExecuteCmdlet(paras);
@@ -2196,11 +2197,11 @@ namespace Provider.ExchangeProvider
                 //用户邮箱存在
                 else
                 {
-                    if (!DisableMailbox(userEmail, out strError))
-                    {
-                        Log4netHelper.Error("DisableMailbox ：" + strError);
-                        return false;
-                    }
+                    //if (!DisableMailbox(userEmail, out strError))
+                    //{
+                    //    Log4netHelper.Error("DisableMailbox ：" + strError);
+                    //    return false;
+                    //}
                 }
             }
             return true;
@@ -2666,7 +2667,7 @@ namespace Provider.ExchangeProvider
             PSParameters para = new PSParameters();
 
             para.Add(new PSParameter("Identity", contactId));
-            //para.Add(new PSParameter("Confirm", false));
+            para.Add(new PSParameter("Confirm", false));
 
             try
             {

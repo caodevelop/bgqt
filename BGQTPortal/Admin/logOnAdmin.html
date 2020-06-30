@@ -6,13 +6,13 @@
 </head>
 <body>
     <div class="ab-div">
-        <div style="font-size:36px;color:#003F8F;background-color:transparent;position:absolute;left:calc(50% - 126px);top:calc(46% - 390px);">AD管理平台</div>
+        <div style="font-size:36px;color:#003F8F;background-color:transparent;position:absolute;left:calc(50% - 200px);top:calc(46% - 390px);">宝钢气体AD系统管理平台</div>
         <div class="resetAndLogin" style="width:860px;">
             <div class="login-div" style="float:left;background-image: linear-gradient(to bottom, #d8d8d8 100%,#dcdcdc 100%);background-size: 1px 70%;background-repeat: no-repeat;background-position:center right;">
                 <form ng-click="focusResetPwd()">
-                    <div class="form-title">员工自助修改密码</div>
+                    <div class="form-title">宝钢气体邮箱自助密码修改</div>
                     <div class="input-group">
-                        <input type="text" placeholder="账号" ng-focus="checkTips2=true" ng-model="resetUser.Account" ng-change="checkSubmit()" />
+                        <input type="text" placeholder="账号（员工号）" ng-focus="checkTips2=true" ng-model="resetUser.Account" ng-change="checkSubmit()" />
                     </div>
                     <div class="input-group">
                         <input type="password" placeholder="原密码" ng-focus="checkTips2=true" ng-model="resetUser.OldPwd" ng-change="checkSubmit()" />
@@ -38,7 +38,7 @@
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">2、必须同时包含字母（区分大小写）、数字、特殊符号三种</label>
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">3、密码不能与上一次密码相同</label>
                         <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">4、密码不能包含用户名部分连续或全部字符</label>
-                        <label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">5、修改后新密码约 20 分钟后生效。</label>
+                        <!--<label class="control-label clearfix" style="display: block;color:#333333;padding-left:12px;margin-bottom:0;">5、修改后新密码约 20 分钟后生效。</label>-->
                     </div>
                 </form>
             </div>
@@ -47,7 +47,7 @@
                     <div class="form-title">管理员登录</div>
                     <div>
                         <div class="input-group">
-                            <input type="text" placeholder="账号" ng-focus="checkTips1=true" ng-model="logOnUser.Account" ng-change="InputChange()" />
+                            <input type="text" placeholder="账号（员工号）" ng-focus="checkTips1=true" ng-model="logOnUser.Account" ng-change="InputChange()" />
                         </div>
                         <div class="input-group">
                             <input type="password" placeholder="密码" ng-model="logOnUser.Password" ng-change="InputChange()" ng-focus="checkTips1=true" />

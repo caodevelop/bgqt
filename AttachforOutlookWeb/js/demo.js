@@ -20,6 +20,11 @@
                     });
                     return;
                 }
+                else {
+                    _.autoSignin(function () {
+                        _.redirectMain(opts.language, opts.currentEmailAddress);
+                    });
+                }
             }
             else {
                 _.autoSignin(function () {

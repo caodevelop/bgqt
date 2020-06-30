@@ -1691,7 +1691,7 @@ namespace Provider.ADProvider
                 switch (iType)
                 {
                     case SearchType.AllNoHab:
-                        strFilter = "(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit)(objectClass=msExchDynamicDistributionList))(!msOrg-IsOrganizational=TRUE))";
+                        strFilter = "(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit))(!msOrg-IsOrganizational=TRUE))";
                         break;
                     case SearchType.Ou:
                         strFilter = "(&(|(objectClass=organizationalUnit))(!objectClass=computer)(!msOrg-IsOrganizational=TRUE))";
@@ -1721,7 +1721,7 @@ namespace Provider.ADProvider
                         strFilter = string.Format("(&(objectClass=group)(mail=*))");
                         break;
                     case SearchType.All:
-                        strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit)(objectClass=msExchDynamicDistributionList)))");
+                        strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit)))");
                         break;
                     case SearchType.GroupTreeNoHab:
                         strFilter = string.Format("(&(|(objectClass=organizationalUnit)(objectClass=group))(!objectClass=computer)(!msOrg-IsOrganizational=TRUE))");
@@ -1742,7 +1742,7 @@ namespace Provider.ADProvider
                 switch (iType)
                 {
                     case SearchType.AllNoHab:
-                        strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit)(objectClass=msExchDynamicDistributionList))(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*))(!msOrg-IsOrganizational=TRUE))", strSearchCondition);
+                        strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit))(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*))(!msOrg-IsOrganizational=TRUE))", strSearchCondition);
                         break;
                     case SearchType.Ou:
                         strFilter = string.Format("(&((objectClass=organizationalUnit))(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*)))", strSearchCondition);
@@ -1763,7 +1763,7 @@ namespace Provider.ADProvider
                         strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group))(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*)(mail=*{0}*)))", strSearchCondition);
                         break;
                    case SearchType.All:
-                        strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit)(objectClass=msExchDynamicDistributionList))(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*)))", strSearchCondition);
+                        strFilter = string.Format("(&(!objectClass=computer)(|(objectClass=user)(objectClass=group)(objectClass=organizationalUnit))(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*)))", strSearchCondition);
                         break;
                     case SearchType.MailUser:
                         strFilter = string.Format("(&(objectClass=user)(|(sAMAccountName=*{0}*)(displayName=*{0}*)(name=*{0}*))(mail=*))", strSearchCondition);
