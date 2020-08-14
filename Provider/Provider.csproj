@@ -77,6 +77,7 @@
     <Compile Include="DBProvider\SensitiveMailDBProvider.cs" />
     <Compile Include="DBProvider\SystemReportDBProvider.cs" />
     <Compile Include="DBProvider\UserDBProvider.cs" />
+    <Compile Include="DBProvider\WaterMakingDBProvider.cs" />
     <Compile Include="ExchangeProvider\EwsProvider.cs" />
     <Compile Include="ExchangeProvider\ExchangeProvider.cs" />
     <Compile Include="ExchangeProvider\ExchangePSProvider.cs" />

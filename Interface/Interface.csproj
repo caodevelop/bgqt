@@ -131,6 +131,9 @@
     <Compile Include="TreeNode.ashx.cs">
       <DependentUpon>TreeNode.ashx</DependentUpon>
     </Compile>
+    <Compile Include="WaterMarking.ashx.cs">
+      <DependentUpon>WaterMarking.ashx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="OrgAndUser.ashx" />
@@ -151,6 +154,7 @@
     <Content Include="StaticGroup.ashx" />
     <Content Include="SameLevelOu.ashx" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="WaterMarking.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

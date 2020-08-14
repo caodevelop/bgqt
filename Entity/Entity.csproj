@@ -64,6 +64,7 @@
     <Compile Include="SensitiveMailInfo.cs" />
     <Compile Include="SystemReportInfo.cs" />
     <Compile Include="UserInfo.cs" />
+    <Compile Include="WaterMakingInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,161 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entity
+{
+    [Serializable]
+    public class WaterMakingInfo
+    {
+        private Guid _ID = Guid.Empty;
+        public Guid ID
+        {
+            get { return _ID; }
+            set { _ID = value; }
+        }
+
+        private string _Name = string.Empty;
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value; }
+        }
+
+        public DateTime CreateTime
+        { get; set; } = DateTime.Now;
+
+        public WaterMakingContentInfo WaterMakingContent
+        { get; set; } = new WaterMakingContentInfo();
+
+        public string Description
+        { get; set; } = string.Empty;
+
+        public Guid CreateUserID
+        { get; set; } = Guid.Empty;
+
+        public Guid RoleID
+        { get; set; } = Guid.Empty;
+    }
+
+    [Serializable]
+    //PDF条件
+    public class PDFConditionInfo
+    {
+        public string From
+        { get; set; } = string.Empty;
+
+        public string Subject
+        { get; set; } = string.Empty;
+
+        public string Recipients
+        { get; set; } = string.Empty;
+
+        public List<string> RecipientLists
+        {
+            get
+            {
+                List<string> _recipientLists = new List<string>();
+                if (Recipients.Contains(";"))
+                {
+                    string[] arr = Recipients.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    _recipientLists = arr.ToList();
+                }
+                return _recipientLists;
+            }
+        }
+
+        public string PDFName
+        { get; set; } = string.Empty;
+    }
+
+    [Serializable]
+    //正文条件
+    public class BodyConditionInfo
+    {
+        public string From
+        { get; set; } = string.Empty;
+
+        public string Subject
+        { get; set; } = string.Empty;
+
+        public string Recipients
+        { get; set; } = string.Empty;
+
+        public List<string> RecipientLists
+        {
+            get
+            {
+                List<string> _recipientLists = new List<string>();
+                if (Recipients.Contains(";"))
+                {
+                    string[] arr = Recipients.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    _recipientLists = arr.ToList();
+                }
+                return _recipientLists;
+            }
+        }
+
+        public bool IsContainsAttachment
+        { get; set; } = false;
+
+        public string AttachmentName
+        { get; set; } = string.Empty;
+    }
+
+    [Serializable]
+    public class WaterMakingContentInfo
+    {
+        public bool IsAllRecipients
+        { get; set; } = false;
+        public string Contect
+        { get; set; } = string.Empty;
+    }
+
+    [Serializable]
+    public class PDFWaterMakingInfo : WaterMakingInfo
+    {
+        public PDFConditionInfo PDFCondition
+        { get; set; } = new PDFConditionInfo();
+
+        public ErrorCodeInfo AddCheckProp()
+        {
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            if (string.IsNullOrEmpty(Name))
+            {
+                error.Code = ErrorCode.NameEmpty;
+            }
+            else if (string.IsNullOrEmpty(PDFCondition.From) && string.IsNullOrEmpty(PDFCondition.Subject)
+                && string.IsNullOrEmpty(PDFCondition.Recipients) && string.IsNullOrEmpty(PDFCondition.PDFName))
+            {
+                error.Code = ErrorCode.WaterMarkingConditionEmpty;
+            }
+
+            return error;
+        }
+    }
+
+    [Serializable]
+    public class BodyWaterMakingInfo : WaterMakingInfo
+    {
+        public BodyConditionInfo BodyCondition
+        { get; set; } = new BodyConditionInfo();
+
+        public ErrorCodeInfo AddCheckProp()
+        {
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            if (string.IsNullOrEmpty(Name))
+            {
+                error.Code = ErrorCode.NameEmpty;
+            }
+            else if (string.IsNullOrEmpty(BodyCondition.From) && string.IsNullOrEmpty(BodyCondition.Subject)
+                && string.IsNullOrEmpty(BodyCondition.Recipients) && string.IsNullOrEmpty(BodyCondition.AttachmentName))
+            {
+                error.Code = ErrorCode.WaterMarkingConditionEmpty;
+            }
+
+            return error;
+        }
+    }
+}

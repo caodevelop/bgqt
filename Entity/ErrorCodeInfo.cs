@@ -286,6 +286,15 @@ namespace Entity
                         case ErrorCode.SmsCodeExpired:
                             codeInfo = "安全码已过期。";
                             break;
+                        case ErrorCode.WaterMarkingConditionEmpty:
+                            codeInfo = "条件为空";
+                            break;
+                        case ErrorCode.WaterMarkingNotExist:
+                            codeInfo = "规则不存在";
+                            break;
+                        case ErrorCode.HaveSameWaterMarking:
+                            codeInfo = "已存在同名规则";
+                            break;
                         default:
                             break;
                     }
@@ -431,5 +440,10 @@ namespace Entity
         UserIsDisable = 10060,
         SmsCodeWrong = 1291,
         SmsCodeExpired = 1292,
+
+        WaterMarkingConditionEmpty = 13000,
+        WaterMarkingNotExist =13001,
+        HaveSameWaterMarking = 13002,
+
     }
 }

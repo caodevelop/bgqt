@@ -88,6 +88,7 @@
     <Compile Include="TokenManager.cs" />
     <Compile Include="TreeNodeManager.cs" />
     <Compile Include="UserManager.cs" />
+    <Compile Include="WaterMarkingManager.cs" />
     <Compile Include="Web References\ADManagerWebService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
