@@ -263,8 +263,9 @@ namespace Entity
         SameRootOu = 8,
         HabGroup = 9,
         RecycleOu = 10,
-        MailboxDataBase = 11,
-        MailAudit = 12,
+        //MailboxDataBase = 11,
+       // MailAudit = 12,
+        WaterMaking =11,
     }
 
     [Serializable]
@@ -290,5 +291,7 @@ namespace Entity
         DeleteUser,
         ModifyProfessionalGroup,
         SyncHab,
+        PDFWaterMaking,
+        BodyWaterMaking,
     }
 }

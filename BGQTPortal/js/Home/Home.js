@@ -20,6 +20,8 @@
     $scope.RoleMD = false;
     $scope.RoleSM = false;
     $scope.RoleMA = false;
+    $scope.RolePDFWM = false;
+    $scope.RoleBodyWM = false;
     $scope.text = "获取安全码";
     angular.element(".content-left").css("height", $window.innerHeight - 84);
     window.onresize = function () {
@@ -98,9 +100,11 @@
                 $scope.RoleQuit = false;
             }
             if (RoleLevelArr.indexOf(11) != -1) {
-                $scope.RoleMD = true;
+                $scope.RolePDFWM = true;
+                $scope.RoleBodyWM = true;
             } else {
-                $scope.RoleMD = false;
+                $scope.RolePDFWM = false;
+                $scope.RoleBodyWM = false;
             }
             if (RoleLevelArr.indexOf(12) != -1) {
                 $scope.RoleMA = true;
@@ -127,18 +131,27 @@
             $(this).next(".navContent").find("li:first-child a").click();
             if ($(this)[0].id == "nav_Log") {
                 storage.setItem("ActiveNavigation", $(this)[0].id);
-                $(this).addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
+                $(this).addClass("selectedLogItem").siblings(".navContent li").removeClass("selectedItem");
                 $(".subNavBox").find(".navContent li").removeClass("selectedItem");
                 $(".navContent").css("display","none"); 
             } else {
-                $("#nav_Log").removeClass("selectedItem");
+                $("#nav_Log").removeClass("selectedLogItem");
+            }
+            if ($(this)[0].id == "nav_Dashboard") {
+                storage.setItem("ActiveNavigation", $(this)[0].id);
+                $(this).addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
+                $(".subNavBox").find(".navContent li").removeClass("selectedItem");
+                $(".navContent").css("display", "none");
+            } else {
+                $("#nav_Dashboard").removeClass("selectedItem");
             }
         })
         $(".navContent li a").click(function () {
             storage.setItem("ActiveNavigation", $(this)[0].id);
             $(this).parents().find(".navContent li").removeClass("selectedItem");
             $(this).parent().addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
-            $("#nav_Log").removeClass("selectedItem");
+            $("#nav_Log").removeClass("selectedLogItem");
+            $("#nav_Dashboard").removeClass("selectedItem");
             //if (storage.getItem("ActiveNavigation") == $(this)[0].id) {
             //    window.location.reload();
             //}
@@ -148,18 +161,24 @@
     if (storage.getItem("ActiveNavigation") != null) {
         console.log(storage.getItem("ActiveNavigation"));
         if (storage.getItem("ActiveNavigation") == "nav_Log") {
-            $("#nav_Log").addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
+            $("#nav_Log").addClass("selectedLogItem").siblings(".navContent li").removeClass("selectedItem");
             $(".subNavBox").find(".navContent li").removeClass("selectedItem");
-        } else {
+        }
+        else if (storage.getItem("ActiveNavigation") == "nav_Dashboard"){
+            $("#nav_Dashboard").addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
+            $(".subNavBox").find(".navContent li").removeClass("selectedItem");
+        }else {
             $("#" + storage.getItem("ActiveNavigation")).parent().addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
             $("#" + storage.getItem("ActiveNavigation")).parents(".navContent").prev(".subNav").addClass("currentDd currentDt").siblings(".subNav").removeClass("currentDd currentDt");
             $("#" + storage.getItem("ActiveNavigation")).parents(".navContent").slideToggle(0).siblings(".navContent").slideUp(0);
         }
     } else {
-        $(".OrgStructure").addClass("currentDd currentDt").siblings(".subNav").removeClass("currentDd currentDt");  
-        $(".OrgStructure").next(".navContent").slideToggle(0).siblings(".navContent").slideUp(0);
-        $(".OrgStructure").next(".navContent").find("li:first-child a").click();
-        $state.go("Home.Org");
+        //$(".OrgStructure").addClass("currentDd currentDt").siblings(".subNav").removeClass("currentDd currentDt");  
+        //$(".OrgStructure").next(".navContent").slideToggle(0).siblings(".navContent").slideUp(0);
+        //$(".OrgStructure").next(".navContent").find("li:first-child a").click();
+        $("#nav_Dashboard").addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
+        $(".subNavBox").find(".navContent li").removeClass("selectedItem");
+        $state.go("Home.Dashboard");
     }
   
 });

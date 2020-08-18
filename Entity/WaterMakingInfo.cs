@@ -26,6 +26,9 @@ namespace Entity
         public DateTime CreateTime
         { get; set; } = DateTime.Now;
 
+        public string CreateTimeName
+        { get { return CreateTime.ToString("yyyy-MM-dd HH:mm:ss"); } }
+
         public WaterMakingContentInfo WaterMakingContent
         { get; set; } = new WaterMakingContentInfo();
 
@@ -68,6 +71,31 @@ namespace Entity
 
         public string PDFName
         { get; set; } = string.Empty;
+
+        public string PDFCondition
+        {
+            get
+            {
+                string condition = string.Empty;
+                if (!string.IsNullOrEmpty(From))
+                {
+                    condition = "发件人：" + From + "，";
+                }
+                if (!string.IsNullOrEmpty(Recipients))
+                {
+                    condition += "收件人：" + Recipients + "，";
+                }
+                if (!string.IsNullOrEmpty(Subject))
+                {
+                    condition += "邮件主题：" + Subject + "，";
+                }
+                if (!string.IsNullOrEmpty(PDFName))
+                {
+                    condition += "PDF文件名：" + PDFName + "，";
+                }
+                return condition;
+            }
+        }
     }
 
     [Serializable]
@@ -111,6 +139,23 @@ namespace Entity
         { get; set; } = false;
         public string Contect
         { get; set; } = string.Empty;
+
+        public string WaterMakingContent
+        {
+            get
+            {
+                string _content = string.Empty;
+                if (IsAllRecipients)
+                {
+                    _content = "全部收件人";
+                }
+                else
+                {
+                    _content = Contect;
+                }
+                return _content;
+            }
+        }
     }
 
     [Serializable]

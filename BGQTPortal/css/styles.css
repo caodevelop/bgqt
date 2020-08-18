@@ -2465,7 +2465,12 @@ a, img {
         background-repeat: no-repeat;
         background-position: left center;
     }
-
+    .subNav.dashboard {
+        background-image: url(../img/icon_dashboard_gray.png);
+        background-size: 16px 16px;
+        background-repeat: no-repeat;
+        background-position: left center;
+    }
     .subNav:hover {
         color: #333333;
     }
@@ -2503,12 +2508,23 @@ a, img {
         color: #fff !important;
         background-color: #0163A7 !important;
     }
-.subNav.selectedItem {
+.subNav.selectedLogItem {
     color: #fff !important;
     padding-left: 76px;
     margin-left: -48px;
     margin-right: -12px;
     background-image: url(../img/icon_log_white.png);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: 48px center;
+    background-color: #0163A7;
+}
+.subNav.selectedItem {
+    color: #fff !important;
+    padding-left: 76px;
+    margin-left: -48px;
+    margin-right: -12px;
+    background-image: url(../img/icon_dashboard_white.png);
     background-size: 16px 16px;
     background-repeat: no-repeat;
     background-position: 48px center;

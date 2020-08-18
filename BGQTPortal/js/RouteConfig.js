@@ -196,7 +196,7 @@
             },
             cache: false,
         })
-        .state('Home.SM', {
+       .state('Home.SM', {
             url: '/HSM',
             params: { "type": null },
             templateUrl: 'SystemManagement/SensitiveMail.html?timestamp=' + new Date().getTime(),
@@ -204,6 +204,30 @@
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load('js/SystemManagement/SensitiveMail.js?timestamp=' + new Date().getTime())
+                }]
+            },
+            cache: false,
+        })
+        .state('Home.PDFWM', {
+            url: '/PDFWM',
+            params: { "type": null },
+            templateUrl: 'SystemManagement/PDFWaterMaking.html?timestamp=' + new Date().getTime(),
+            controller: 'PDFWMCtrl',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load('js/SystemManagement/PDFWaterMaking.js?timestamp=' + new Date().getTime())
+                }]
+            },
+            cache: false,
+        })
+        .state('Home.BodyWM', {
+            url: '/BodyWM',
+            params: { "type": null },
+            templateUrl: 'SystemManagement/BodyWaterMaking.html?timestamp=' + new Date().getTime(),
+            controller: 'BodyWMCtrl',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load('js/SystemManagement/BodyWaterMaking.js?timestamp=' + new Date().getTime())
                 }]
             },
             cache: false,
@@ -216,6 +240,18 @@
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load('js/SystemLog/log.js?timestamp=' + new Date().getTime())
+                }]
+            },
+            cache: false,
+        })
+        .state('Home.Dashboard', {
+            url: '/HDB',
+            params: { "type": null },
+            templateUrl: 'Home/Dashboard.html?timestamp=' + new Date().getTime(),
+            controller: 'hdbCtrl',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load('js/Home/Dashboard.js?timestamp=' + new Date().getTime())
                 }]
             },
             cache: false,

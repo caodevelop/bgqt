@@ -21,6 +21,7 @@
             <div class="content-left">
                 <div class="sidebar-nav-left">
                     <div class="subNavBox">
+                        <div id="nav_Dashboard" class="subNav dashboard" ui-sref="Home.Dashboard" ui-sref-opts="{reload:'Home.Dashboard'}"><a>管理驾驶舱</a></div>
                         <div class="subNav OrgStructure">组织架构</div>
                         <ul class="navContent">
                             <li><a id="nav_Org" ui-sref="Home.Org" ui-sref-opts="{reload:'Home.Org'}">组织与用户</a></li>
@@ -28,7 +29,7 @@
                             <!--<li><a id="nav_PAG" ng-show="RolePAG==true" ui-sref="Home.PAG" ui-sref-opts="{reload:'Home.PAG'}">公用账户组</a></li>-->
                             <li><a id="nav_Quit" ng-show="RoleQuit==true" ui-sref="Home.Quit" ui-sref-opts="{reload:'Home.Quit'}">离职人员管理</a></li>
                             <!--<li><a id="nav_SCG" ng-show="RoleSCG==true" ui-sref="Home.SCG" ui-sref-opts="{reload:'Home.SCG'}">控股静态通讯组</a></li>
-                            <li><a id="nav_SOU" ng-show="RoleSOU==true" ui-sref="Home.SOU" ui-sref-opts="{reload:'Home.SOU'}">同级 OU 管理</a></li>-->
+        <li><a id="nav_SOU" ng-show="RoleSOU==true" ui-sref="Home.SOU" ui-sref-opts="{reload:'Home.SOU'}">同级 OU 管理</a></li>-->
                         </ul>
                         <div class="subNav SystemStatistics">系统统计</div>
                         <ul class="navContent">
@@ -43,6 +44,8 @@
                             <!--<li><a id="nav_MD" ng-show="RoleMD==true" ui-sref="Home.MD" ui-sref-opts="{reload:'Home.MD'}">邮箱数据库</a></li>-->
                             <li><a id="nav_SM" ng-show="RoleSM==true" ui-sref="Home.SM" ui-sref-opts="{reload:'Home.SM'}">敏感邮件删除</a></li>
                             <!--<li><a id="nav_MA" ng-show="RoleMA==true" ui-sref="Home.MA" ui-sref-opts="{reload:'Home.MA'}">邮件审批</a></li>-->
+                            <li><a id="nav_SM" ng-show="RolePDFWM==true" ui-sref="Home.PDFWM" ui-sref-opts="{reload:'Home.PDFWM'}">PDF加水印</a></li>
+                            <li><a id="nav_SM" ng-show="RoleBodyWM==true" ui-sref="Home.BodyWM" ui-sref-opts="{reload:'Home.BodyWM'}">邮件正文加水印</a></li>
                         </ul>
                         <div id="nav_Log" class="subNav log" ui-sref="Home.Log" ui-sref-opts="{reload:'Home.Log'}"><a>日志</a></div>
                     </div>
