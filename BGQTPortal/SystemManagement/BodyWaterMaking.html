@@ -5,6 +5,168 @@
     <title></title>
 </head>
 <body>
-
+    <div style="padding:24px;">
+        <div class="LogTable" ng-show="ViewOrAdd">
+            <div class="searchBox clearfix" style="line-height:0;" ng-init="GetBodyWaterMakingList(1)">
+                <div style="display:inline-block">
+                    <form role="form" class="form-inline clearfix">
+                        <div class="form-group" style="width: 238px;">
+                            <input ng-model="Searchstr" type="text" class="form-control" name="search_code" placeholder="名称/关键字" />
+                        </div>
+                        <div class="oprate-butons form-group">
+                            <button type="reset" class="btn btn-theme secondary" ng-click="clearSearch()">清除</button>
+                            <button type="button" class="btn btn-theme primary" ng-click="GetBodyWaterMakingList(1)">查询</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="pull-right opright">
+                    <a class="abtn" href="javascript:void(0);" ng-click="gotoBodyWMModal('add','')">添加</a>
+                </div>
+            </div>
+            <div class="data-fluid">
+                <div class="scroll_bar log">
+                    <table class="table dtable lcnp largeTable" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width: 140px">名称</th>
+                                <th style="width: 260px">添加条件</th>
+                                <th style="width: 240px">水印内容</th>
+                                <th style="width: 120px">创建时间</th>
+                                <th style="width: 80px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in Lists">
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.Name}}" tooltip-trigger="'outsideClick'">{{x.Name}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.BodyCondition}}" tooltip-trigger="'outsideClick'">{{x.BodyCondition}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.WaterMakingContent}}" tooltip-trigger="'outsideClick'">{{x.WaterMakingContent}}</span></td>
+                                <td>{{x.CreateTimeName}}</td>
+                                <td>
+                                    <div class="pull-left oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="gotoBodyWMModal('edit',x.ID)" style="margin-right:6px;">编辑</a>
+                                    </div>
+                                    <div class="pull-right oprate" ng-if="x.trueData == 1">
+                                        <a href="javascript:void(0);" ng-click="delBodyWMModal(x.ID)">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="position:relative;height:48px;margin-bottom:60px;">
+                    <ul uib-pagination total-items="bigTotalItems" items-per-page="pSize" ng-model="currentPage" ng-change="pageChanged(currentPage)" previous-text="上一页" next-text="下一页" max-size="maxSize" class="pagination-sm" boundary-links="false" boundary-link-numbers="true" rotate="true"></ul>
+                    <ul style="width:90px;float:right;margin-top:23px;">
+                        <li><select ng-model="pSize" ng-change="changePageSize()" style="width:90px;background: url(../img/down.png) no-repeat scroll 64px center #fff;"><option ng-repeat="y in PageSizes" value="{{y.value}}">{{y.text}}</option></select></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="addSensitiveMail page-row" ng-hide="ViewOrAdd" style="margin:0;">
+            <div class="panel panel-default org-panel">
+                <div class="panel-heading clearfix">
+                    <span style="font-weight: 700;">{{OpTitle}}</span>
+                    <span id="addgroupbtnbox" class="pull-right right-oprate-btn">
+                        <a ng-click="AddBodyWaterMaking()" ng-if="op=='add'" class="abtn" href="javascript:void(0);">保存</a>
+                        <a ng-click="ModifyBodyWaterMaking()" ng-if="op=='edit'" class="abtn" href="javascript:void(0);">保存</a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <div class="block orginfo" style="position:relative;">
+                        <div class="first-col" id="first-col" style="width:360px;padding-left:0;padding-right:0;">
+                            <div class="form-group">
+                                <label class="control-label" style="display:block;">名称<span class="required">*</span></label>
+                                <input type="text" ng-model="WaterMakingName" ng-disabled="op=='edit'" class="form-control" value="" />
+                            </div>
+                            <div class="panel panel-default org-panel">
+                                <div class="panel-heading clearfix">
+                                    <span style="display:inline-block;margin-bottom:6px;line-height:1.5">添加条件<span class="required" style="color:red;margin-left:6px;">*</span></span>
+                                </div>
+                                <div class="panel-body" style="padding:0;">
+                                    <div class="block orginfo" style="width: 100%;border:1px solid #d8d8d8;border-top:0;border-bottom:0;">
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">发件人</label>
+                                            <input type="text" ng-model="From" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">收件人</label>
+                                            <input type="text" ng-model="Recipients" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">邮件主题</label>
+                                            <input type="text" ng-model="Subject" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group" style="clear: both;">
+                                                <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:0;margin-top:6px;">
+                                                    <input id="IsContainsAttachment" ng-model="IsContainsAttachment" class="chk_1" type="checkbox" ng-click="CheckContainsAttachment($event)" />
+                                                    <label for="IsContainsAttachment" style="margin-right:10px;"></label>包含附件
+                                                </div>
+                                                <label class="control-label">附件名称</label>
+                                                <input type="text" ng-model="AttachmentName" ng-disabled="IsContainsAttachment==false" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="last-col" style="padding-right:0;">
+                            <div class="panel panel-default org-panel">
+                                <div class="panel-body" style="padding:0;">
+                                    <div class="block orginfo" style="width: 100%;">
+                                        <div class="form-group" style="clear: both;height:32px;margin-bottom:0;">
+                                            <div class="checkbox" style="line-height: 1.1;width:180px;float:left;">
+                                                <input id="ComplianceSearch" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="1" ng-click="CheckIsAllRecipients($event)" />
+                                                <label for="ComplianceSearch" style="margin:0;padding:0;">全部收件人</label>
+                                            </div>
+                                            <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:0;float:right;">
+                                                <input id="SearchMailbox" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="0" />
+                                                <label for="SearchMailbox" style="margin:0;padding:0;">自定义内容</label>
+                                                <input type="text" ng-model="Content" class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group clearfix" style="height:auto">
+                                            <span class="tips" style="width:480px;display:block;margin-top:10px;">
+                                                说明：<br />
+                                            </span>
+                                            <span class="tips" style="width:480px;display:block;margin-top:10px;">
+                                                1.&nbsp;&nbsp;添加条件：<br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询格式：名称(英文):查询值  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：subject:主题 <br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询条件：AND 或 OR(大写) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：body:正文 AND from:user@baosteelgas.com <br />
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可搜索属性：<a target="_blank" style="cursor:pointer" href="https://docs.microsoft.com/zh-cn/exchange/security-and-compliance/in-place-ediscovery/message-properties-and-search-operators#searchable-properties-in-exchange">详见链接</a><br />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--删除-->
+        <div class="modal fade" id="delBodyWM_Modal" tabindex="-1" role="dialog" aria-labelledby="delBodyWMModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">删除</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>删除邮件正文加水印规则后：</div>
+                                    <div>用户发送符合该条件的邮件时，邮件正文将不会再进行打水印操作。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelBodyWM()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

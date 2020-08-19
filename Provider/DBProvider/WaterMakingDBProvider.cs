@@ -61,7 +61,7 @@ namespace Provider.DBProvider
                             PDFWaterMakingInfo info = new PDFWaterMakingInfo();
                             info.ID = Guid.Parse(Convert.ToString(sdr["ID"]));
                             info.Name = Convert.ToString(sdr["Name"]);
-                            info.Description = Convert.ToString(sdr["Description"]);
+                           // info.Description = Convert.ToString(sdr["Description"]);
                             info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                             info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                             info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
@@ -70,7 +70,7 @@ namespace Provider.DBProvider
                             info.PDFCondition.Subject = Convert.ToString(sdr["Subject"]);
                             info.PDFCondition.PDFName = Convert.ToString(sdr["PDFName"]);
                             info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
-                            info.WaterMakingContent.Contect = Convert.ToString(sdr["Contect"]);
+                            info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
                             lists.Lists.Add(info);
                         }
                     }
@@ -134,7 +134,7 @@ namespace Provider.DBProvider
                                         DataRow sdr = ds.Tables[1].Rows[0];
                                         info.ID = Guid.Parse(Convert.ToString(sdr["ID"]));
                                         info.Name = Convert.ToString(sdr["Name"]);
-                                        info.Description = Convert.ToString(sdr["Description"]);
+                                        //info.Description = Convert.ToString(sdr["Description"]);
                                         info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                                         info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                                         info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
@@ -143,7 +143,7 @@ namespace Provider.DBProvider
                                         info.PDFCondition.Subject = Convert.ToString(sdr["Subject"]);
                                         info.PDFCondition.PDFName = Convert.ToString(sdr["PDFName"]);
                                         info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
-                                        info.WaterMakingContent.Contect = Convert.ToString(sdr["Contect"]);
+                                        info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
                                     }
                                     break;
                                 case -1:
@@ -197,7 +197,7 @@ namespace Provider.DBProvider
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
             string strError = string.Empty;
             bool bResult = true;
             try
@@ -215,11 +215,13 @@ namespace Provider.DBProvider
                 paras.Add(paraPDFName);
                 SqlParameter paraIsAllRecipients = new SqlParameter("@IsAllRecipients", waterMakingInfo.WaterMakingContent.IsAllRecipients);
                 paras.Add(paraIsAllRecipients);
-                SqlParameter paraContect = new SqlParameter("@Contect", waterMakingInfo.WaterMakingContent.Contect);
+                SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
                 SqlParameter paraUserID = new SqlParameter("@CreateUserID", admin.UserID);
                 paras.Add(paraUserID);
-              
+                SqlParameter paraRoleID = new SqlParameter("@RoleID", admin.RoleID);
+                paras.Add(paraRoleID);
+
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
                 {
@@ -301,7 +303,7 @@ namespace Provider.DBProvider
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
             string strError = string.Empty;
             bool bResult = true;
             try
@@ -321,7 +323,7 @@ namespace Provider.DBProvider
                 paras.Add(paraPDFName);
                 SqlParameter paraIsAllRecipients = new SqlParameter("@IsAllRecipients", waterMakingInfo.WaterMakingContent.IsAllRecipients);
                 paras.Add(paraIsAllRecipients);
-                SqlParameter paraContect = new SqlParameter("@Contect", waterMakingInfo.WaterMakingContent.Contect);
+                SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
                 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
@@ -509,7 +511,7 @@ namespace Provider.DBProvider
                             BodyWaterMakingInfo info = new BodyWaterMakingInfo();
                             info.ID = Guid.Parse(Convert.ToString(sdr["ID"]));
                             info.Name = Convert.ToString(sdr["Name"]);
-                            info.Description = Convert.ToString(sdr["Description"]);
+                            //info.Description = Convert.ToString(sdr["Description"]);
                             info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                             info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                             info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
@@ -519,7 +521,7 @@ namespace Provider.DBProvider
                             info.BodyCondition.IsContainsAttachment = Convert.ToBoolean(sdr["IsContainsAttachment"]);
                             info.BodyCondition.AttachmentName = Convert.ToString(sdr["AttachmentName"]);
                             info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
-                            info.WaterMakingContent.Contect = Convert.ToString(sdr["Contect"]);
+                            info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
                             lists.Lists.Add(info);
                         }
                     }
@@ -583,7 +585,7 @@ namespace Provider.DBProvider
                                         DataRow sdr = ds.Tables[1].Rows[0];
                                         info.ID = Guid.Parse(Convert.ToString(sdr["ID"]));
                                         info.Name = Convert.ToString(sdr["Name"]);
-                                        info.Description = Convert.ToString(sdr["Description"]);
+                                        //info.Description = Convert.ToString(sdr["Description"]);
                                         info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                                         info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                                         info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
@@ -593,7 +595,7 @@ namespace Provider.DBProvider
                                         info.BodyCondition.IsContainsAttachment = Convert.ToBoolean(sdr["IsContainsAttachment"]);
                                         info.BodyCondition.AttachmentName = Convert.ToString(sdr["AttachmentName"]);
                                         info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
-                                        info.WaterMakingContent.Contect = Convert.ToString(sdr["Contect"]);
+                                        info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
                                     }
                                     break;
                                 case -1:
@@ -648,7 +650,7 @@ namespace Provider.DBProvider
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
             paramstr += $"||AttachmentName:{waterMakingInfo.BodyCondition.AttachmentName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
             string strError = string.Empty;
             bool bResult = true;
             try
@@ -668,10 +670,12 @@ namespace Provider.DBProvider
                 paras.Add(paraIsAttachmentName);
                 SqlParameter paraIsAllRecipients = new SqlParameter("@IsAllRecipients", waterMakingInfo.WaterMakingContent.IsAllRecipients);
                 paras.Add(paraIsAllRecipients);
-                SqlParameter paraContect = new SqlParameter("@Contect", waterMakingInfo.WaterMakingContent.Contect);
+                SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
                 SqlParameter paraUserID = new SqlParameter("@CreateUserID", admin.UserID);
                 paras.Add(paraUserID);
+                SqlParameter paraRoleID = new SqlParameter("@RoleID", admin.RoleID);
+                paras.Add(paraRoleID);
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
@@ -754,7 +758,7 @@ namespace Provider.DBProvider
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
             paramstr += $"||AttachmentName:{waterMakingInfo.BodyCondition.AttachmentName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
             string strError = string.Empty;
             bool bResult = true;
             try
@@ -776,7 +780,7 @@ namespace Provider.DBProvider
                 paras.Add(paraIsAttachmentName);
                 SqlParameter paraIsAllRecipients = new SqlParameter("@IsAllRecipients", waterMakingInfo.WaterMakingContent.IsAllRecipients);
                 paras.Add(paraIsAllRecipients);
-                SqlParameter paraContect = new SqlParameter("@Contect", waterMakingInfo.WaterMakingContent.Contect);
+                SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);

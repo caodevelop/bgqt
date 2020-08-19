@@ -130,6 +130,36 @@ namespace Entity
 
         public string AttachmentName
         { get; set; } = string.Empty;
+
+        public string BodyCondition
+        {
+            get
+            {
+                string condition = string.Empty;
+                if (!string.IsNullOrEmpty(From))
+                {
+                    condition = "发件人：" + From + "，";
+                }
+                if (!string.IsNullOrEmpty(Recipients))
+                {
+                    condition += "收件人：" + Recipients + "，";
+                }
+                if (!string.IsNullOrEmpty(Subject))
+                {
+                    condition += "邮件主题：" + Subject + "，";
+                }
+                if (IsContainsAttachment)
+                {
+                    condition += "包含附件，";
+
+                    if (!string.IsNullOrEmpty(AttachmentName))
+                    {
+                        condition += "附件名称：" + AttachmentName + "，";
+                    }
+                }
+                return condition;
+            }
+        }
     }
 
     [Serializable]
@@ -137,7 +167,7 @@ namespace Entity
     {
         public bool IsAllRecipients
         { get; set; } = false;
-        public string Contect
+        public string Content
         { get; set; } = string.Empty;
 
         public string WaterMakingContent
@@ -151,7 +181,7 @@ namespace Entity
                 }
                 else
                 {
-                    _content = Contect;
+                    _content = Content;
                 }
                 return _content;
             }

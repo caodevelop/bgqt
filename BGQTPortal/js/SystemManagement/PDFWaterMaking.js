@@ -56,14 +56,8 @@
                         "ID": ListData[n].ID,
                         "Name": ListData[n].Name,
                         "PDFCondition": ListData[n].PDFCondition.PDFCondition,
-                        "ObjectType": ListData[n].ObjectType,
-                        "ObjectNames": ListData[n].ObjectNames,
-                        "Keywords": ListData[n].Keywords,
+                        "WaterMakingContent": ListData[n].WaterMakingContent.WaterMakingContent,
                         "CreateTimeName": ListData[n].CreateTimeName.substr(0, 16),
-                        "StartTimeName": ListData[n].StartTimeName.substr(0, 16),
-                        "EndTimeName": ListData[n].EndTimeName.substr(0, 16),
-                        "ExecuteTimeName": ListData[n].ExecuteTimeName.substr(0, 16),
-                        "ExecuteResult": ListData[n].ExecuteResult,
                         "trueData": 1
                     };
                     $scope.Lists.push($scope.arr);
@@ -74,16 +68,9 @@
                             "$$hashKey": i,
                             "ID": "",
                             "Name": "",
-                            "ObjectID": "",
-                            "ObjectType": "",
-                            "ObjectNames": "",
-                            "Keywords": "",
+                            "PDFCondition": "",
+                            "WaterMakingContent": "",
                             "CreateTimeName": "",
-                            "EndTimeName": "",
-                            "ExecuteTimeName": "",
-                            "ExecuteResult": "",
-                            "StatusName": "",
-                            "TimePeriod": "",
                             "trueData": 0
                         }
                         $scope.Lists.push(nulltr);
@@ -100,5 +87,244 @@
         $scope.GetPDFWaterMakingList(currentPage);
     };
 
+    $scope.clearSearch = function () {
+        $scope.Searchstr = '';
+        $scope.GetPDFWaterMakingList(1);
+    };
+
+    $scope.changePageSize = function () {
+        $scope.GetPDFWaterMakingList(1);
+    };
+
+    //添加 or 编辑
+    $scope.gotoPDFWMModal = function (op, id) {
+        $scope.ViewOrAdd = false;
+        angular.element(".panel-heading").css("border-bottom", "1px solid #d8d8d8");
+        $scope.seachNode = '';
+        $scope.op = op;
+        if (op == 'edit') {
+            $scope.OpTitle = "编辑规则";
+            $scope.GetPDFWaterMakingInfo(id);
+        } else {
+            $scope.OpTitle = "添加规则";
+            $scope.WaterMakingName = '';
+            $scope.From = '';
+            $scope.Recipients = '';
+            $scope.Subject = '';
+            $scope.PDFName = '';
+            $scope.Content = '';
+            $scope.IsAllRecipients = 1;
+        }
+    };
+    
+    //添加
+    $scope.AddPDFWaterMaking = function () {
+        if ($scope.WaterMakingName == "") {
+            ErrorHandling('false', 0, '请输入添加PDF水印规则名称。');
+            return;
+        }
+        if ($scope.From == "" && $scope.Recipients == ""
+            && $scope.Subject == "" && $scope.PDFName == "") {
+            ErrorHandling('false', 0, '请输入添加PDF水印规则条件。');
+            return;
+        }
+       
+        if ($scope.IsAllRecipients == "0" && $scope.Content =="") {
+            ErrorHandling('false', 0, '请输入添加PDF水印规则内容。');
+            return;
+        }
+
+        var PDFConditionObj = {
+            "From": $scope.From,
+            "Recipients": $scope.Recipients,
+            "Subject": $scope.Subject,
+            "PDFName": $scope.PDFName
+        };
+
+        var WaterMakingContent = {
+            "IsAllRecipients": $scope.IsAllRecipients == "1" ? "true" : "false",
+            "Content": $scope.Content
+        };
+
+        var paramObj = {
+            "Name": $scope.WaterMakingName,
+           "PDFCondition": PDFConditionObj,
+            "WaterMakingContent": WaterMakingContent
+        };
+
+        angular.element(".preloader").css("display", "block");
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=AddPDFWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            angular.element(".preloader").css("display", "none");
+            var callbackObj = response.data;
+            ErrorHandling(callbackObj.result, callbackObj.errCode, callbackObj.errMsg);
+            if (callbackObj.result == "true") {
+                $scope.GetPDFWaterMakingList(1);
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
+
+    //编辑
+    $scope.ModifyPDFWaterMaking = function () {
+        if ($scope.WaterMakingName == "") {
+            ErrorHandling('false', 0, '请输入添加PDF水印规则名称。');
+            return;
+        }
+        if ($scope.From == "" && $scope.Recipients == ""
+            && $scope.Subject == "" && $scope.PDFName == "") {
+            ErrorHandling('false', 0, '请输入添加PDF水印规则条件。');
+            return;
+        }
+
+        if ($scope.IsAllRecipients == "0" && $scope.Content == "") {
+            ErrorHandling('false', 0, '请输入添加PDF水印规则内容。');
+            return;
+        }
+
+        var PDFConditionObj = {
+            "From": $scope.From,
+            "Recipients": $scope.Recipients,
+            "Subject": $scope.Subject,
+            "PDFName": $scope.PDFName
+        };
+
+        var WaterMakingContent = {
+            "IsAllRecipients": $scope.IsAllRecipients == "1" ? "true" : "false",
+            "Content": $scope.Content
+        };
+
+        var paramObj = {
+            "ID": $scope.ModifyPDFWaterMakingObjectID,
+            "Name": $scope.WaterMakingName,
+            "PDFCondition": PDFConditionObj,
+            "WaterMakingContent": WaterMakingContent
+        };
+
+        angular.element(".preloader").css("display", "block");
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=ModifyPDFWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            angular.element(".preloader").css("display", "none");
+            var callbackObj = response.data;
+            ErrorHandling(callbackObj.result, callbackObj.errCode, callbackObj.errMsg);
+            if (callbackObj.result == "true") {
+                $scope.GetPDFWaterMakingList(1);
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
+
+    //删除
+    $scope.delPDFWMModal = function (id) {
+        $("#delpdfwm_Modal").modal("show");
+        $scope.nomalModal();
+        $scope.delPDFWmID = id;
+    };
+
+    $scope.DelPDFWM = function () {
+        var paramObj = {
+            "ID": $scope.delPDFWmID
+        };
+        $scope.operateProgress();
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=DeletePDFWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            var callbackObj = response.data;
+            if (callbackObj.result == "true") {
+                $scope.showMsg('success', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = false;
+                $scope.GetPDFWaterMakingList(1);
+            } else {
+                $scope.showMsg('error', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = true;
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
+
+    //获取详情
+    $scope.GetPDFWaterMakingInfo = function (id) {
+        $scope.ModifyPDFWaterMakingObjectID = id;
+        var paramObj = {
+            "ID": id
+        };
+
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=GetPDFWaterMakingInfo&accessToken=' + storage.getItem("userAdminToken") + '&ID=' + id,
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            var ListData = response.data;
+            if (ListData.result == "true") {
+                $scope.ModifyPDFWaterMakingObjectID = id;
+                $scope.WaterMakingName = ListData.data.Name;
+                $scope.From = ListData.data.PDFCondition.From;
+                $scope.Recipients = ListData.data.PDFCondition.Recipients;
+                $scope.Subject = ListData.data.PDFCondition.Subject;
+                $scope.PDFName = ListData.data.PDFCondition.PDFName;
+                if (ListData.data.WaterMakingContent.IsAllRecipients == true) {
+                    $scope.IsAllRecipients = 1;
+                }
+                else {
+                    $scope.IsAllRecipients = 0;
+                    $scope.Content = ListData.data.WaterMakingContent.Content;
+                }
+            } else {
+                $scope.showMsg('error', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = true;
+            }
+        }, function errorCallback(e) {
+
+        });
+    };
+
+    //正常模态框状态
+    $scope.nomalModal = function () {
+        angular.element("input").removeClass("error");
+        angular.element("textarea").removeClass("error");
+        angular.element("select").removeClass("error");
+        $(".loading").css("visibility", "hidden");
+        angular.element(".modalBtn").text("确 定");
+        $scope.checkTips = false;
+        $scope.showModalFoot = true;
+        $scope.modalButton = false;
+        $scope.errorMsg = "";
+        $scope.opResult = "";
+    };
+    //模态框按钮执行中状态
+    $scope.operateProgress = function () {
+        $(".loading").css("visibility", "visible");
+        angular.element(".modalBtn").text("执行中");
+        $scope.showModalFoot = true;
+        $scope.modalButton = true;
+    };
+
+    //弹出框报错信息
+    $scope.showMsg = function (opResult, checkTips,
+        errorMsg, inputIndex) {
+        $(".loading").css("visibility", "hidden");
+        $scope.opResult = opResult;
+        $scope.checkTips = checkTips;
+        $scope.errorMsg = errorMsg;
+        angular.element(".modalBtn").text("确 定");
+        $scope.redBorder = parseInt(inputIndex);
+        if (opResult == 'error') {
+            $scope.showModalFoot = true;
+            $scope.modalButton = false;
+        } else {
+            $scope.showModalFoot = false;
+        }
+    };
 
 });

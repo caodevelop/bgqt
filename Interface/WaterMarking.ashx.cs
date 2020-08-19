@@ -64,11 +64,11 @@ namespace Interface
                     case "AddBodyWaterMaking":
                         strJsonResult = AddBodyWaterMaking(context);
                         break;
-                    case "ChangeBodyWaterMaking":
-                        // strJsonResult = ChangeStaticGroupInfo(context);
+                    case "ModifyBodyWaterMaking":
+                        strJsonResult = ModifyBodyWaterMaking(context);
                         break;
                     case "DeleteBodyWaterMaking":
-                        // strJsonResult = ChangeStaticGroupInfo(context);
+                        strJsonResult = DeleteBodyWaterMaking(context);
                         break;
                     default:
                         break;

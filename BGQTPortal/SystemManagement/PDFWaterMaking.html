@@ -10,7 +10,7 @@
             <div class="searchBox clearfix" style="line-height:0;" ng-init="GetPDFWaterMakingList(1)">
                 <div style="display:inline-block">
                     <form role="form" class="form-inline clearfix">
-                        <div class="form-group">
+                        <div class="form-group" style="width: 238px;">
                             <input ng-model="Searchstr" type="text" class="form-control" name="search_code" placeholder="名称/关键字" />
                         </div>
                         <div class="oprate-butons form-group">
@@ -38,8 +38,8 @@
                         <tbody>
                             <tr ng-repeat="x in Lists">
                                 <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.Name}}" tooltip-trigger="'outsideClick'">{{x.Name}}</span></td>
-                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.ObjectNames}}" tooltip-trigger="'outsideClick'">{{x.ObjectNames}}</span></td>
-                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.Keywords}}" tooltip-trigger="'outsideClick'">{{x.Keywords}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.PDFCondition}}" tooltip-trigger="'outsideClick'">{{x.PDFCondition}}</span></td>
+                                <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.WaterMakingContent}}" tooltip-trigger="'outsideClick'">{{x.WaterMakingContent}}</span></td>
                                 <td>{{x.CreateTimeName}}</td>
                                 <td>
                                     <div class="pull-left oprate" ng-if="x.trueData == 1">
@@ -75,30 +75,31 @@
                         <div class="first-col" id="first-col" style="width:360px;padding-left:0;padding-right:0;">
                             <div class="form-group">
                                 <label class="control-label" style="display:block;">名称<span class="required">*</span></label>
-                                <input type="text" ng-model="SensitiveMailName" ng-disabled="op=='edit'" class="form-control" value="" />
+                                <input type="text" ng-model="WaterMakingName" ng-disabled="op=='edit'" class="form-control" value="" />
                             </div>
-                            <div class="form-group" style="height:auto;margin-bottom:18px;">
-                                <label class="control-label" style="display:inline-block;float:left">范围<span class="required">*</span></label><label class="control-label" style="display:inline-block;float:right"><a ng-click="gotoAddObjectLimit()">添加</a></label>
-                                <div class="scroll_bar" style="width:358px;height:252px;display:block;border:1px solid #d8d8d8;clear:both;overflow:auto">
-                                    <table class="Editable" style="width:100%;">
-                                        <tbody>
-                                            <tr ng-repeat="d in ObjectLimits" id="{{d.ObjectID}}">
-                                                <td style="width: 250px;"><span style="width: 250px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;height: 30px;line-height: 30px;">{{d.ObjectName}}</span></td>
-                                                <td style="width: 70px;"><span style="width: 70px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;height: 30px;line-height: 30px;">{{d.TypeName}}</span></td>
-                                                <td><img src="img/icon_close.png" ng-click="removeObjectLimit(d.ObjectID)" style="float:right;" /></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="panel panel-default org-panel">
+                                <div class="panel-heading clearfix">
+                                    <span style="display:inline-block;margin-bottom:6px;line-height:1.5">添加条件<span class="required" style="color:red;margin-left:6px;">*</span></span>
                                 </div>
-                            </div>
-                            <div class="form-group" style="clear: both;height:32px;margin-bottom:0;display:none;">
-                                <div class="checkbox" style="line-height: 1.1;width:180px;float:left;">
-                                    <input id="ComplianceSearch" ng-disabled="op=='edit'" style="margin:0;vertical-align:text-top;" ng-model="SensitiveMailType" type="radio" name="SensitiveMailType" value="1" />
-                                    <label for="ComplianceSearch" style="margin:0;padding:0;">小于 10000 用户</label>
-                                </div>
-                                <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:0;float:right;">
-                                    <input id="SearchMailbox" ng-disabled="op=='edit'" style="margin:0;vertical-align:text-top;" ng-model="SensitiveMailType" type="radio" name="SensitiveMailType" value="2" />
-                                    <label for="SearchMailbox" style="margin:0;padding:0;">大于等于 10000 用户</label>
+                                <div class="panel-body" style="padding:0;">
+                                    <div class="block orginfo" style="width: 100%;border:1px solid #d8d8d8;border-top:0;border-bottom:0;">
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">发件人</label>
+                                            <input type="text" ng-model="From" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">收件人</label>
+                                            <input type="text" ng-model="Recipients" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">邮件主题</label>
+                                            <input type="text" ng-model="Subject" class="form-control" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" style="display:block;">PDF名称</label>
+                                            <input type="text" ng-model="PDFName" class="form-control" value="" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -106,32 +107,25 @@
                             <div class="panel panel-default org-panel">
                                 <div class="panel-body" style="padding:0;">
                                     <div class="block orginfo" style="width: 100%;">
-                                        <div class="form-group clearfix" style="margin-bottom: 0px;">
-                                            <label class="control-label clearfix" style="display:block;">时间段<span class="required">*</span></label>
-                                            <div class="input-group input-group-minimal" style="display:inline-block;margin-bottom:0;">
-                                                <input type="text" placeholder="时间" ng-model="SMailStartTime" ng-time style="width:168px;" class="form-control date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd hh:ii" />
+                                        <div class="form-group" style="clear: both;height:32px;margin-bottom:0;">
+                                            <div class="checkbox" style="line-height: 1.1;width:180px;float:left;">
+                                                <input id="ComplianceSearch"  style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="1" />
+                                                <label for="ComplianceSearch" style="margin:0;padding:0;">全部收件人</label>
                                             </div>
-                                            <div id="coo-icon" class="form-group" style="width: 10px; text-align: center; margin-right: 4px; margin-left: 4px;position:absolute;margin-top:7px;display:inline-block;margin-bottom:0;">
-                                                <span class="coo-icon">~</span>
-                                            </div>
-                                            <div class="input-group input-group-minimal" style="display:inline-block;margin-bottom:0;margin-left:20px;">
-                                                <input type="text" placeholder="时间" ng-model="SMailEndTime" ng-time style="width:168px;" class="form-control date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd hh:ii" />
+                                            <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:0;float:right;">
+                                                <input id="SearchMailbox" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="0" />
+                                                <label for="SearchMailbox" style="margin:0;padding:0;">自定义内容</label>
+                                                <input type="text" ng-model="Content" class="form-control" value="" />
                                             </div>
                                         </div>
                                         <div class="form-group clearfix" style="height:auto">
-                                            <label class="control-label clearfix">关键字<span class="required">*</span></label>
-                                            <textarea ng-model="Keywords" ng-focus="showtips=true;checkTips=true;" ng-blur="showtips=false" class="form-control" placeholder='' style="width: 480px; height: 90px;resize: none;"></textarea>
                                             <span class="tips" style="width:480px;display:block;margin-top:10px;">
                                                 说明：<br />
                                             </span>
                                             <span class="tips" style="width:480px;display:block;margin-top:10px;">
-                                                1.&nbsp;&nbsp;查询关键字模版：<br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询格式：名称(英文):查询值  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：subject:主题 <br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询条件：AND 或 OR(大写) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：body:正文 AND from:user@baosteelgas.com <br />
+                                                1.&nbsp;&nbsp;添加条件：<br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询格式：名称(英文):查询值  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：subject:主题 <br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询条件：AND 或 OR(大写) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：body:正文 AND from:user@baosteelgas.com <br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可搜索属性：<a target="_blank" style="cursor:pointer" href="https://docs.microsoft.com/zh-cn/exchange/security-and-compliance/in-place-ediscovery/message-properties-and-search-operators#searchable-properties-in-exchange">详见链接</a><br />
                                             </span>
-                                            <!--<span class="tips" style="width:480px;display:block;margin-top:10px;">
-                                                2.&nbsp;&nbsp;大于等于 10000 用户查询关键字模版：<br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询格式：(名称(英文): "查询值"), <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：(subject:"主题") <br />&nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;查询条件：AND 或 OR(大写) ，<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：(subject:"主题") AND (from:"user@baosteelgas.com")<br />
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;针对大于等于 10000 用户的可搜索属性：<a target="_blank" style="cursor:pointer" href="https://docs.microsoft.com/zh-cn/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference">详见链接</a>
-                                            </span>-->
                                         </div>
                                     </div>
                                 </div>
@@ -141,36 +135,8 @@
                 </div>
             </div>
         </div>
-        <!--添加/编辑-->
-        <div class="modal fade" id="SMail_Modal" tabindex="-1" role="dialog" aria-labelledby="SMailModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">添加</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
-                        <div class="modalForm">
-                            <div class="form-group" style="width: 100%;height:32px;">
-                                <input type="text" ng-model="seachNode" class="form-control search_user" style="width: 278px; display: inline-block;margin-right:12px;padding-left:34px;" placeholder="输入显示名称" />
-                                <button style="height:32px;position:absolute;background-color:#fff;padding:0 20px;border:1px solid #d8d8d8;" ng-click="SearchCompanyTree()">搜索</button>
-                                <a class="clear_search" ng-show="seachNode!=''" ng-click="clearSearchInput()" href="javascript:void(0);"></a>
-                            </div>
-                            <div class="form-group treeHide">
-                                <ul class="ztree scroll_bar" id="CompanyTree" style="margin: 0; padding:12px; height: 258px; overflow: auto;"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
-                        <button type="button" ng-click="AddObjectLimit()" ng-disabled="modalButton" class="btn btn-theme modalBtn">确 定</button>
-                        <div class="loading"><span></span><span></span><span></span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!--删除-->
-        <div class="modal fade" id="delSMail_Modal" tabindex="-1" role="dialog" aria-labelledby="delSMailModalLabel" aria-hidden="true">
+        <div class="modal fade" id="delpdfwm_Modal" tabindex="-1" role="dialog" aria-labelledby="delPDFWMModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -182,14 +148,14 @@
                         <div class="modalForm">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div>删除敏感邮件后：</div>
-                                    <div>1. 相关数据会被全部删除并且无法恢复。</div>
+                                    <div>删除PDF加水印规则后：</div>
+                                    <div>用户发送符合该条件的邮件时，PDF附件将不会再进行打水印操作。</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer OperationProgress" ng-show="showModalFoot">
-                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelSMail()">确 定</button>
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelPDFWM()">确 定</button>
                         <div class="loading"><span></span><span></span><span></span></div>
                     </div>
                 </div>

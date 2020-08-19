@@ -122,7 +122,7 @@ namespace Manager
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
 
             string funname = "AddPDFWaterMaking";
 
@@ -197,7 +197,7 @@ namespace Manager
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
 
             string funname = "ModifyPDFWaterMaking";
 
@@ -418,7 +418,7 @@ namespace Manager
             paramstr += $"||PDFName:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
             paramstr += $"||PDFName:{waterMakingInfo.BodyCondition.AttachmentName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
 
             string funname = "AddBodyWaterMaking";
 
@@ -494,7 +494,7 @@ namespace Manager
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
             paramstr += $"||AttachmentName:{waterMakingInfo.BodyCondition.AttachmentName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
-            paramstr += $"||Contect:{waterMakingInfo.WaterMakingContent.Contect}";
+            paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
 
             string funname = "ModifyBodyWaterMaking";
 
