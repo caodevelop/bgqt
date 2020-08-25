@@ -10,7 +10,7 @@ var selectTree = false;
 var currentAdminRoleLists = [];
 var editFlag = false;
 
-var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'ngFileUpload', 'ui.bootstrap'], function ($httpProvider) {
+var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'ngFileUpload', 'ui.bootstrap','highcharts-ng'], function ($httpProvider) {
     baseRequest($httpProvider);
 });
 

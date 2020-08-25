@@ -173,12 +173,14 @@
             $("#" + storage.getItem("ActiveNavigation")).parents(".navContent").slideToggle(0).siblings(".navContent").slideUp(0);
         }
     } else {
-        //$(".OrgStructure").addClass("currentDd currentDt").siblings(".subNav").removeClass("currentDd currentDt");  
-        //$(".OrgStructure").next(".navContent").slideToggle(0).siblings(".navContent").slideUp(0);
-        //$(".OrgStructure").next(".navContent").find("li:first-child a").click();
-        $("#nav_Dashboard").addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
-        $(".subNavBox").find(".navContent li").removeClass("selectedItem");
-        $state.go("Home.Dashboard");
+        $(".OrgStructure").addClass("currentDd currentDt").siblings(".subNav").removeClass("currentDd currentDt");  
+        $(".OrgStructure").next(".navContent").slideToggle(0).siblings(".navContent").slideUp(0);
+        $(".OrgStructure").next(".navContent").find("li:first-child a").click();
+        $state.go("Home.Org");
+        //$("#nav_Dashboard").addClass("selectedItem").siblings(".navContent li").removeClass("selectedItem");
+        //$(".subNavBox").find(".navContent li").removeClass("selectedItem");
+        //$state.go("Home.Dashboard");
+      
     }
   
 });

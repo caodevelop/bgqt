@@ -718,5 +718,73 @@ namespace Provider.ExchangeProvider
         }
 
         #endregion
+
+        #region mailcount
+        public class GetServerreceiveMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId deliver -resultsize unlimited).count", starTime, endTime);
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+        public class GetServerSendMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId receive -resultsize unlimited | {2}).count", starTime, endTime, "where {$_.Source -eq 'STOREDRIVER'}");
+                //string a = string.Format("(get-transportserver *-MHC* | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId deliver -resultsize unlimited).count", starTime, endTime);
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+
+        public class GetSMTPSendMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId send -resultsize unlimited| {2}).count", starTime, endTime, "where {$_.Source -eq 'smtp'}");
+
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+        public class GetUserreceiveMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime, string mail)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId deliver -Recipients \"{2}\" -resultsize unlimited).count", starTime, endTime, mail);
+
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+
+        public class GetUserSendServerMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime, string mail)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId receive -Sender \"{2}\" -resultsize unlimited| {3}).count", starTime, endTime, mail, "where {$_.Source -eq 'STOREDRIVER'}");
+
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+        public class GetUserSendSMTPMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime, string mail)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId send -Sender \"{2}\" -resultsize unlimited| {3}).count ", starTime, endTime, mail, "where {$_.Source -eq 'smtp'}");
+
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+
+        public class GetUserSendExSMTPMailCount : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(DateTime starTime, DateTime endTime, string mail)
+            {
+                string a = string.Format("@(Get-TransportService | Get-MessageTrackingLog -Start \"{0}\" -End \"{1}\" -EventId receive -Sender \"{2}\" -resultsize unlimited| {3}).count ", starTime, endTime, mail, "where {$_.Source -eq 'smtp'}");
+
+                return PSCommandBase.ExecuteCmdlet(a);
+            }
+        }
+        #endregion
     }
 }

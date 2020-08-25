@@ -463,5 +463,37 @@ namespace ExchangeManagerWebService
 
             return result;
         }
+
+        #region 邮件数量
+        [WebMethod(Description = "获取系统邮件数量")]
+        public bool GetServerMailCount(DateTime starTime, DateTime endTime, out int sendCount, out int receiveCount, out string strError)
+        {
+            strError = string.Empty;
+            sendCount = 0;
+            receiveCount = 0;
+
+            if (!ExchangeProvider.GetServerMailCount(starTime, endTime, out sendCount, out receiveCount, out strError))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        [WebMethod(Description = "获取账户邮件数量")]
+        public bool GetUserMailCount(DateTime starTime, DateTime endTime, string mail, out int sendCount, out int receiveCount, out string strError)
+        {
+            strError = string.Empty;
+            sendCount = 0;
+            receiveCount = 0;
+
+            if (!ExchangeProvider.GetUserMailCount(starTime, endTime, mail, out sendCount, out receiveCount, out strError))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
+
     }
 }

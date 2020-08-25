@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendWillPasswordExpireMessa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendAdminNoticeMessage", "SendAdminNoticeMessage\SendAdminNoticeMessage.csproj", "{56BE8077-8355-4CFD-B1FA-C5FE75CEDFC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMailCount", "SyncMailCount\SyncMailCount.csproj", "{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -194,6 +196,14 @@ Global
 		{56BE8077-8355-4CFD-B1FA-C5FE75CEDFC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{56BE8077-8355-4CFD-B1FA-C5FE75CEDFC0}.Release|x64.ActiveCfg = Release|Any CPU
 		{56BE8077-8355-4CFD-B1FA-C5FE75CEDFC0}.Release|x64.Build.0 = Release|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Debug|x64.Build.0 = Debug|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Release|x64.ActiveCfg = Release|Any CPU
+		{248B6A6E-BBA8-4A21-AA84-5D401BEBB853}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

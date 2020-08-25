@@ -3079,6 +3079,155 @@ namespace Provider.ExchangeProvider
             return true;
         }
 
+        public static bool GetServerMailCount(DateTime starTime, DateTime endTime, out int sendCount, out int receiveCount, out string strError)
+        {
+            strError = string.Empty;
+            sendCount = 0;
+            receiveCount = 0;
+
+            try
+            {
+                ICollection<PSObject> result = ExchangePSProvider.GetServerreceiveMailCount.ExecuteCmdlet(starTime, endTime);
+
+                foreach (PSObject o in result)
+                {
+                    if (o == null)
+                    {
+                        receiveCount = 0;
+                    }
+                    else
+                    {
+                        receiveCount = Convert.ToInt32(o.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strError = ex.ToString();
+                return false;
+            }
+
+            try
+            {
+                ICollection<PSObject> result = ExchangePSProvider.GetServerSendMailCount.ExecuteCmdlet(starTime, endTime);
+
+                foreach (PSObject o in result)
+                {
+                    if (o == null)
+                    {
+                        sendCount = 0;
+                    }
+                    else
+                    {
+                        sendCount = Convert.ToInt32(o.ToString());
+                    }
+                }
+
+                ICollection<PSObject> result1 = ExchangePSProvider.GetSMTPSendMailCount.ExecuteCmdlet(starTime, endTime);
+                foreach (PSObject o in result1)
+                {
+                    if (o == null)
+                    {
+                        sendCount += 0;
+                    }
+                    else
+                    {
+                        sendCount += Convert.ToInt32(o.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strError = ex.ToString();
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool GetUserMailCount(DateTime starTime, DateTime endTime, string mail, out int sendCount, out int receiveCount, out string strError)
+        {
+            strError = string.Empty;
+            sendCount = 0;
+            receiveCount = 0;
+
+            try
+            {
+                ICollection<PSObject> result = ExchangePSProvider.GetUserreceiveMailCount.ExecuteCmdlet(starTime, endTime, mail);
+
+                foreach (PSObject o in result)
+                {
+                    if (o == null)
+                    {
+                        receiveCount = 0;
+                    }
+                    else
+                    {
+                        receiveCount = Convert.ToInt32(o.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strError = ex.ToString();
+                return false;
+            }
+
+            try
+            {
+                ICollection<PSObject> result = ExchangePSProvider.GetUserSendServerMailCount.ExecuteCmdlet(starTime, endTime, mail);
+
+                foreach (PSObject o in result)
+                {
+                    if (o == null)
+                    {
+                        sendCount = 0;
+                    }
+                    else
+                    {
+                        sendCount = Convert.ToInt32(o.ToString());
+                        //DBUtility.Logger.Info(mail + "账户GetUserSendServerMailCount不为空发送邮件数量：" + sendCount.ToString() + "新增加数量为：" + Convert.ToInt32(o.ToString()));
+                    }
+                }
+
+                ICollection<PSObject> result1 = ExchangePSProvider.GetUserSendSMTPMailCount.ExecuteCmdlet(starTime, endTime, mail);
+                foreach (PSObject o in result1)
+                {
+                    if (o == null)
+                    {
+                        sendCount += 0;
+                        //DBUtility.Logger.Info(mail + "账户GetUserSendSMTPMailCount发送邮件数量：" + sendCount.ToString());
+                    }
+                    else
+                    {
+                        sendCount = sendCount + Convert.ToInt32(o.ToString());
+                        //DBUtility.Logger.Info(mail + "账户GetUserSendSMTPMailCount不为空发送邮件数量：" + sendCount.ToString() + "新增加数量为：" + Convert.ToInt32(o.ToString()));
+                    }
+                }
+                ICollection<PSObject> result2 = ExchangePSProvider.GetUserSendExSMTPMailCount.ExecuteCmdlet(starTime, endTime, mail);
+                foreach (PSObject o in result2)
+                {
+                    if (o == null)
+                    {
+                        sendCount += 0;
+                        //DBUtility.Logger.Info(mail + "账户GetUserSendExSMTPMailCount发送邮件数量：" + sendCount.ToString());
+                    }
+                    else
+                    {
+                        sendCount = sendCount + Convert.ToInt32(o.ToString());
+                        //DBUtility.Logger.Info(mail + "账户GetUserSendSMTPMailCount不为空发送邮件数量：" + sendCount.ToString() + "新增加数量为：" + Convert.ToInt32(o.ToString()));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strError = ex.ToString();
+                return false;
+            }
+
+            return true;
+        }
+
         public static bool TestCommand(string cmd,out string strError)
         {
             strError = string.Empty;
