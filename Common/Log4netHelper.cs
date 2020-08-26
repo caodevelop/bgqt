@@ -233,6 +233,7 @@ namespace Common
                     if (!_db.ExcuteByTransaction(paras, "dbo.[prc_AddSysLog]", out iResult, out strError))
                     {
                         strError = "prc_AddSysLog数据库执行失败,Error:" + strError;
+                        Log4netHelper.Error(strError);
                         bResult = false;
                         break;
                     }
@@ -264,6 +265,7 @@ namespace Common
             }
             catch (Exception ex)
             {
+                Log4netHelper.Error(ex.ToString());
                 bResult = false;
             }
             return bResult;

@@ -10,5 +10,6 @@ namespace DBUtility
     {
         public static readonly string strConnection = System.Configuration.ConfigurationManager.AppSettings["SQLConnString"];
         public static readonly string strConnection1 = System.Configuration.ConfigurationManager.AppSettings["SQLConnString1"];
+        public static string testConnection = string.Empty;
     }
 }
