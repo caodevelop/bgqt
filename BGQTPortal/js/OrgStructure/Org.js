@@ -127,7 +127,6 @@
                     ErrorHandling(data.result, data.errCode, data.errMsg);
                 }
             }, function errorCallback(e) {
-
             });
         }
         GetRootNode();

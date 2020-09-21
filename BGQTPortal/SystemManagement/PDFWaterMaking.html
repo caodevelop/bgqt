@@ -28,10 +28,11 @@
                     <table class="table dtable lcnp largeTable" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
                         <thead>
                             <tr>
-                                <th style="width: 140px">名称</th>
-                                <th style="width: 260px">添加条件</th>
-                                <th style="width: 240px">水印内容</th>
+                                <th style="width: 120px">名称</th>
+                                <th style="width: 240px">添加条件</th>
+                                <th style="width: 220px">水印内容</th>
                                 <th style="width: 120px">创建时间</th>
+                                <th style="width: 60px">状态</th>
                                 <th style="width: 80px">操作</th>
                             </tr>
                         </thead>
@@ -41,12 +42,18 @@
                                 <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.PDFCondition}}" tooltip-trigger="'outsideClick'">{{x.PDFCondition}}</span></td>
                                 <td><span class="Adaptive" tooltip-placement="top" uib-tooltip="{{x.WaterMakingContent}}" tooltip-trigger="'outsideClick'">{{x.WaterMakingContent}}</span></td>
                                 <td>{{x.CreateTimeName}}</td>
+                                <td>{{x.StatusName}}</td>
                                 <td>
                                     <div class="pull-left oprate" ng-if="x.trueData == 1">
                                         <a href="javascript:void(0);" ng-click="gotoPDFWMModal('edit',x.ID)" style="margin-right:6px;">编辑</a>
                                     </div>
                                     <div class="pull-right oprate" ng-if="x.trueData == 1">
-                                        <a href="javascript:void(0);" ng-click="delPDFWMModal(x.ID)">删除</a>
+                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">更多<span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="javascript:void(0);" ng-click="disablePDFWMModal(x.ID)" ng-if="x.Status==1">停用</a></li>
+                                            <li><a href="javascript:void(0);" ng-click="EnablePDFWM(x.ID)" ng-if="x.Status==2">启用</a></li>
+                                            <li><a href="javascript:void(0);" ng-click="delPDFWMModal(x.ID)">删除</a></li>
+                                        </ul>
                                     </div>
                                 </td>
                             </tr>
@@ -83,9 +90,13 @@
                             <div style="margin-top:10px"></div>
                             <div class="form-group">
                                 <label class="control-label" style="display:block;">发件人</label>
-                                <input type="text" ng-model="From" class="form-control" value="" />
+                                <input type="text" ng-model="From" class="form-control" value="" ng-disabled="IsAllFrom==true" />
+                                <div class="checkbox" style="line-height: 1.1;margin-top:10px;">
+                                    <input id="IsAllFrom" ng-model="IsAllFrom" class="chk_1" type="checkbox" ng-click="CheckAllFrom($event)" />
+                                    <label for="IsAllFrom" style="margin-right:10px;"></label>全部发件人
+                                </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="margin-top:20px">
                                 <label class="control-label" style="display:block;">收件人</label>
                                 <input type="text" ng-model="Recipients" class="form-control" value="" />
                             </div>
@@ -103,13 +114,17 @@
                             <div style="margin-top:10px"></div>
                             <div class="form-group" style="clear: both;height:32px;margin-bottom:0;">
                                 <div class="checkbox" style="line-height: 1.1;width:180px">
-                                    <input id="ComplianceSearch" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="1" />
+                                    <input id="ComplianceSearch" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="1" ng-click="CheckIsAllRecipients($event)" />
                                     <label for="ComplianceSearch" style="margin:0;padding:0;">全部收件人</label>
                                 </div>
                                 <div class="checkbox" style="line-height: 1.1;width:180px;margin-top:10px;">
-                                    <input id="SearchMailbox" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="0" />
+                                    <input id="SearchMailbox" style="margin:0;vertical-align:text-top;" ng-model="IsAllRecipients" type="radio" name="IsAllRecipients" value="0" ng-click="CheckIsAllRecipients($event)" />
                                     <label for="SearchMailbox" style="margin:0;padding:0;">自定义内容</label>
-                                    <input type="text" ng-model="Content" class="form-control" value="" style="width:360px;margin-top:4px" />
+                                    <input type="text" ng-model="Content" class="form-control" value="" style="width:360px;margin-top:4px" ng-disabled="IsAllRecipients==1" />
+                                </div>
+                                <div class="checkbox" style="line-height: 1.1;margin-top:10px;">
+                                    <input id="addDateTime" ng-model="AddDateTime" class="chk_1" type="checkbox" />
+                                    <label for="addDateTime" style="margin-right:10px;"></label>添加日期
                                 </div>
                             </div>
                         </div>
@@ -134,7 +149,7 @@
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PDF文件中。 <br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;自定义内容可包含变量加内容，主题变量：{subject} ，发件人变量：<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{From} 。<br />
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：自定义内容为 “ {From} 内部用户所有”，触发PDF加水印功能<br />
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：自定义内容为 “ {from} 内部用户所有”，触发PDF加水印功能<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后，水印内容为 “zhangsan@baosteelgas.com内部用户所有”。
                                             </span>
                                         </div>
@@ -167,6 +182,32 @@
                     </div>
                     <div class="modal-footer OperationProgress" ng-show="showModalFoot">
                         <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DelPDFWM()">确 定</button>
+                        <div class="loading"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--禁用-->
+        <div class="modal fade" id="disPDFWM_Modal" tabindex="-1" role="dialog" aria-labelledby="disPDFWMModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">停用</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                        <div class="modalForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>停用PDF加水印规则后：</div>
+                                    <div>用户发送符合该条件的邮件时，PDF附件将不会再进行打水印操作。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer OperationProgress" ng-show="showModalFoot">
+                        <button type="button" class="btn btn-theme modalBtn" ng-disabled="modalButton" ng-click="DisablePDFWM()">确 定</button>
                         <div class="loading"><span></span><span></span><span></span></div>
                     </div>
                 </div>

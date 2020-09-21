@@ -21,14 +21,14 @@
     $scope.pSize = $scope.PageSizes[0].value;
 
     if ($window.innerWidth >= 1024) {
-        $(".content-left").css("height", $window.innerHeight - 84);
+        $(".content-left").css("height", $window.innerHeight -64);
     } else {
         $(".content-left").css("height", $window.innerHeight - 4);
     }
     window.onresize = function () {
         $scope.$apply(function () {
             if ($window.innerWidth >= 1024) {
-                $(".content-left").css("height", $window.innerHeight - 84);
+                $(".content-left").css("height", $window.innerHeight - 64);
             } else {
                 $(".content-left").css("height", $window.innerHeight - 4);
             }
@@ -58,6 +58,8 @@
                         "BodyCondition": ListData[n].BodyCondition.BodyCondition,
                         "WaterMakingContent": ListData[n].WaterMakingContent.WaterMakingContent,
                         "CreateTimeName": ListData[n].CreateTimeName.substr(0, 16),
+                        "StatusName": ListData[n].StatusName,
+                        "Status": ListData[n].Status,
                         "trueData": 1
                     };
                     $scope.Lists.push($scope.arr);
@@ -71,6 +73,8 @@
                             "BodyCondition": "",
                             "WaterMakingContent": "",
                             "CreateTimeName": "",
+                            "StatusName": "",
+                            "Status": 1,
                             "trueData": 0
                         }
                         $scope.Lists.push(nulltr);
@@ -109,12 +113,14 @@
             $scope.OpTitle = "添加规则";
             $scope.WaterMakingName = '';
             $scope.From = '';
+            $scope.IsAllFrom = false;
             $scope.Recipients = '';
             $scope.Subject = '';
             $scope.IsContainsAttachment = false;
             $scope.AttachmentName = '';
             $scope.Content = '';
             $scope.IsAllRecipients = 1;
+            $scope.AddDateTime = false;
         }
     };
 
@@ -124,7 +130,7 @@
             ErrorHandling('false', 0, '请输入添加邮件正文水印规则名称。');
             return;
         }
-        if ($scope.From == "" && $scope.Recipients == ""
+        if ($scope.From == "" && $scope.IsAllFrom == false && $scope.Recipients == ""
             && $scope.Subject == "" && $scope.AttachmentName == "") {
             ErrorHandling('false', 0, '请输入添加邮件正文水印规则条件。');
             return;
@@ -137,6 +143,7 @@
 
         var BodyConditionObj = {
             "From": $scope.From,
+            "IsAllFrom": $scope.IsAllFrom,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "IsContainsAttachment": $scope.IsContainsAttachment,
@@ -145,13 +152,14 @@
 
         var WaterMakingContent = {
             "IsAllRecipients": $scope.IsAllRecipients == "1" ? "true" : "false",
-            "Content": $scope.Content
+            "Content": $scope.Content,
+            "IsAddDate": $scope.AddDateTime
         };
 
         var paramObj = {
             "Name": $scope.WaterMakingName,
             "BodyCondition": BodyConditionObj,
-            "WaterMakingContent": WaterMakingContent
+            "WaterMakingContent": WaterMakingContent,
         };
 
         angular.element(".preloader").css("display", "block");
@@ -177,7 +185,7 @@
             ErrorHandling('false', 0, '请输入添加邮件正文水印规则名称。');
             return;
         }
-        if ($scope.From == "" && $scope.Recipients == ""
+        if ($scope.From == "" && $scope.IsAllFrom == false && $scope.Recipients == ""
             && $scope.Subject == "" && $scope.AttachmentName == "") {
             ErrorHandling('false', 0, '请输入添加邮件正文水印规则条件。');
             return;
@@ -190,6 +198,7 @@
 
         var BodyConditionObj = {
             "From": $scope.From,
+            "IsAllFrom": $scope.IsAllFrom,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "IsContainsAttachment": $scope.IsContainsAttachment,
@@ -198,7 +207,8 @@
 
         var WaterMakingContent = {
             "IsAllRecipients": $scope.IsAllRecipients == "1" ? "true" : "false",
-            "Content": $scope.Content
+            "Content": $scope.Content,
+            "IsAddDate": $scope.AddDateTime
         };
 
         var paramObj = {
@@ -273,10 +283,13 @@
                 $scope.ModifyPDFWaterMakingObjectID = id;
                 $scope.WaterMakingName = ListData.data.Name;
                 $scope.From = ListData.data.BodyCondition.From;
+                $scope.IsAllFrom = ListData.data.BodyCondition.IsAllFrom;
                 $scope.Recipients = ListData.data.BodyCondition.Recipients;
                 $scope.Subject = ListData.data.BodyCondition.Subject;
                 $scope.IsContainsAttachment = ListData.data.BodyCondition.IsContainsAttachment;
                 $scope.AttachmentName = ListData.data.BodyCondition.AttachmentName;
+                $scope.Status = ListData.data.Status;
+               
                 if (ListData.data.WaterMakingContent.IsAllRecipients == true) {
                     $scope.IsAllRecipients = 1;
                 }
@@ -284,6 +297,7 @@
                     $scope.IsAllRecipients = 0;
                     $scope.Content = ListData.data.WaterMakingContent.Content;
                 }
+                $scope.AddDateTime = ListData.data.WaterMakingContent.IsAddDate;
             } else {
                 $scope.showMsg('error', false, callbackObj.errMsg, 1);
                 $scope.showModalFoot = true;
@@ -299,13 +313,73 @@
         }
     };
 
+    $scope.CheckAllFrom = function ($event) {
+        if ($scope.IsAllFrom == true) {
+            $scope.From = "";
+        }
+    };
+
     $scope.CheckIsAllRecipients = function ($event) {
         if ($scope.IsAllRecipients == 1) {
             $scope.Content = "";
         }
     };
 
-    
+    //停用
+    $scope.disableBodyWMModal = function (id) {
+        $("#disBodyWM_Modal").modal("show");
+        $scope.nomalModal();
+        $scope.disBodyWmID = id;
+    }
+
+    $scope.DisableBodyWM = function () {
+        var paramObj = {
+            "ID": $scope.disBodyWmID
+        };
+        $scope.operateProgress();
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=DisableBodyWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            var callbackObj = response.data;
+            if (callbackObj.result == "true") {
+                $scope.showMsg('success', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = false;
+                $scope.GetBodyWaterMakingList(1);
+            } else {
+                $scope.showMsg('error', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = true;
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
+
+    //启用
+    $scope.EnableBodyWM = function (id) {
+        var paramObj = {
+            "ID": id
+        };
+        $scope.operateProgress();
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=EnableBodyWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            var callbackObj = response.data;
+            if (callbackObj.result == "true") {
+                //$scope.showMsg('success', false, callbackObj.errMsg, 1);
+                //$scope.showModalFoot = false;
+                $scope.GetBodyWaterMakingList(1);
+            } else {
+                //$scope.showMsg('error', false, callbackObj.errMsg, 1);
+                //$scope.showModalFoot = true;
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
 
     //正常模态框状态
     $scope.nomalModal = function () {

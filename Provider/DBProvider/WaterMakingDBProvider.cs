@@ -65,12 +65,16 @@ namespace Provider.DBProvider
                             info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                             info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                             info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
+                            info.Status = (WaterMakingStatus)Convert.ToInt32(sdr["Status"]);
+                            info.Priority = Convert.ToInt32(sdr["Priority"]);
                             info.PDFCondition.From = Convert.ToString(sdr["From"]);
+                            info.PDFCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
                             info.PDFCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                             info.PDFCondition.Subject = Convert.ToString(sdr["Subject"]);
                             info.PDFCondition.PDFName = Convert.ToString(sdr["PDFName"]);
                             info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
                             info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
+                            info.WaterMakingContent.IsAddDate = Convert.ToBoolean(sdr["IsAddDate"]);
                             lists.Lists.Add(info);
                         }
                     }
@@ -138,12 +142,16 @@ namespace Provider.DBProvider
                                         info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                                         info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                                         info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
+                                        info.Status = (WaterMakingStatus)Convert.ToInt32(sdr["Status"]);
+                                        info.Priority = Convert.ToInt32(sdr["Priority"]);
                                         info.PDFCondition.From = Convert.ToString(sdr["From"]);
+                                        info.PDFCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
                                         info.PDFCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                                         info.PDFCondition.Subject = Convert.ToString(sdr["Subject"]);
                                         info.PDFCondition.PDFName = Convert.ToString(sdr["PDFName"]);
                                         info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
                                         info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
+                                        info.WaterMakingContent.IsAddDate = Convert.ToBoolean(sdr["IsAddDate"]);
                                     }
                                     break;
                                 case -1:
@@ -193,6 +201,7 @@ namespace Provider.DBProvider
             paramstr += $"||AdminAccount:{admin.UserAccount}";
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.PDFCondition.From}";
+            paramstr += $"||IsAllFrom:{waterMakingInfo.PDFCondition.IsAllFrom}";
             paramstr += $"||Recipients:{waterMakingInfo.PDFCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
@@ -207,6 +216,8 @@ namespace Provider.DBProvider
                 paras.Add(paraName);
                 SqlParameter paraFrom = new SqlParameter("@From", waterMakingInfo.PDFCondition.From);
                 paras.Add(paraFrom);
+                SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.PDFCondition.IsAllFrom);
+                paras.Add(paraIsAllFrom);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.PDFCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.PDFCondition.Subject);
@@ -217,10 +228,14 @@ namespace Provider.DBProvider
                 paras.Add(paraIsAllRecipients);
                 SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
+                SqlParameter paraIsAddDate = new SqlParameter("@IsAddDate", waterMakingInfo.WaterMakingContent.IsAddDate);
+                paras.Add(paraIsAddDate);
                 SqlParameter paraUserID = new SqlParameter("@CreateUserID", admin.UserID);
                 paras.Add(paraUserID);
                 SqlParameter paraRoleID = new SqlParameter("@RoleID", admin.RoleID);
                 paras.Add(paraRoleID);
+                SqlParameter paraPriority = new SqlParameter("@Priority", waterMakingInfo.Priority);
+                paras.Add(paraPriority);
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
@@ -299,6 +314,7 @@ namespace Provider.DBProvider
             paramstr += $"||ID:{waterMakingInfo.ID}";
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.PDFCondition.From}";
+            paramstr += $"||IsAllFrom:{waterMakingInfo.PDFCondition.IsAllFrom}";
             paramstr += $"||Recipients:{waterMakingInfo.PDFCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
@@ -315,6 +331,8 @@ namespace Provider.DBProvider
                 paras.Add(paraName);
                 SqlParameter paraFrom = new SqlParameter("@From", waterMakingInfo.PDFCondition.From);
                 paras.Add(paraFrom);
+                SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.PDFCondition.IsAllFrom);
+                paras.Add(paraIsAllFrom);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.PDFCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.PDFCondition.Subject);
@@ -325,7 +343,11 @@ namespace Provider.DBProvider
                 paras.Add(paraIsAllRecipients);
                 SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
-                
+                SqlParameter paraIsAddDate = new SqlParameter("@IsAddDate", waterMakingInfo.WaterMakingContent.IsAddDate);
+                paras.Add(paraIsAddDate);
+                SqlParameter paraPriority = new SqlParameter("@Priority", waterMakingInfo.Priority);
+                paras.Add(paraPriority);
+
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
                 {
@@ -462,6 +484,154 @@ namespace Provider.DBProvider
             }
             return bResult;
         }
+
+        public bool DisablePDFWaterMaking(Guid transactionid, AdminInfo admin, PDFWaterMakingInfo waterMakingInfo, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraAdminID = new SqlParameter("@AdminID", admin.UserID);
+                paras.Add(paraAdminID);
+                SqlParameter paraID = new SqlParameter("@ID", waterMakingInfo.ID);
+                paras.Add(paraID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_DisablePDFWaterMaking]", out ds, out strError))
+                    {
+                        strError = "DisablePDFWaterMaking异常,Error:" + strError;
+                        LoggerHelper.Error("WaterMakingDBProvider调用DisablePDFWaterMaking异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 1:
+                                    bResult = true;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("WaterMakingDBProvider调用DisablePDFWaterMaking异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("WaterMakingDBProvider调用DisablePDFWaterMaking异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMakingDBProvider调用DisablePDFWaterMaking异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool EnablePDFWaterMaking(Guid transactionid, AdminInfo admin, PDFWaterMakingInfo waterMakingInfo, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraAdminID = new SqlParameter("@AdminID", admin.UserID);
+                paras.Add(paraAdminID);
+                SqlParameter paraID = new SqlParameter("@ID", waterMakingInfo.ID);
+                paras.Add(paraID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_EnablePDFWaterMaking]", out ds, out strError))
+                    {
+                        strError = "EnablePDFWaterMaking异常,Error:" + strError;
+                        LoggerHelper.Error("WaterMakingDBProvider调用EnablePDFWaterMaking异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 1:
+                                    bResult = true;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("WaterMakingDBProvider调用EnablePDFWaterMaking异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("WaterMakingDBProvider调用EnablePDFWaterMaking异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMakingDBProvider调用EnablePDFWaterMaking异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
         #endregion
         #region
         public bool GetBodyWaterMakingList(Guid transactionid, AdminInfo admin, int curpage, int pagesize, string searchstr, out BaseListInfo lists, out ErrorCodeInfo error)
@@ -514,14 +684,18 @@ namespace Provider.DBProvider
                             //info.Description = Convert.ToString(sdr["Description"]);
                             info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                             info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
+                            info.Status = (WaterMakingStatus)Convert.ToInt32(sdr["Status"]);
+                            info.Priority = Convert.ToInt32(sdr["Priority"]);
                             info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
                             info.BodyCondition.From = Convert.ToString(sdr["From"]);
+                            info.BodyCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
                             info.BodyCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                             info.BodyCondition.Subject = Convert.ToString(sdr["Subject"]);
                             info.BodyCondition.IsContainsAttachment = Convert.ToBoolean(sdr["IsContainsAttachment"]);
                             info.BodyCondition.AttachmentName = Convert.ToString(sdr["AttachmentName"]);
                             info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
                             info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
+                            info.WaterMakingContent.IsAddDate = Convert.ToBoolean(sdr["IsAddDate"]);
                             lists.Lists.Add(info);
                         }
                     }
@@ -589,13 +763,17 @@ namespace Provider.DBProvider
                                         info.CreateTime = Convert.ToDateTime(sdr["CreateTime"]);
                                         info.CreateUserID = Guid.Parse(Convert.ToString(sdr["CreateUserID"]));
                                         info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
+                                        info.Status = (WaterMakingStatus)Convert.ToInt32(sdr["Status"]);
+                                        info.Priority = Convert.ToInt32(sdr["Priority"]);
                                         info.BodyCondition.From = Convert.ToString(sdr["From"]);
+                                        info.BodyCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
                                         info.BodyCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                                         info.BodyCondition.Subject = Convert.ToString(sdr["Subject"]);
                                         info.BodyCondition.IsContainsAttachment = Convert.ToBoolean(sdr["IsContainsAttachment"]);
                                         info.BodyCondition.AttachmentName = Convert.ToString(sdr["AttachmentName"]);
                                         info.WaterMakingContent.IsAllRecipients = Convert.ToBoolean(sdr["IsAllRecipients"]);
                                         info.WaterMakingContent.Content = Convert.ToString(sdr["Content"]);
+                                        info.WaterMakingContent.IsAddDate = Convert.ToBoolean(sdr["IsAddDate"]);
                                     }
                                     break;
                                 case -1:
@@ -645,6 +823,7 @@ namespace Provider.DBProvider
             paramstr += $"||AdminAccount:{admin.UserAccount}";
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.BodyCondition.From}";
+            paramstr += $"||IsAllFrom:{waterMakingInfo.BodyCondition.IsAllFrom}";
             paramstr += $"||Recipients:{waterMakingInfo.BodyCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.BodyCondition.Subject}";
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
@@ -660,6 +839,8 @@ namespace Provider.DBProvider
                 paras.Add(paraName);
                 SqlParameter paraFrom = new SqlParameter("@From", waterMakingInfo.BodyCondition.From);
                 paras.Add(paraFrom);
+                SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.BodyCondition.IsAllFrom);
+                paras.Add(paraIsAllFrom);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.BodyCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.BodyCondition.Subject);
@@ -672,10 +853,14 @@ namespace Provider.DBProvider
                 paras.Add(paraIsAllRecipients);
                 SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
+                SqlParameter paraIsAddDate = new SqlParameter("@IsAddDate", waterMakingInfo.WaterMakingContent.IsAddDate);
+                paras.Add(paraIsAddDate);
                 SqlParameter paraUserID = new SqlParameter("@CreateUserID", admin.UserID);
                 paras.Add(paraUserID);
                 SqlParameter paraRoleID = new SqlParameter("@RoleID", admin.RoleID);
                 paras.Add(paraRoleID);
+                SqlParameter paraPriority = new SqlParameter("@Priority", waterMakingInfo.Priority);
+                paras.Add(paraPriority);
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
@@ -753,6 +938,7 @@ namespace Provider.DBProvider
             paramstr += $"||ID:{waterMakingInfo.ID}";
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.BodyCondition.From}";
+            paramstr += $"||IsAllFrom:{waterMakingInfo.BodyCondition.IsAllFrom}";
             paramstr += $"||Recipients:{waterMakingInfo.BodyCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.BodyCondition.Subject}";
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
@@ -770,6 +956,8 @@ namespace Provider.DBProvider
                 paras.Add(paraName);
                 SqlParameter paraFrom = new SqlParameter("@From", waterMakingInfo.BodyCondition.From);
                 paras.Add(paraFrom);
+                SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.BodyCondition.IsAllFrom);
+                paras.Add(paraIsAllFrom);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.BodyCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.BodyCondition.Subject);
@@ -782,6 +970,11 @@ namespace Provider.DBProvider
                 paras.Add(paraIsAllRecipients);
                 SqlParameter paraContect = new SqlParameter("@Content", waterMakingInfo.WaterMakingContent.Content);
                 paras.Add(paraContect);
+                SqlParameter paraIsAddDate = new SqlParameter("@IsAddDate", waterMakingInfo.WaterMakingContent.IsAddDate);
+                paras.Add(paraIsAddDate);
+                SqlParameter paraPriority = new SqlParameter("@Priority", waterMakingInfo.Priority);
+                paras.Add(paraPriority);
+
 
                 CBaseDB _db = new CBaseDB(Conntection.strConnection);
                 do
@@ -916,6 +1109,154 @@ namespace Provider.DBProvider
                 bResult = false;
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Error("WaterMakingDBProvider调用DeleteBodyWaterMaking异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool DisableBodyWaterMaking(Guid transactionid, AdminInfo admin, BodyWaterMakingInfo waterMakingInfo, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraAdminID = new SqlParameter("@AdminID", admin.UserID);
+                paras.Add(paraAdminID);
+                SqlParameter paraID = new SqlParameter("@ID", waterMakingInfo.ID);
+                paras.Add(paraID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_DisableBodyWaterMaking]", out ds, out strError))
+                    {
+                        strError = "DisableBodyWaterMaking异常,Error:" + strError;
+                        LoggerHelper.Error("WaterMakingDBProvider调用DisableBodyWaterMaking异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 1:
+                                    bResult = true;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("WaterMakingDBProvider调用DisableBodyWaterMaking异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("WaterMakingDBProvider调用DisableBodyWaterMaking异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMakingDBProvider调用DisableBodyWaterMaking异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool EnableBodyWaterMaking(Guid transactionid, AdminInfo admin, BodyWaterMakingInfo waterMakingInfo, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CParameters paras = new CParameters();
+                SqlParameter paraAdminID = new SqlParameter("@AdminID", admin.UserID);
+                paras.Add(paraAdminID);
+                SqlParameter paraID = new SqlParameter("@ID", waterMakingInfo.ID);
+                paras.Add(paraID);
+
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction(paras, "dbo.[prc_EnableBodyWaterMaking]", out ds, out strError))
+                    {
+                        strError = "EnableBodyWaterMaking异常,Error:" + strError;
+                        LoggerHelper.Error("WaterMakingDBProvider调用EnableBodyWaterMaking异常", paramstr, strError, transactionid);
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 1:
+                                    bResult = true;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("WaterMakingDBProvider调用EnableBodyWaterMaking异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("WaterMakingDBProvider调用EnableBodyWaterMaking异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMakingDBProvider调用EnableBodyWaterMaking异常", string.Empty, ex.ToString(), transactionid);
             }
             return bResult;
         }

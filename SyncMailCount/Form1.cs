@@ -15,7 +15,7 @@ namespace SyncMailCount
 {
     public partial class Form1 : Form
     {
-        private CBaseDB m_db;
+        private CBaseDB m_db = new CBaseDB(Conntection.strConnection);
         public Form1()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace SyncMailCount
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DateTime startDate = new DateTime(2020, 1, 1);
+            DateTime startDate = new DateTime(2020, 9, 13);
             DateTime endDate = DateTime.Now;
             for (DateTime dt = startDate; dt < endDate; dt = dt.AddDays(1))
             {
@@ -67,6 +67,7 @@ namespace SyncMailCount
                 parameters.Add(paraReceiveCount);
 
                 int iResult = 1;
+                
                 if (!m_db.ExcuteByTransaction(parameters, "dbo.prc_InsertADSystemMailCount", out iResult, out strError))
                 {
                     Log4netHelper.Error("系统邮件个数存入数据库, error:" + strError);
@@ -95,7 +96,7 @@ namespace SyncMailCount
             try
             {
                 //读取ad user
-                string strsql = "select sAMAccountName,UserPrincipalName from dbo.tb_ADUser";
+                string strsql = "select sAMAccountName,UserPrincipalName from dbo.T_Base_ADUser";
 
                 if (!m_db.ExcuteByDataAdapter(strsql, out ds, out strError))
                 {
@@ -134,8 +135,10 @@ namespace SyncMailCount
                         CParameters parameters = new CParameters();
                         SqlParameter parasAMAccountName = new SqlParameter("@sAMAccountName", Convert.ToString(ds.Tables[0].Rows[i]["sAMAccountName"]));
                         parameters.Add(parasAMAccountName);
-                        SqlParameter paraDateTime = new SqlParameter("@TotalDate", startTime);
-                        parameters.Add(paraDateTime);
+                        //SqlParameter paraUserPrincipalName = new SqlParameter("@UserPrincipalName", Convert.ToString(ds.Tables[0].Rows[i]["UserPrincipalName"]));
+                        //parameters.Add(paraUserPrincipalName);
+                        SqlParameter paraStartTime = new SqlParameter("@TotalDate", startTime);
+                        parameters.Add(paraStartTime);
                         SqlParameter paraSendCount = new SqlParameter("@SendMailCount", iSendMailCount);
                         parameters.Add(paraSendCount);
                         SqlParameter paraReceiveCount = new SqlParameter("@ReceiveMailCount", iReceiveMailCount);

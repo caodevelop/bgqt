@@ -58,6 +58,8 @@
                         "PDFCondition": ListData[n].PDFCondition.PDFCondition,
                         "WaterMakingContent": ListData[n].WaterMakingContent.WaterMakingContent,
                         "CreateTimeName": ListData[n].CreateTimeName.substr(0, 16),
+                        "StatusName": ListData[n].StatusName,
+                        "Status": ListData[n].Status,
                         "trueData": 1
                     };
                     $scope.Lists.push($scope.arr);
@@ -71,6 +73,8 @@
                             "PDFCondition": "",
                             "WaterMakingContent": "",
                             "CreateTimeName": "",
+                            "StatusName": "",
+                            "Status": 1,
                             "trueData": 0
                         }
                         $scope.Lists.push(nulltr);
@@ -109,11 +113,13 @@
             $scope.OpTitle = "添加规则";
             $scope.WaterMakingName = '';
             $scope.From = '';
+            $scope.IsAllFrom = false;
             $scope.Recipients = '';
             $scope.Subject = '';
             $scope.PDFName = '';
             $scope.Content = '';
             $scope.IsAllRecipients = 1;
+            $scope.AddDateTime = false;
         }
     };
     
@@ -123,7 +129,7 @@
             ErrorHandling('false', 0, '请输入添加PDF水印规则名称。');
             return;
         }
-        if ($scope.From == "" && $scope.Recipients == ""
+        if ($scope.From == "" && $scope.IsAllFrom == false && $scope.Recipients == ""
             && $scope.Subject == "" && $scope.PDFName == "") {
             ErrorHandling('false', 0, '请输入添加PDF水印规则条件。');
             return;
@@ -136,6 +142,7 @@
 
         var PDFConditionObj = {
             "From": $scope.From,
+            "IsAllFrom": $scope.IsAllFrom,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "PDFName": $scope.PDFName
@@ -143,7 +150,8 @@
 
         var WaterMakingContent = {
             "IsAllRecipients": $scope.IsAllRecipients == "1" ? "true" : "false",
-            "Content": $scope.Content
+            "Content": $scope.Content,
+            "IsAddDate": $scope.AddDateTime
         };
 
         var paramObj = {
@@ -175,7 +183,7 @@
             ErrorHandling('false', 0, '请输入添加PDF水印规则名称。');
             return;
         }
-        if ($scope.From == "" && $scope.Recipients == ""
+        if ($scope.From == "" && $scope.IsAllFrom == false &&  $scope.Recipients == ""
             && $scope.Subject == "" && $scope.PDFName == "") {
             ErrorHandling('false', 0, '请输入添加PDF水印规则条件。');
             return;
@@ -188,6 +196,7 @@
 
         var PDFConditionObj = {
             "From": $scope.From,
+            "IsAllFrom": $scope.IsAllFrom,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "PDFName": $scope.PDFName
@@ -195,7 +204,8 @@
 
         var WaterMakingContent = {
             "IsAllRecipients": $scope.IsAllRecipients == "1" ? "true" : "false",
-            "Content": $scope.Content
+            "Content": $scope.Content,
+            "IsAddDate": $scope.AddDateTime
         };
 
         var paramObj = {
@@ -270,9 +280,11 @@
                 $scope.ModifyPDFWaterMakingObjectID = id;
                 $scope.WaterMakingName = ListData.data.Name;
                 $scope.From = ListData.data.PDFCondition.From;
+                $scope.IsAllFrom = ListData.data.PDFCondition.IsAllFrom;
                 $scope.Recipients = ListData.data.PDFCondition.Recipients;
                 $scope.Subject = ListData.data.PDFCondition.Subject;
                 $scope.PDFName = ListData.data.PDFCondition.PDFName;
+                $scope.Status = ListData.data.Status;
                 if (ListData.data.WaterMakingContent.IsAllRecipients == true) {
                     $scope.IsAllRecipients = 1;
                 }
@@ -280,6 +292,7 @@
                     $scope.IsAllRecipients = 0;
                     $scope.Content = ListData.data.WaterMakingContent.Content;
                 }
+                $scope.AddDateTime = ListData.data.WaterMakingContent.IsAddDate;
             } else {
                 $scope.showMsg('error', false, callbackObj.errMsg, 1);
                 $scope.showModalFoot = true;
@@ -288,6 +301,74 @@
 
         });
     };
+
+    $scope.CheckAllFrom = function ($event) {
+        if ($scope.IsAllFrom == true) {
+            $scope.From = "";
+        }
+    };
+
+    $scope.CheckIsAllRecipients = function ($event) {
+        if ($scope.IsAllRecipients == 1) {
+            $scope.Content = "";
+        }
+    };
+
+    //停用
+    $scope.disablePDFWMModal = function (id) {
+        $("#disPDFWM_Modal").modal("show");
+        $scope.nomalModal();
+        $scope.disPDFWmID = id;
+    }
+
+    $scope.DisablePDFWM = function () {
+        var paramObj = {
+            "ID": $scope.disPDFWmID
+        };
+        $scope.operateProgress();
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=DisablePDFWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            var callbackObj = response.data;
+            if (callbackObj.result == "true") {
+                $scope.showMsg('success', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = false;
+                $scope.GetPDFWaterMakingList(1);
+            } else {
+                $scope.showMsg('error', false, callbackObj.errMsg, 1);
+                $scope.showModalFoot = true;
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
+
+    //启用
+    $scope.EnablePDFWM = function (id) {
+        var paramObj = {
+            "ID": id
+        };
+        $scope.operateProgress();
+        $http({
+            method: 'post',
+            url: storage.getItem("InterfaceUrl") + 'WaterMarking.ashx?op=EnablePDFWaterMaking&accessToken=' + storage.getItem("userAdminToken"),
+            data: JSON.stringify(paramObj)
+        }).then(function successCallback(response) {
+            var callbackObj = response.data;
+            if (callbackObj.result == "true") {
+                //$scope.showMsg('success', false, callbackObj.errMsg, 1);
+                //$scope.showModalFoot = false;
+                $scope.GetPDFWaterMakingList(1);
+            } else {
+                //$scope.showMsg('error', false, callbackObj.errMsg, 1);
+                //$scope.showModalFoot = true;
+            }
+        }, function errorCallback(e) {
+
+        });
+    }
 
     //正常模态框状态
     $scope.nomalModal = function () {

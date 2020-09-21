@@ -141,5 +141,13 @@ namespace Entity
         }
     }
 
-
+    public class EntryAndDepartureUserInfo
+    {
+        public int month
+        { get; set; } = 1;
+        public int EntryCount
+        { get; set; } = 0;
+        public int DepartureCount
+        { get; set; } = 0;
+    }
 }

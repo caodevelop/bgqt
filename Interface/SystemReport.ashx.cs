@@ -68,6 +68,25 @@ namespace Interface
                     case "ExportUserCreateTimeToExcel":
                         strJsonResult = ExportUserCreateTimeToExcel(context);
                         break;
+                    case "GetSystemUserCount":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetSystemUserCount(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "GetEntryAndDepartureUserCount":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetEntryAndDepartureUserCount(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "GetUserUsedMailBoxList":
+                        strJsonResult = ExportUserCreateTimeToExcel(context);
+                        break;
+                    case "GetMailBoxDBUsedList":
+                        strJsonResult = ExportUserCreateTimeToExcel(context);
+                        break;
+                    case "GetSystemMailBoxCount":
+                        strJsonResult = ExportUserCreateTimeToExcel(context);
+                        break;
                     default:
                         break;
                 }
@@ -874,6 +893,100 @@ namespace Interface
             {
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Error("SystemReport.ashx调用接口ExportUserCreateTimeToExcel异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetSystemUserCount(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetSystemUserCount";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetSystemUserCount(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetSystemUserCount异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetEntryAndDepartureUserCount(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetEntryAndDepartureUserCount";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetEntryAndDepartureUserCount(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetEntryAndDepartureUserCount异常", context.Request.RawUrl, ex.ToString(), transactionid);
                 LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
             }

@@ -370,8 +370,7 @@ namespace SyncADControl
 
             return bResult;
         }
-
-
+        
         [ComImport]
         [Guid("9068270B-0939-11D1-8BE1-00C04FD8D503")]
         [InterfaceType(ComInterfaceType.InterfaceIsDual)]

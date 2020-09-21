@@ -344,7 +344,7 @@ namespace Manager
 
                     using (ExcelPackage package = new ExcelPackage())
                     {
-                        ExcelWorksheet sheet = package.Workbook.Worksheets.Add("已停用用户统计");
+                        ExcelWorksheet sheet = package.Workbook.Worksheets.Add("已禁用用户统计");
                         sheet.Cells[1, 1].Value = "显示名称";
                         sheet.Column(1).Width = 30;//设置列宽
                         sheet.Cells[1, 2].Value = "邮箱";
@@ -503,6 +503,93 @@ namespace Manager
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                 LoggerHelper.Error("SystemReportManager调用ExportUserCreateTimeToExcel异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetSystemUserCount(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetSystemUserCount";
+
+            try
+            {
+                do
+                {
+                    int count = 0;
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetSystemUserCount(transactionid, admin, out count, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    Dictionary<string, int> dy = new Dictionary<string, int>();
+                    dy.Add("Conut", count);
+                    string json = JsonConvert.SerializeObject(dy);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetSystemUserCount异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetEntryAndDepartureUserCount(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetEntryAndDepartureUserCount";
+
+            try
+            {
+                do
+                {
+
+                    List<EntryAndDepartureUserInfo> entryAndDepartureUserInfos = new List<EntryAndDepartureUserInfo>(); 
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetEntryAndDepartureUserCount(transactionid, admin, out entryAndDepartureUserInfos, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(entryAndDepartureUserInfos);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetEntryAndDepartureUserCount异常", paramstr, ex.ToString(), transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                 result = false;
             }

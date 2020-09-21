@@ -55,6 +55,12 @@ namespace Interface
                     case "DeletePDFWaterMaking":
                         strJsonResult = DeletePDFWaterMaking(context);
                         break;
+                    case "DisablePDFWaterMaking":
+                        strJsonResult = DisablePDFWaterMaking(context);
+                        break;
+                    case "EnablePDFWaterMaking":
+                        strJsonResult = EnablePDFWaterMaking(context);
+                        break;
                     case "GetBodyWaterMakingList":
                         strJsonResult = GetBodyWaterMakingList(context);
                         break;
@@ -70,7 +76,15 @@ namespace Interface
                     case "DeleteBodyWaterMaking":
                         strJsonResult = DeleteBodyWaterMaking(context);
                         break;
+                    case "DisableBodyWaterMaking":
+                        strJsonResult = DisableBodyWaterMaking(context);
+                        break;
+                    case "EnableBodyWaterMaking":
+                        strJsonResult = EnableBodyWaterMaking(context);
+                        break;
                     default:
+                        error.Code = ErrorCode.JsonRequestIllegal;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                         break;
                 }
             }
@@ -408,6 +422,118 @@ namespace Interface
 
             return strJsonResult;
         }
+
+        private string DisablePDFWaterMaking(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "DisablePDFWaterMaking";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    PDFWaterMakingInfo info = JsonConvert.DeserializeObject<PDFWaterMakingInfo>(body);
+
+                    WaterMarkingManager manager = new WaterMarkingManager(ClientIP);
+                    manager.DisablePDFWaterMaking(transactionid, admin, info, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMaking.ashx调用接口DisablePDFWaterMaking异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string EnablePDFWaterMaking(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "EnablePDFWaterMaking";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    PDFWaterMakingInfo info = JsonConvert.DeserializeObject<PDFWaterMakingInfo>(body);
+
+                    WaterMarkingManager manager = new WaterMarkingManager(ClientIP);
+                    manager.EnablePDFWaterMaking(transactionid, admin, info, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMaking.ashx调用接口EnablePDFWaterMaking异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
         #endregion
 
         #region 正文加水印
@@ -718,6 +844,118 @@ namespace Interface
             {
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Error("WaterMaking.ashx调用接口DeleteBodyWaterMaking异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string DisableBodyWaterMaking(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "DisableBodyWaterMaking";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    BodyWaterMakingInfo info = JsonConvert.DeserializeObject<BodyWaterMakingInfo>(body);
+
+                    WaterMarkingManager manager = new WaterMarkingManager(ClientIP);
+                    manager.DisableBodyWaterMaking(transactionid, admin, info, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMaking.ashx调用接口DisableBodyWaterMaking异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string EnableBodyWaterMaking(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "EnableBodyWaterMaking";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    Stream str = context.Request.InputStream;
+                    // Find number of bytes in stream.
+                    Int32 strLen = Convert.ToInt32(str.Length);
+                    // Create a byte array.
+                    byte[] strArr = new byte[strLen];
+                    // Read stream into byte array.
+                    str.Read(strArr, 0, strLen);
+                    string body = System.Text.Encoding.UTF8.GetString(strArr);
+
+                    BodyWaterMakingInfo info = JsonConvert.DeserializeObject<BodyWaterMakingInfo>(body);
+
+                    WaterMarkingManager manager = new WaterMarkingManager(ClientIP);
+                    manager.EnableBodyWaterMaking(transactionid, admin, info, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("WaterMaking.ashx调用接口EnableBodyWaterMaking异常", context.Request.RawUrl, ex.ToString(), transactionid);
                 LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
             }

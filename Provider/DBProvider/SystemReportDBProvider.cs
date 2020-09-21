@@ -366,5 +366,137 @@ namespace Provider.DBProvider
             }
             return bResult;
         }
+
+        public bool GetSystemUserCount(Guid transactionid, AdminInfo admin, out int count, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            count = 0;
+            string strError = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetSystemUserCount]", out ds, out strError))
+                    {
+                        strError = "prc_GetSystemUserCount数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        count = Convert.ToInt32(ds.Tables[1].Rows[0][0]);
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("数据库执行prc_GetSystemUserCount失败", string.Empty, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用prc_GetSystemUserCount异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetEntryAndDepartureUserCount(Guid transactionid, AdminInfo admin, out List<EntryAndDepartureUserInfo> entryAndDepartureUserInfos, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            entryAndDepartureUserInfos = new List<EntryAndDepartureUserInfo>();
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetUserMonthData]", out ds, out strError))
+                    {
+                        strError = "prc_GetUserMonthData数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    for (int i = 1; i <= 12; i++)
+                                    {
+                                        int entryCount = 0;
+                                        int departureCount = 0;
+                                        foreach (DataRow row in ds.Tables[1].Rows)
+                                        {
+                                            if (Convert.ToInt32(row["hm"]) == i)
+                                            {
+                                                entryCount = Convert.ToInt32(row["usercount"]);
+                                            }
+                                        }
+                                        foreach (DataRow row in ds.Tables[2].Rows)
+                                        {
+                                            if (Convert.ToInt32(row["hm"]) == i)
+                                            {
+                                                departureCount = Convert.ToInt32(row["usercount"]);
+                                            }
+                                        }
+                                        entryAndDepartureUserInfos.Add(new EntryAndDepartureUserInfo { month = i, EntryCount = entryCount, DepartureCount = departureCount });
+                                    }
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("RSystemReportDBProvider调用GetEntryAndDepartureUserCount异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("RSystemReportDBProvider调用GetEntryAndDepartureUserCount异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用prc_GetUserMonthData异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
     }
 }

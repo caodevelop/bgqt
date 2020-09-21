@@ -40,6 +40,32 @@ namespace Entity
 
         public Guid RoleID
         { get; set; } = Guid.Empty;
+
+        public WaterMakingStatus Status
+        { get; set; } = WaterMakingStatus.Enable;
+
+        public string StatusName
+        {
+            get
+            {
+                string _status = string.Empty;
+                if (Status == WaterMakingStatus.Enable)
+                {
+                    _status = "正常";
+                }
+                else if(Status == WaterMakingStatus.Disable)
+                {
+                    _status = "停用";
+                }
+                return _status;
+            }
+        }
+
+        /// <summary>
+        /// 优先级：1最低
+        /// </summary>
+        public int Priority
+        { get; set; } = 1;
     }
 
     [Serializable]
@@ -48,6 +74,9 @@ namespace Entity
     {
         public string From
         { get; set; } = string.Empty;
+
+        public bool IsAllFrom
+        { get; set; } = false;
 
         public string Subject
         { get; set; } = string.Empty;
@@ -77,7 +106,11 @@ namespace Entity
             get
             {
                 string condition = string.Empty;
-                if (!string.IsNullOrEmpty(From))
+                if (IsAllFrom)
+                {
+                    condition = "全部发件人，";
+                }
+                else if (!string.IsNullOrEmpty(From))
                 {
                     condition = "发件人：" + From + "，";
                 }
@@ -93,7 +126,7 @@ namespace Entity
                 {
                     condition += "PDF文件名：" + PDFName + "，";
                 }
-                return condition;
+                return condition.TrimEnd('，');
             }
         }
     }
@@ -104,6 +137,9 @@ namespace Entity
     {
         public string From
         { get; set; } = string.Empty;
+
+        public bool IsAllFrom
+        { get; set; } = false;
 
         public string Subject
         { get; set; } = string.Empty;
@@ -136,7 +172,11 @@ namespace Entity
             get
             {
                 string condition = string.Empty;
-                if (!string.IsNullOrEmpty(From))
+                if (IsAllFrom)
+                {
+                    condition = "全部发件人，";
+                }
+                else if (!string.IsNullOrEmpty(From))
                 {
                     condition = "发件人：" + From + "，";
                 }
@@ -157,7 +197,8 @@ namespace Entity
                         condition += "附件名称：" + AttachmentName + "，";
                     }
                 }
-                return condition;
+
+                return condition.TrimEnd('，');
             }
         }
     }
@@ -169,6 +210,9 @@ namespace Entity
         { get; set; } = false;
         public string Content
         { get; set; } = string.Empty;
+
+        public bool IsAddDate
+        { get; set; } = false;
 
         public string WaterMakingContent
         {
@@ -182,6 +226,10 @@ namespace Entity
                 else
                 {
                     _content = Content;
+                }
+                if (IsAddDate)
+                {
+                    _content += "，添加日期";
                 }
                 return _content;
             }
@@ -201,7 +249,7 @@ namespace Entity
             {
                 error.Code = ErrorCode.NameEmpty;
             }
-            else if (string.IsNullOrEmpty(PDFCondition.From) && string.IsNullOrEmpty(PDFCondition.Subject)
+            else if (string.IsNullOrEmpty(PDFCondition.From) && PDFCondition.IsAllFrom == false && string.IsNullOrEmpty(PDFCondition.Subject)
                 && string.IsNullOrEmpty(PDFCondition.Recipients) && string.IsNullOrEmpty(PDFCondition.PDFName))
             {
                 error.Code = ErrorCode.WaterMarkingConditionEmpty;
@@ -224,7 +272,7 @@ namespace Entity
             {
                 error.Code = ErrorCode.NameEmpty;
             }
-            else if (string.IsNullOrEmpty(BodyCondition.From) && string.IsNullOrEmpty(BodyCondition.Subject)
+            else if (string.IsNullOrEmpty(BodyCondition.From) && BodyCondition.IsAllFrom==false && string.IsNullOrEmpty(BodyCondition.Subject)
                 && string.IsNullOrEmpty(BodyCondition.Recipients) && string.IsNullOrEmpty(BodyCondition.AttachmentName))
             {
                 error.Code = ErrorCode.WaterMarkingConditionEmpty;
@@ -232,5 +280,13 @@ namespace Entity
 
             return error;
         }
+    }
+
+    [Serializable]
+    public enum WaterMakingStatus
+    {
+        Enable = 1,
+        Disable = 2,
+        Delete = -1,
     }
 }

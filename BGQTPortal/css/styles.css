@@ -2500,14 +2500,19 @@ a, img {
     color: #fff !important;
 }
 
+.subNav.selectedLogItem a {
+    color: #fff !important;
+}
+
 .navContent li a:hover {
     color: #0163A7;
     background-color: #fff;
 }
-    .navContent li.selectedItem a {
-        color: #fff !important;
-        background-color: #0163A7 !important;
-    }
+.navContent li.selectedItem a {
+    color: #fff !important;
+    background-color: #0163A7 !important;
+}
+
 .subNav.selectedLogItem {
     color: #fff !important;
     padding-left: 76px;
@@ -2530,6 +2535,7 @@ a, img {
     background-position: 48px center;
     background-color: #0163A7;
 }
+
 /*searchBox css*/
 .searchBox form.form-inline {
     overflow: hidden;

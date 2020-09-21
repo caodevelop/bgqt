@@ -123,6 +123,7 @@ namespace Manager
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
             paramstr += $"||IsAllRecipients:{waterMakingInfo.WaterMakingContent.IsAllRecipients}";
             paramstr += $"||Content:{waterMakingInfo.WaterMakingContent.Content}";
+            paramstr += $"||IsAddDate:{waterMakingInfo.WaterMakingContent.IsAddDate}";
 
             string funname = "AddPDFWaterMaking";
 
@@ -138,6 +139,12 @@ namespace Manager
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;
                         break;
+                    }
+
+                    //全部发件人优先级最低
+                    if (!waterMakingInfo.PDFCondition.IsAllFrom)
+                    {
+                        waterMakingInfo.Priority = 2;
                     }
 
                     WaterMakingDBProvider provider = new WaterMakingDBProvider();
@@ -213,6 +220,12 @@ namespace Manager
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;
                         break;
+                    }
+
+                    //全部发件人优先级最低
+                    if (!waterMakingInfo.PDFCondition.IsAllFrom)
+                    {
+                        waterMakingInfo.Priority = 2;
                     }
 
                     WaterMakingDBProvider provider = new WaterMakingDBProvider();
@@ -306,6 +319,118 @@ namespace Manager
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                 LoggerHelper.Error("WaterMarkingManager调用DeletePDFWaterMaking异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool DisablePDFWaterMaking(Guid transactionid, AdminInfo admin, PDFWaterMakingInfo waterMakingInfo, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string message = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||AdminAccount:{admin.UserAccount}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+
+            string funname = "DisablePDFWaterMaking";
+
+            try
+            {
+                do
+                {
+                    WaterMakingDBProvider Provider = new WaterMakingDBProvider();
+                    if (!Provider.DisablePDFWaterMaking(transactionid, admin, waterMakingInfo, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info);
+
+                    #region 操作日志
+                    LogInfo operateLog = new LogInfo();
+                    operateLog.AdminID = admin.UserID;
+                    operateLog.AdminAccount = admin.UserAccount;
+                    operateLog.RoleID = admin.RoleID;
+                    operateLog.ClientIP = _clientip;
+                    operateLog.OperateResult = true;
+                    operateLog.OperateType = "禁用PDF打水印规则";
+                    operateLog.OperateLog = $"{admin.UserAccount}于{DateTime.Now}禁用PDF打水印规则。名称：{waterMakingInfo.Name}";
+                    LogManager.AddOperateLog(transactionid, operateLog);
+                    #endregion
+
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("WaterMarkingManager调用DisablePDFWaterMaking异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool EnablePDFWaterMaking(Guid transactionid, AdminInfo admin, PDFWaterMakingInfo waterMakingInfo, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string message = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||AdminAccount:{admin.UserAccount}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+
+            string funname = "EnablePDFWaterMaking";
+
+            try
+            {
+                do
+                {
+                    WaterMakingDBProvider Provider = new WaterMakingDBProvider();
+                    if (!Provider.EnablePDFWaterMaking(transactionid, admin, waterMakingInfo, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info);
+
+                    #region 操作日志
+                    LogInfo operateLog = new LogInfo();
+                    operateLog.AdminID = admin.UserID;
+                    operateLog.AdminAccount = admin.UserAccount;
+                    operateLog.RoleID = admin.RoleID;
+                    operateLog.ClientIP = _clientip;
+                    operateLog.OperateResult = true;
+                    operateLog.OperateType = "启用PDF打水印规则";
+                    operateLog.OperateLog = $"{admin.UserAccount}于{DateTime.Now}启用PDF打水印规则。名称：{waterMakingInfo.Name}";
+                    LogManager.AddOperateLog(transactionid, operateLog);
+                    #endregion
+
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("WaterMarkingManager调用EnablePDFWaterMaking异常", paramstr, ex.ToString(), transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                 result = false;
             }
@@ -436,6 +561,12 @@ namespace Manager
                         break;
                     }
 
+                    //全部发件人优先级最低
+                    if (!waterMakingInfo.BodyCondition.IsAllFrom)
+                    {
+                        waterMakingInfo.Priority = 2;
+                    }
+                   
                     WaterMakingDBProvider provider = new WaterMakingDBProvider();
                     if (!provider.AddBodyWaterMaking(transactionid, admin, ref waterMakingInfo, out error))
                     {
@@ -489,6 +620,7 @@ namespace Manager
             paramstr += $"||ID:{waterMakingInfo.ID}";
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.BodyCondition.From}";
+            paramstr += $"||IsAllFrom:{waterMakingInfo.BodyCondition.IsAllFrom}";
             paramstr += $"||Recipients:{waterMakingInfo.BodyCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.BodyCondition.Subject}";
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
@@ -510,6 +642,12 @@ namespace Manager
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;
                         break;
+                    }
+
+                    //全部发件人优先级最低
+                    if (!waterMakingInfo.BodyCondition.IsAllFrom)
+                    {
+                        waterMakingInfo.Priority = 2;
                     }
 
                     WaterMakingDBProvider provider = new WaterMakingDBProvider();
@@ -603,6 +741,118 @@ namespace Manager
                 error.Code = ErrorCode.Exception;
                 LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                 LoggerHelper.Error("WaterMarkingManager调用DeleteBodyWaterMaking异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool DisableBodyWaterMaking(Guid transactionid, AdminInfo admin, BodyWaterMakingInfo waterMakingInfo, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string message = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||AdminAccount:{admin.UserAccount}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+
+            string funname = "DisableBodyWaterMaking";
+
+            try
+            {
+                do
+                {
+                    WaterMakingDBProvider Provider = new WaterMakingDBProvider();
+                    if (!Provider.DisableBodyWaterMaking(transactionid, admin, waterMakingInfo, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info);
+
+                    #region 操作日志
+                    LogInfo operateLog = new LogInfo();
+                    operateLog.AdminID = admin.UserID;
+                    operateLog.AdminAccount = admin.UserAccount;
+                    operateLog.RoleID = admin.RoleID;
+                    operateLog.ClientIP = _clientip;
+                    operateLog.OperateResult = true;
+                    operateLog.OperateType = "禁用正文打水印规则";
+                    operateLog.OperateLog = $"{admin.UserAccount}于{DateTime.Now}禁用正文打水印规则。名称：{waterMakingInfo.Name}";
+                    LogManager.AddOperateLog(transactionid, operateLog);
+                    #endregion
+
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("WaterMarkingManager调用DisableBodyWaterMaking异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool EnableBodyWaterMaking(Guid transactionid, AdminInfo admin, BodyWaterMakingInfo waterMakingInfo, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string message = string.Empty;
+            string paramstr = string.Empty;
+            paramstr += $"AdminID:{admin.UserID}";
+            paramstr += $"||AdminAccount:{admin.UserAccount}";
+            paramstr += $"||ID:{waterMakingInfo.ID}";
+
+            string funname = "EnableBodyWaterMaking";
+
+            try
+            {
+                do
+                {
+                    WaterMakingDBProvider Provider = new WaterMakingDBProvider();
+                    if (!Provider.EnableBodyWaterMaking(transactionid, admin, waterMakingInfo, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info);
+
+                    #region 操作日志
+                    LogInfo operateLog = new LogInfo();
+                    operateLog.AdminID = admin.UserID;
+                    operateLog.AdminAccount = admin.UserAccount;
+                    operateLog.RoleID = admin.RoleID;
+                    operateLog.ClientIP = _clientip;
+                    operateLog.OperateResult = true;
+                    operateLog.OperateType = "启用正文打水印规则";
+                    operateLog.OperateLog = $"{admin.UserAccount}于{DateTime.Now}启用正文打水印规则。名称：{waterMakingInfo.Name}";
+                    LogManager.AddOperateLog(transactionid, operateLog);
+                    #endregion
+
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("WaterMarkingManager调用EnableBodyWaterMaking异常", paramstr, ex.ToString(), transactionid);
                 strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                 result = false;
             }
