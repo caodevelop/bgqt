@@ -229,6 +229,13 @@ namespace Provider.ExchangeProvider
             }
         }
 
+        public class PSCommandEnableContact : PSCommandBase
+        {
+            public static ICollection<PSObject> ExecuteCmdlet(PSParameters parms)
+            {
+                return PSCommandBase.ExecuteCmdlet("Enable-MailContact", parms);
+            }
+        }
         #endregion
 
         #region DistributionGroup

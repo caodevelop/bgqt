@@ -538,6 +538,7 @@ namespace Manager
             paramstr += $"||AdminAccount:{admin.UserAccount}";
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.BodyCondition.From}";
+            paramstr += $"||ExcludeFroms:{waterMakingInfo.BodyCondition.ExcludeFroms}";
             paramstr += $"||Recipients:{waterMakingInfo.BodyCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.BodyCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.BodyCondition.IsContainsAttachment}";

@@ -73,6 +73,8 @@ namespace SyncADControl.ExchangeWebservice {
         
         private System.Threading.SendOrPostCallback GetUserMailCountOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetUserMailSizeOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -176,6 +178,9 @@ namespace SyncADControl.ExchangeWebservice {
         
         /// <remarks/>
         public event GetUserMailCountCompletedEventHandler GetUserMailCountCompleted;
+        
+        /// <remarks/>
+        public event GetUserMailSizeCompletedEventHandler GetUserMailSizeCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://Betternext.com/NewExchangeUser", RequestNamespace="http://Betternext.com/", ResponseNamespace="http://Betternext.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -937,6 +942,41 @@ namespace SyncADControl.ExchangeWebservice {
             if ((this.GetUserMailCountCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetUserMailCountCompleted(this, new GetUserMailCountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://Betternext.com/GetUserMailSize", RequestNamespace="http://Betternext.com/", ResponseNamespace="http://Betternext.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public bool GetUserMailSize(string mail, out string sizename, out long mailSize, out string usedSizeName, out long usedMailSize, out string databaseName, out string strError) {
+            object[] results = this.Invoke("GetUserMailSize", new object[] {
+                        mail});
+            sizename = ((string)(results[1]));
+            mailSize = ((long)(results[2]));
+            usedSizeName = ((string)(results[3]));
+            usedMailSize = ((long)(results[4]));
+            databaseName = ((string)(results[5]));
+            strError = ((string)(results[6]));
+            return ((bool)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetUserMailSizeAsync(string mail) {
+            this.GetUserMailSizeAsync(mail, null);
+        }
+        
+        /// <remarks/>
+        public void GetUserMailSizeAsync(string mail, object userState) {
+            if ((this.GetUserMailSizeOperationCompleted == null)) {
+                this.GetUserMailSizeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetUserMailSizeOperationCompleted);
+            }
+            this.InvokeAsync("GetUserMailSize", new object[] {
+                        mail}, this.GetUserMailSizeOperationCompleted, userState);
+        }
+        
+        private void OnGetUserMailSizeOperationCompleted(object arg) {
+            if ((this.GetUserMailSizeCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetUserMailSizeCompleted(this, new GetUserMailSizeCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -1791,6 +1831,80 @@ namespace SyncADControl.ExchangeWebservice {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[3]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2558.0")]
+    public delegate void GetUserMailSizeCompletedEventHandler(object sender, GetUserMailSizeCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2558.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetUserMailSizeCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetUserMailSizeCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+        
+        /// <remarks/>
+        public string sizename {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[1]));
+            }
+        }
+        
+        /// <remarks/>
+        public long mailSize {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((long)(this.results[2]));
+            }
+        }
+        
+        /// <remarks/>
+        public string usedSizeName {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[3]));
+            }
+        }
+        
+        /// <remarks/>
+        public long usedMailSize {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((long)(this.results[4]));
+            }
+        }
+        
+        /// <remarks/>
+        public string databaseName {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[5]));
+            }
+        }
+        
+        /// <remarks/>
+        public string strError {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[6]));
             }
         }
     }

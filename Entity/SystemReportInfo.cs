@@ -92,8 +92,9 @@ namespace Entity
         private string _StatusName = string.Empty;
         public string StatusName
         {
-           
-            get {
+
+            get
+            {
                 switch (_UserSatus)
                 {
                     case State.Enable:
@@ -108,7 +109,7 @@ namespace Entity
                 }
                 return _StatusName;
             }
-            
+
         }
 
         private PasswordType _Type = PasswordType.NerverExpire;
@@ -148,6 +149,94 @@ namespace Entity
         public int EntryCount
         { get; set; } = 0;
         public int DepartureCount
+        { get; set; } = 0;
+    }
+
+    public class UserUsedMailInfo
+    {
+        public string displayname
+        { get; set; } = string.Empty;
+        public string mail
+        { get; set; } = string.Empty;
+
+        public long usedMailSize
+        { get; set; } = 0;
+
+        public long MailSize
+        { get; set; } = 0;
+
+        public long usableMailSize
+        { get; set; } = 0;
+
+        public string UsedSizeName
+        { get; set; } = string.Empty;
+
+        public string SizeName
+        { get; set; } = string.Empty;
+    }
+
+    public class MailBoxDBUsedInfo
+    {
+        public string mailboxdbname
+        { get; set; } = string.Empty;
+
+        public int usercount
+        { get; set; } = 0;
+
+        public long usedmailsize
+        { get; set; } = 0;
+    }
+
+    public class SystemMailCountInfo
+    {
+        public int month
+        { get; set; } = 1;
+        public int SendMailCount
+        { get; set; } = 0;
+
+        public int ReceiveMailCount
+        { get; set; } = 0;
+
+        public int TotalMailCount
+        { get; set; } = 0;
+    }
+
+    public class CompanyMailCountInfo
+    {
+        public int HPS_WORK_COMPANY
+        { get; set; } = 0;
+
+        public string HPS_WORK_COMP_DESC
+        { get; set; } = string.Empty;
+
+        public int MailCount
+        { get; set; } = 0;
+    }
+
+    public class DeptMailCountInfo
+    {
+        public int DEPTID
+        { get; set; } = 0;
+
+        public string DEPT_DESCR
+        { get; set; } = string.Empty;
+
+        public string COMPANY_DESCR
+        { get; set; } = string.Empty;
+
+        public int MailCount
+        { get; set; } = 0;
+    }
+
+    public class UserMailCountInfo
+    {
+        public int EMPLID
+        { get; set; } = 0;
+        public string NAME
+        { get; set; } = string.Empty;
+        public string MailAddress
+        { get; set; } = string.Empty;
+        public int MailCount
         { get; set; } = 0;
     }
 }

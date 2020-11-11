@@ -400,6 +400,26 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetUserMailSize">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="mail" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserMailSizeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetUserMailSizeResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="sizename" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="mailSize" type="s:long" />
+            <s:element minOccurs="0" maxOccurs="1" name="usedSizeName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="usedMailSize" type="s:long" />
+            <s:element minOccurs="0" maxOccurs="1" name="databaseName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="strError" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
       <s:simpleType name="guid">
@@ -541,6 +561,12 @@
   <wsdl:message name="GetUserMailCountSoapOut">
     <wsdl:part name="parameters" element="tns:GetUserMailCountResponse" />
   </wsdl:message>
+  <wsdl:message name="GetUserMailSizeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserMailSize" />
+  </wsdl:message>
+  <wsdl:message name="GetUserMailSizeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserMailSizeResponse" />
+  </wsdl:message>
   <wsdl:portType name="ManagerWebServiceSoap">
     <wsdl:operation name="NewExchangeUser">
       <wsdl:input message="tns:NewExchangeUserSoapIn" />
@@ -631,6 +657,11 @@
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取账户邮件数量</wsdl:documentation>
       <wsdl:input message="tns:GetUserMailCountSoapIn" />
       <wsdl:output message="tns:GetUserMailCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserMailSize">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取用户邮箱已用数量</wsdl:documentation>
+      <wsdl:input message="tns:GetUserMailSizeSoapIn" />
+      <wsdl:output message="tns:GetUserMailSizeSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ManagerWebServiceSoap" type="tns:ManagerWebServiceSoap">
@@ -833,6 +864,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetUserMailSize">
+      <soap:operation soapAction="http://Betternext.com/GetUserMailSize" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="ManagerWebServiceSoap12" type="tns:ManagerWebServiceSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -1027,6 +1067,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetUserMailCount">
       <soap12:operation soapAction="http://Betternext.com/GetUserMailCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserMailSize">
+      <soap12:operation soapAction="http://Betternext.com/GetUserMailSize" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

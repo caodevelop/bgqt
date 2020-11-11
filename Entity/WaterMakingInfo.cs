@@ -78,6 +78,9 @@ namespace Entity
         public bool IsAllFrom
         { get; set; } = false;
 
+        public string ExcludeFroms
+        { get; set; } = string.Empty;
+
         public string Subject
         { get; set; } = string.Empty;
 
@@ -109,6 +112,10 @@ namespace Entity
                 if (IsAllFrom)
                 {
                     condition = "全部发件人，";
+                    if (!string.IsNullOrEmpty(ExcludeFroms))
+                    {
+                        condition += "排除发件人：" + ExcludeFroms + "，";
+                    }
                 }
                 else if (!string.IsNullOrEmpty(From))
                 {
@@ -140,6 +147,9 @@ namespace Entity
 
         public bool IsAllFrom
         { get; set; } = false;
+
+        public string ExcludeFroms
+        { get; set; } = string.Empty;
 
         public string Subject
         { get; set; } = string.Empty;
@@ -175,6 +185,10 @@ namespace Entity
                 if (IsAllFrom)
                 {
                     condition = "全部发件人，";
+                    if (!string.IsNullOrEmpty(ExcludeFroms))
+                    {
+                        condition += "排除发件人：" + ExcludeFroms + "，";
+                    }
                 }
                 else if (!string.IsNullOrEmpty(From))
                 {

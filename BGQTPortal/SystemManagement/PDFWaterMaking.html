@@ -90,7 +90,11 @@
                             <div style="margin-top:10px"></div>
                             <div class="form-group">
                                 <label class="control-label" style="display:block;">发件人</label>
-                                <input type="text" ng-model="From" class="form-control" value="" ng-disabled="IsAllFrom==true" />
+                                <input type="text" ng-model="From" class="form-control" ng-disabled="IsAllFrom==true" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" style="display:block;">排除发件人</label>
+                                <input type="text" ng-model="ExcludeFroms" class="form-control" ng-disabled="IsAllFrom==false" />
                                 <div class="checkbox" style="line-height: 1.1;margin-top:10px;">
                                     <input id="IsAllFrom" ng-model="IsAllFrom" class="chk_1" type="checkbox" ng-click="CheckAllFrom($event)" />
                                     <label for="IsAllFrom" style="margin-right:10px;"></label>全部发件人
@@ -142,13 +146,15 @@
                                                 &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;添加条件必须有1条或多条，多条间为 “并且” 关系。 <br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：发件人：zhangsan@baosteelgas.com；邮件主题：测试，<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当邮件中包含这两个条件时，触发PDF加水印功能。 <br />
+                                                &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;排除发件人：当选择 “全部发件人”时，可以指定规则内排除的发<br />
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件人，可以为多个，以 ";" 隔离<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;收件人：可以为多个，以 ";" 隔离<br />
                                                 2.&nbsp;&nbsp;水印内容：<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;水印内容包含：所有收件人或自定义内容。<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;选择所有收件人时，将会把邮件中所有收件人、抄送人作为水印加在 <br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PDF文件中。 <br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;●&nbsp;&nbsp;自定义内容可包含变量加内容，主题变量：{subject} ，发件人变量：<br />
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{From} 。<br />
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{from} 。<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：自定义内容为 “ {from} 内部用户所有”，触发PDF加水印功能<br />
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后，水印内容为 “zhangsan@baosteelgas.com内部用户所有”。
                                             </span>

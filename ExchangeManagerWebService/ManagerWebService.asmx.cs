@@ -464,6 +464,30 @@ namespace ExchangeManagerWebService
             return result;
         }
 
+        [WebMethod]
+        public bool EnableMailContact(Guid transactionid,
+            string name,
+            string displayname,
+            string mail,
+            out string strError)
+        {
+            bool result = true;
+            strError = string.Empty;
+
+            string paramstr = string.Empty;
+            paramstr += $"||name:{name}";
+            paramstr += $"||displayName:{displayname}";
+            paramstr += $"||mail:{mail}";
+          
+            if (!ExchangeProvider.EnableMailContact(name, mail, displayname, ref strError))
+            {
+                Log4netHelper.Error("EnableMailContact", paramstr, strError, transactionid);
+                result = false;
+            }
+
+            return result;
+        }
+
         #region 邮件数量
         [WebMethod(Description = "获取系统邮件数量")]
         public bool GetServerMailCount(DateTime starTime, DateTime endTime, out int sendCount, out int receiveCount, out string strError)
@@ -490,6 +514,38 @@ namespace ExchangeManagerWebService
             {
                 return false;
             }
+            return true;
+        }
+
+        [WebMethod(Description = "获取用户邮箱已用数量")]
+        public bool GetUserMailSize(string mail, out string sizename, out long mailSize, out string usedSizeName, out long usedMailSize,out string databaseName, out string strError)
+        {
+            strError = string.Empty;
+
+            mailSize = 0;
+            usedMailSize = 0;
+            databaseName = string.Empty;
+            sizename = string.Empty;
+            usedSizeName = string.Empty;
+            string databaseProhibitSendQuotaName = string.Empty;
+            long databaseProhibitSendQuotaSize = 0;
+
+            if (!ExchangeProvider.GetEmailInfoValue(mail,out sizename, out mailSize,out databaseName, out strError))
+            {
+                return false;
+            }
+
+            if (!ExchangeProvider.GetUsedMailBoxSize(mail, out usedSizeName, out usedMailSize, out databaseProhibitSendQuotaName,out databaseProhibitSendQuotaSize,  out strError))
+            {
+                return false;
+            }
+
+            if (mailSize == -1 && sizename == "unlimited")
+            {
+                mailSize = databaseProhibitSendQuotaSize;
+                sizename = databaseProhibitSendQuotaName;
+            }
+
             return true;
         }
 

@@ -7,67 +7,69 @@
 <body>
     <div class="ab-div">
         <div style="font-size:36px;color:#003F8F;background-color:transparent;position:absolute;left:calc(50% - 200px);top:calc(46% - 390px);">宝钢气体AD系统管理平台</div>
-        <div class="resetAndLogin" style="width:860px;top:42%;text-align:center">
-            <div class="login-div">
-                <form>
-                    <div class="form-title">{{formTitle}}</div>
-                    <div class="Account-login" ng-show="getPwdStepOne">
-                        <div class="input-group">
-                            <input type="text" placeholder="账号（员工号）" ng-focus="checkTips=true" ng-model="User.Account" ng-change="checkSubmit()" />
-                        </div>
-                        <div class="input-group nomargin">
-                            <input type="text" class="VCode floatleft" placeholder="验证码" ng-focus="checkTips=true" ng-model="User.VCode" ng-change="checkSubmit('step1')" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly',true);" />
-                            <input type="button" class="code floatright" id="login-code" ng-focus="checkTips=true" ng-click="RefreshCode()" ng-model="Code" />
-                        </div>
-                        <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
-                        <button class="login-btn" ng-click="next()" ng-disabled="RePwdStepOne">下一步</button>
-                        <div class="in-block">
-                            <div class="forgetPwd" ng-click="gotoAdminLogin()" style="color: #1890ff;">返回首页</div>
-                        </div>
-                    </div>
-                    <div ng-show="getPwdStepTwo">
-                        <div class="Account-login">
-                            <div style="margin-bottom:12px;padding:0 12px;">安全码已发送至：{{User.Mobile}}</div>
+        <!--<div style="font-size:18px;color:#F45454;background-color:transparent;position:absolute;left:calc(50% - 300px);top:calc(53% - 390px);">请注意，您即将修改密码，修改后您的邮箱，VPN，Edoc 系统密码将同步更改</div>-->
+        <!--<div class="resetAndLogin" style="width:860px;top:45%;text-align:center">-->
+            <div class="resetAndLogin" style="width:860px;top:42%;text-align:center">
+                <div class="login-div">
+                    <form>
+                        <div class="form-title">{{formTitle}}</div>
+                        <div class="Account-login" ng-show="getPwdStepOne">
+                            <div class="input-group">
+                                <input type="text" placeholder="账号（员工号）" ng-focus="checkTips=true" ng-model="User.Account" ng-change="checkSubmit()" />
+                            </div>
                             <div class="input-group nomargin">
-                                <input type="text" class="VCode floatleft" placeholder="安全码" ng-focus="checkTips=true" ng-model="User.TwoVCode" ng-change="checkSubmit('step2')" style="width:148px;" />
-                                <input type="button" class="code floatright" ng-focus="checkTips=true" ng-click="reSend()" ng-value="Text" ng-disabled="!paraevent" style="width:120px;text-align:center;" />
+                                <input type="text" class="VCode floatleft" placeholder="验证码" ng-focus="checkTips=true" ng-model="User.VCode" ng-change="checkSubmit('step1')" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly',true);" />
+                                <input type="button" class="code floatright" id="login-code" ng-focus="checkTips=true" ng-click="RefreshCode()" ng-model="Code" />
                             </div>
                             <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
-                            <button class="login-btn" ng-click="Verification()" ng-disabled="RePwdStepTwo">确 定</button>
+                            <button class="login-btn" ng-click="next()" ng-disabled="RePwdStepOne">下一步</button>
                             <div class="in-block">
                                 <div class="forgetPwd" ng-click="gotoAdminLogin()" style="color: #1890ff;">返回首页</div>
                             </div>
                         </div>
-                    </div>
-                    <div ng-show="getPwdStepThree">
-                        <div class="Account-login">
-                            <div class="input-group">
-                                <input type="password" placeholder="新密码" ng-model="User.Password" ng-change="checkSubmit('step3')" ng-focus="shownametips=true" ng-blur="shownametips=false" />
-                                <span class="tips" ng-show="shownametips">8～20 个字符；同时包含字母（区分大小写）、数字、特殊符号三种；不支持空格，"&"，"<"；不能与上一次密码相同；不能包含用户名部分连续或全部字符</span>
-                            </div>
-                            <div class="input-group">
-                                <input type="password" placeholder="确认新密码" ng-focus="checkTips=true" ng-model="User.rePassword" ng-change="checkSubmit('step3')" />
-                            </div>
-                            <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
-                            <button class="login-btn" ng-click="resetPwd()" ng-disabled="RePwdStepThree">确 定</button>
-                            <div class="in-block">
-                                <div class="forgetPwd" ng-click="gotoAdminLogin()" style="color: #1890ff;">返回首页</div>
+                        <div ng-show="getPwdStepTwo">
+                            <div class="Account-login">
+                                <div style="margin-bottom:12px;padding:0 12px;">安全码已发送至：{{User.Mobile}}</div>
+                                <div class="input-group nomargin">
+                                    <input type="text" class="VCode floatleft" placeholder="安全码" ng-focus="checkTips=true" ng-model="User.TwoVCode" ng-change="checkSubmit('step2')" style="width:148px;" />
+                                    <input type="button" class="code floatright" ng-focus="checkTips=true" ng-click="reSend()" ng-value="Text" ng-disabled="!paraevent" style="width:120px;text-align:center;" />
+                                </div>
+                                <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                                <button class="login-btn" ng-click="Verification()" ng-disabled="RePwdStepTwo">确 定</button>
+                                <div class="in-block">
+                                    <div class="forgetPwd" ng-click="gotoAdminLogin()" style="color: #1890ff;">返回首页</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div ng-show="getPwdStepFour">
-                        <div class="Account-login">
-                            <div style="text-align:center;">
-                                <div style="height:30px;line-height:30px;color:#0a78d5;">员工：{{User.Account}} 密码重置成功。</div>
+                        <div ng-show="getPwdStepThree">
+                            <div class="Account-login">
+                                <div class="input-group">
+                                    <input type="password" placeholder="新密码" ng-model="User.Password" ng-change="checkSubmit('step3')" ng-focus="shownametips=true" ng-blur="shownametips=false" />
+                                    <span class="tips" ng-show="shownametips">8～20 个字符；同时包含字母（区分大小写）、数字、特殊符号三种；不支持空格，"&"，"<"；不能与上一次密码相同；不能包含用户名部分连续或全部字符</span>
+                                </div>
+                                <div class="input-group">
+                                    <input type="password" placeholder="确认新密码" ng-focus="checkTips=true" ng-model="User.rePassword" ng-change="checkSubmit('step3')" />
+                                </div>
+                                <div class="errorMsg" ng-model="errorMsg" ng-hide="checkTips" ng-class="opResult">{{errorMsg}}</div>
+                                <button class="login-btn" ng-click="resetPwd()" ng-disabled="RePwdStepThree">确 定</button>
+                                <div class="in-block">
+                                    <div class="forgetPwd" ng-click="gotoAdminLogin()" style="color: #1890ff;">返回首页</div>
+                                </div>
                             </div>
-                            <button class="login-btn" ng-click="gotoAdminLogin()" style="margin-top:60px;">返回首页</button>
                         </div>
-                    </div>
-                </form>
+                        <div ng-show="getPwdStepFour">
+                            <div class="Account-login">
+                                <div style="text-align:center;">
+                                    <div style="height:30px;line-height:30px;color:#0a78d5;">员工：{{User.Account}} 密码重置成功。</div>
+                                </div>
+                                <button class="login-btn" ng-click="gotoAdminLogin()" style="margin-top:60px;">返回首页</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+            <div class="sgp-logo" style="border-right:0;"><img src="img/logo.png" style="height:60px;" /></div>
+            <div class="recordnum"><span></span></div>
         </div>
-        <div class="sgp-logo" style="border-right:0;"><img src="img/logo.png" style="height:60px;" /></div>
-        <div class="recordnum"><span></span></div>
-    </div>
 </body>
 </html>

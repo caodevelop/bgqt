@@ -599,6 +599,29 @@ namespace Provider.ExchangeProvider
             return true;
         }
 
+        public static bool EnableMailContact(
+            string pName,
+            string pExternalEmailAddress,
+            string pDisplayName,
+            ref string pStrError)
+        {
+            PSParameters paras = new PSParameters();
+
+            paras.AddPara("Identity", pName);
+            paras.AddPara("ExternalEmailAddress", pExternalEmailAddress);
+            paras.AddPara("DisplayName", pDisplayName);
+            
+            try
+            {
+                ExchangePSProvider.PSCommandEnableContact.ExecuteCmdlet(paras);
+            }
+            catch (Exception ex)
+            {
+                pStrError += string.Format("<EnableMailContact>{0}</EnableMailContact>", ex.ToString());
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #region DistributionGroup Interface
@@ -1909,6 +1932,9 @@ namespace Provider.ExchangeProvider
                     info.MailboxDBID = Guid.Parse(Convert.ToString(o.Members["Guid"].Value));
                     info.MailboxDB = o.Members["Name"].Value.ToString();
                     info.MailboxServer = o.Members["Server"].Value.ToString();
+                    string ProhibitSendReceiveQuota = o.Members["ProhibitSendReceiveQuota"].Value.ToString();
+                    info.MailSizeName = ProhibitSendReceiveQuota.Substring(0, ProhibitSendReceiveQuota.IndexOf("(")).Trim();
+                    info.MailSize = long.Parse(ProhibitSendReceiveQuota.Split('(')[1].ToString().Replace("bytes)", "").Replace(",", "").Trim());
                     databaseList.Add(info);
                 }
             }
@@ -1916,6 +1942,59 @@ namespace Provider.ExchangeProvider
             {
                 strError += string.Format("<GetMailboxDatabase>{0}</GetMailboxDatabase>", ex.ToString());
                 return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 获取用户邮箱空间，返回bytes
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="sizename"></param>
+        /// <param name="MaxValue"></param>
+        /// <param name="databaseName"></param>
+        /// <param name="strError"></param>
+        /// <returns></returns>
+        public static bool GetEmailInfoValue(string Email, out string sizename, out long MaxValue, out string databaseName, out string strError)
+        {
+            strError = string.Empty;
+            MaxValue = 0;
+            PSParameters para = new PSParameters();
+            para.Add(new PSParameter("Identity", Email));
+            databaseName = string.Empty;
+            sizename = string.Empty;
+            string FactSpace = string.Empty;
+            try
+            {
+                ICollection<PSObject> result = ExchangePSProvider.PSCommandGetMailBox.ExecuteCmdlet(para);
+
+                //  23.44 MB (24,576,000 bytes)
+                foreach (PSObject o in result)
+                {
+                    databaseName = Convert.ToString(o.Members["Database"].Value);
+                    FactSpace = Convert.ToString(o.Members["ProhibitSendReceiveQuota"].Value);
+
+                    if (FactSpace.ToLower() == "unlimited")
+                    {
+                        sizename = "unlimited";
+                        MaxValue = -1;
+                        break;
+                    }
+                    else
+                    {
+                        sizename = FactSpace.Split('(')[0].ToString().Trim();
+                        MaxValue = long.Parse(FactSpace.Split('(')[1].ToString().Replace("bytes)", "").Replace(",", "").Trim());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strError += string.Format("<GetEmailMaxValue>{0}</GetEmailMaxValue>", ex.ToString());
+                return false;
+            }
+            finally
+            {
             }
 
             return true;
@@ -1929,6 +2008,7 @@ namespace Provider.ExchangeProvider
             para.Add(new PSParameter("Identity", Email));
             string FactSpace = string.Empty;
             databaseName = string.Empty;
+            
             try
             {
                 ICollection<PSObject> result = ExchangePSProvider.PSCommandGetMailBox.ExecuteCmdlet(para);
@@ -1939,6 +2019,7 @@ namespace Provider.ExchangeProvider
                 {
                     databaseName = Convert.ToString(o.Members["Database"].Value);
                     FactSpace = Convert.ToString(o.Members["ProhibitSendReceiveQuota"].Value);
+                    
                     if (FactSpace.ToLower() == "unlimited")
                     {
                         MaxValue = -1;
@@ -2355,7 +2436,6 @@ namespace Provider.ExchangeProvider
 
         public static bool GetUsedMailBoxSize(string Email, out long UsedMailBoxSize, out string strError)
         {
-
             UsedMailBoxSize = 0;
             strError = string.Empty;
 
@@ -2369,6 +2449,39 @@ namespace Provider.ExchangeProvider
                 {
                     string uSize = o.Members["TotalItemSize"].Value.ToString().Split('(')[1].ToString().Replace("bytes)", "").Replace(",", "").Trim();
                     UsedMailBoxSize = long.Parse(uSize);
+                }
+            }
+            catch (Exception ex)
+            {
+                strError += string.Format("<GetUsedMailBoxSize>{0}</GetUsedMailBoxSize>", ex.ToString());
+                return false;
+            }
+            return true;
+        }
+
+        public static bool GetUsedMailBoxSize(string Email,out string UsedSizeName, out long UsedMailBoxSize,out string DatabaseProhibitSendQuotaName,out long DatabaseProhibitSendQuotaSize, out string strError)
+        {
+            UsedSizeName = string.Empty;
+            UsedMailBoxSize = 0;
+            DatabaseProhibitSendQuotaName = string.Empty;
+            DatabaseProhibitSendQuotaSize = 0;
+            strError = string.Empty;
+
+            PSParameters para = new PSParameters();
+            para.Add(new PSParameter("Identity", Email));
+            try
+            {
+                ICollection<PSObject> result = ExchangePSProvider.PSCommandGetMailboxStatistics.ExecuteCmdlet(para);
+
+                foreach (PSObject o in result)
+                {
+                    string TotalItemSize = o.Members["TotalItemSize"].Value.ToString();
+                    UsedSizeName = TotalItemSize.Substring(0, TotalItemSize.IndexOf("(")).Trim();
+                    string uSize = TotalItemSize.Split('(')[1].ToString().Replace("bytes)", "").Replace(",", "").Trim();
+                    UsedMailBoxSize = long.Parse(uSize);
+                    string DatabaseProhibitSendQuota = o.Members["DatabaseProhibitSendQuota"].Value.ToString();
+                    DatabaseProhibitSendQuotaName = DatabaseProhibitSendQuota.Substring(0, DatabaseProhibitSendQuota.IndexOf("(")).Trim();
+                    DatabaseProhibitSendQuotaSize = long.Parse(DatabaseProhibitSendQuota.Split('(')[1].ToString().Replace("bytes)", "").Replace(",", "").Trim());
                 }
             }
             catch (Exception ex)

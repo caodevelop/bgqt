@@ -59,6 +59,12 @@ namespace Entity
             set { _MailboxServer = value; }
         }
 
+        public string MailSizeName
+        { get; set; } = string.Empty;
+
+        public long MailSize
+        { get; set; } = 0;
+
         private DateTime _CreateTime = DateTime.Now;
         public DateTime CreateTime
         {

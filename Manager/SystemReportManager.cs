@@ -595,5 +595,258 @@ namespace Manager
             }
             return result;
         }
+
+        public bool GetUserUsedMailBoxList(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetUserUsedMailBoxList";
+
+            try
+            {
+                do
+                {
+
+                    List<UserUsedMailInfo> UserUsedMailList = new List<UserUsedMailInfo>();
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetUserUsedMailBoxList(transactionid, admin, out UserUsedMailList, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(UserUsedMailList);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetUserUsedMailBoxList异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetMailBoxDBUsedList(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetMailBoxDBUsedList";
+
+            try
+            {
+                do
+                {
+                    List<MailBoxDBUsedInfo> mailBoxDBUsedInfos = new List<MailBoxDBUsedInfo>();
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetMailBoxDBUsedList(transactionid, admin, out mailBoxDBUsedInfos, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(mailBoxDBUsedInfos);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetMailBoxDBUsedList异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetSystemMailBoxCount(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetSystemMailBoxCount";
+
+            try
+            {
+                do
+                {
+                    List<SystemMailCountInfo> systemMailCounts = new List<SystemMailCountInfo>();
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetSystemMailBoxCount(transactionid, admin, out systemMailCounts, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(systemMailCounts);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetSystemMailBoxCount异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetCompanyMailCount(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetCompanyMailCount";
+
+            try
+            {
+                do
+                {
+                    List<CompanyMailCountInfo> companyMailCounts = new List<CompanyMailCountInfo>();
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetCompanyMailCount(transactionid, admin, out companyMailCounts, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(companyMailCounts);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetCompanyMailCount异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetDeptMailCount(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetDeptMailCount";
+
+            try
+            {
+                do
+                {
+                    List<DeptMailCountInfo> deptMailCounts = new List<DeptMailCountInfo>();
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetDeptMailCount(transactionid, admin, out deptMailCounts, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(deptMailCounts);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetDeptMailCount异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
+
+        public bool GetUserMailCount(Guid transactionid, AdminInfo admin, out string strJsonResult)
+        {
+            bool result = true;
+            strJsonResult = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            string paramstr = string.Empty;
+            paramstr += $"userID:{admin.UserID}";
+            paramstr += $"||UserAccount:{admin.UserAccount}";
+            string funname = "GetUserMailCount";
+
+            try
+            {
+                do
+                {
+                    List<UserMailCountInfo> userMailCounts = new List<UserMailCountInfo>();
+                    SystemReportDBProvider Provider = new SystemReportDBProvider();
+                    if (!Provider.GetUserMailCount(transactionid, admin, out userMailCounts, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                        result = false;
+                        break;
+                    }
+                    error.Code = ErrorCode.None;
+                    string json = JsonConvert.SerializeObject(userMailCounts);
+                    LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), true, transactionid);
+                    strJsonResult = JsonHelper.ReturnJson(true, Convert.ToInt32(error.Code), error.Info, json);
+                    result = true;
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
+                LoggerHelper.Error("SystemReportManager调用GetUserMailCount异常", paramstr, ex.ToString(), transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                result = false;
+            }
+            return result;
+        }
     }
 }

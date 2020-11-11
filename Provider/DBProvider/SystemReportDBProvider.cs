@@ -498,5 +498,535 @@ namespace Provider.DBProvider
             }
             return bResult;
         }
+
+        public bool GetUserUsedMailBoxList(Guid transactionid, AdminInfo admin, out List<UserUsedMailInfo> userUsedMailInfos, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            userUsedMailInfos = new List<UserUsedMailInfo>();
+            int topcount = Convert.ToInt32(Common.ConfigHelper.ConfigInstance["TopCount"]);
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetUserUsedMailBox]", out ds, out strError))
+                    {
+                        strError = "prc_GetUserUsedMailBox数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                    {
+                                        DataRow dr = ds.Tables[1].Rows[i];
+                                        if (i < topcount)
+                                        {
+                                            UserUsedMailInfo info = new UserUsedMailInfo();
+                                            info.displayname = Convert.ToString(dr["displayname"]);
+                                            info.mail = Convert.ToString(dr["Mail"]);
+                                            info.usedMailSize = Convert.ToInt64(dr["UsedMailSize"]) / 1024 / 1024;
+                                            info.MailSize = Convert.ToInt64(dr["MailSize"]) / 1024 / 1024;
+                                            info.UsedSizeName = Convert.ToString(dr["UsedSizeName"]);
+                                            info.SizeName = Convert.ToString(dr["SizeName"]);
+                                            info.usableMailSize = info.MailSize - info.usedMailSize;
+                                            userUsedMailInfos.Add(info);
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("RSystemReportDBProvider调用GetUserUsedMailBoxList异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("RSystemReportDBProvider调用GetUserUsedMailBoxList异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用GetUserUsedMailBoxList异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetMailBoxDBUsedList(Guid transactionid, AdminInfo admin, out List<MailBoxDBUsedInfo> mailBoxDBUsedInfos, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            mailBoxDBUsedInfos = new List<MailBoxDBUsedInfo>();
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetMailBoxDBCount]", out ds, out strError))
+                    {
+                        strError = "prc_GetMailBoxDBCount数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    foreach (DataRow dr in ds.Tables[1].Rows)
+                                    {
+                                        MailBoxDBUsedInfo info = new MailBoxDBUsedInfo();
+                                        info.mailboxdbname = Convert.ToString(dr["databaseName"]);
+                                        info.usercount = Convert.ToInt32(dr["usercount"]);
+                                        info.usedmailsize = Convert.ToInt64(dr["usedmailsize"]) / 1024 / 1024;
+                                        mailBoxDBUsedInfos.Add(info);
+                                    }
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("SystemReportDBProvider调用GetMailBoxDBUsedList异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("SystemReportDBProvider调用GetMailBoxDBUsedList异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用GetMailBoxDBUsedList异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetSystemMailBoxCount(Guid transactionid, AdminInfo admin, out List<SystemMailCountInfo> systemMailCounts, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            systemMailCounts = new List<SystemMailCountInfo>();
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetSystemMailBoxCount]", out ds, out strError))
+                    {
+                        strError = "prc_GetSystemMailBoxCount数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    for (int i = 1; i <= 12; i++)
+                                    {
+                                        int SendCount = 0;
+                                        int ReceiveCount = 0;
+                                        int TotalCount = 0;
+                                        foreach (DataRow row in ds.Tables[1].Rows)
+                                        {
+                                            if (Convert.ToInt32(row["month"]) == i)
+                                            {
+                                                SendCount = Convert.ToInt32(row["SendCount"]);
+                                                ReceiveCount = Convert.ToInt32(row["ReceiveCount"]);
+                                                TotalCount = SendCount + ReceiveCount;
+                                            }
+                                        }
+
+                                        systemMailCounts.Add(new SystemMailCountInfo { month = i, SendMailCount = SendCount, ReceiveMailCount = ReceiveCount, TotalMailCount = TotalCount });
+                                    }
+                                    
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("SystemReportDBProvider调用GetSystemMailBoxCount异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("SystemReportDBProvider调用GetSystemMailBoxCount异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用GetSystemMailBoxCount异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetCompanyMailCount(Guid transactionid, AdminInfo admin, out List<CompanyMailCountInfo> companyMailCounts, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            companyMailCounts = new List<CompanyMailCountInfo>();
+            int topcount = Convert.ToInt32(Common.ConfigHelper.ConfigInstance["TopCount"]);
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetCompanyMailCount]", out ds, out strError))
+                    {
+                        strError = "prc_GetCompanyMailCount数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    int mailcount = 0;
+                                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                    {
+                                        DataRow dr = ds.Tables[1].Rows[i];
+                                        if (i < topcount)
+                                        {
+                                            companyMailCounts.Add(new CompanyMailCountInfo { HPS_WORK_COMPANY =Convert.ToInt32(dr["HPS_WORK_COMPANY"]), HPS_WORK_COMP_DESC = Convert.ToString(dr["HPS_WORK_COMP_DESC"]), MailCount = Convert.ToInt32(dr["MailCount"]) });
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                        //else
+                                        //{
+                                        //    mailcount += Convert.ToInt32(dr["MailCount"]);
+                                        //}
+                                    }
+                                    //companyMailCounts.Add(new CompanyMailCountInfo { HPS_WORK_COMPANY = 0, HPS_WORK_COMP_DESC = "其他", MailCount = mailcount });
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("SystemReportDBProvider调用GetCompanyMailCount异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("SystemReportDBProvider调用GetCompanyMailCount异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用GetCompanyMailCount异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetDeptMailCount(Guid transactionid, AdminInfo admin, out List<DeptMailCountInfo> deptMailCounts, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            deptMailCounts = new List<DeptMailCountInfo>();
+            int topcount = Convert.ToInt32(Common.ConfigHelper.ConfigInstance["TopCount"]);
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetDeptMailCount]", out ds, out strError))
+                    {
+                        strError = "prc_GetDeptMailCount数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    int mailcount = 0;
+                                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                    {
+                                        DataRow dr = ds.Tables[1].Rows[i];
+                                        if (i < topcount)
+                                        {
+                                            deptMailCounts.Add(new DeptMailCountInfo { DEPTID = Convert.ToInt32(dr["DEPTID"]), DEPT_DESCR = Convert.ToString(dr["DEPT_DESCR"]), COMPANY_DESCR = Convert.ToString(dr["HPS_WORK_COMP_DESC"]), MailCount = Convert.ToInt32(dr["MailCount"]) });
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                        //else
+                                        //{
+                                        //    mailcount += Convert.ToInt32(dr["MailCount"]);
+                                        //}
+                                    }
+                                    //deptMailCounts.Add(new DeptMailCountInfo { DEPTID = 0, DEPT_DESCR = "其他", MailCount = mailcount });
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("SystemReportDBProvider调用GetDeptMailCount异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("SystemReportDBProvider调用GetDeptMailCount异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用GetDeptMailCount异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
+
+        public bool GetUserMailCount(Guid transactionid, AdminInfo admin, out List<UserMailCountInfo> userMailCounts, out ErrorCodeInfo error)
+        {
+            error = new ErrorCodeInfo();
+            userMailCounts = new List<UserMailCountInfo>();
+            int topcount = Convert.ToInt32(Common.ConfigHelper.ConfigInstance["TopCount"]);
+            string strError = string.Empty;
+            string paramstr = string.Empty;
+            bool bResult = true;
+            try
+            {
+                CBaseDB _db = new CBaseDB(Conntection.strConnection);
+                do
+                {
+                    DataSet ds = new DataSet();
+                    if (!_db.ExcuteByTransaction("dbo.[prc_GetUserMailCount]", out ds, out strError))
+                    {
+                        strError = "prc_GetUserMailCount数据库执行失败,Error:" + strError;
+                        bResult = false;
+                        error.Code = ErrorCode.SQLException;
+                        break;
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            int iResult = 0;
+                            iResult = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                            switch (iResult)
+                            {
+                                case 0:
+                                    int mailcount = 0;
+                                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                    {
+                                        DataRow dr = ds.Tables[1].Rows[i];
+                                        if (i < topcount)
+                                        {
+                                            userMailCounts.Add(new UserMailCountInfo { EMPLID = Convert.ToInt32(dr["EMPLID"]), MailAddress = Convert.ToString(dr["MailAddress"]), NAME = Convert.ToString(dr["NAME"]), MailCount = Convert.ToInt32(dr["MailCount"]) });
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                        //else
+                                        //{
+                                        //    mailcount += Convert.ToInt32(dr["MailCount"]);
+                                        //}
+                                    }
+                                    //userMailCounts.Add(new UserMailCountInfo { EMPLID = 0, MailAddress = string.Empty, NAME = "其他", MailCount = mailcount });
+                                    bResult = true;
+                                    break;
+                                case -1:
+                                    bResult = false;
+                                    error.Code = ErrorCode.UserNotLoginRole;
+                                    break;
+                                case -9999:
+                                    bResult = false;
+                                    error.Code = ErrorCode.SQLException;
+                                    LoggerHelper.Error("SystemReportDBProvider调用GetUserMailCount异常", paramstr, "-9999", transactionid);
+                                    break;
+                                default:
+                                    bResult = false;
+                                    error.Code = ErrorCode.Exception;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            bResult = false;
+                            error.Code = ErrorCode.Exception;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bResult = false;
+                        error.Code = ErrorCode.Exception;
+                        LoggerHelper.Error("SystemReportDBProvider调用GetUserMailCount异常", paramstr, "ds = null 或者 ds.Tables.Count <= 0", transactionid);
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReportDBProvider调用GetUserMailCount异常", string.Empty, ex.ToString(), transactionid);
+            }
+            return bResult;
+        }
     }
 }

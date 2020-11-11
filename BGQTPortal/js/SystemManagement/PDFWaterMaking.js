@@ -114,6 +114,7 @@
             $scope.WaterMakingName = '';
             $scope.From = '';
             $scope.IsAllFrom = false;
+            $scope.ExcludeFroms = '';
             $scope.Recipients = '';
             $scope.Subject = '';
             $scope.PDFName = '';
@@ -143,6 +144,7 @@
         var PDFConditionObj = {
             "From": $scope.From,
             "IsAllFrom": $scope.IsAllFrom,
+            "ExcludeFroms": $scope.ExcludeFroms,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "PDFName": $scope.PDFName
@@ -197,6 +199,7 @@
         var PDFConditionObj = {
             "From": $scope.From,
             "IsAllFrom": $scope.IsAllFrom,
+            "ExcludeFroms": $scope.ExcludeFroms,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "PDFName": $scope.PDFName
@@ -281,6 +284,7 @@
                 $scope.WaterMakingName = ListData.data.Name;
                 $scope.From = ListData.data.PDFCondition.From;
                 $scope.IsAllFrom = ListData.data.PDFCondition.IsAllFrom;
+                $scope.ExcludeFroms = ListData.data.PDFCondition.ExcludeFroms;
                 $scope.Recipients = ListData.data.PDFCondition.Recipients;
                 $scope.Subject = ListData.data.PDFCondition.Subject;
                 $scope.PDFName = ListData.data.PDFCondition.PDFName;

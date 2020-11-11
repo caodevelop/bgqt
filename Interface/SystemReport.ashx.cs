@@ -79,13 +79,34 @@ namespace Interface
                         context.Response.Write(strJsonResult);
                         break;
                     case "GetUserUsedMailBoxList":
-                        strJsonResult = ExportUserCreateTimeToExcel(context);
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetUserUsedMailBoxList(context);
+                        context.Response.Write(strJsonResult);
                         break;
                     case "GetMailBoxDBUsedList":
-                        strJsonResult = ExportUserCreateTimeToExcel(context);
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetMailBoxDBUsedList(context);
+                        context.Response.Write(strJsonResult);
                         break;
                     case "GetSystemMailBoxCount":
-                        strJsonResult = ExportUserCreateTimeToExcel(context);
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetSystemMailBoxCount(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "GetCompanyMailCount":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetCompanyMailCount(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "GetDeptMailCount":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetDeptMailCount(context);
+                        context.Response.Write(strJsonResult);
+                        break;
+                    case "GetUserMailCount":
+                        context.Response.ContentType = "text/plain";
+                        strJsonResult = GetUserMailCount(context);
+                        context.Response.Write(strJsonResult);
                         break;
                     default:
                         break;
@@ -994,6 +1015,287 @@ namespace Interface
             return strJsonResult;
         }
 
+        private string GetUserUsedMailBoxList(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetUserUsedMailBoxList";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetUserUsedMailBoxList(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetUserUsedMailBoxList异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetMailBoxDBUsedList(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetMailBoxDBUsedList";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetMailBoxDBUsedList(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetMailBoxDBUsedList异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetSystemMailBoxCount(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetSystemMailBoxCount";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetSystemMailBoxCount(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetSystemMailBoxCount异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetCompanyMailCount(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetCompanyMailCount";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetCompanyMailCount(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetCompanyMailCount异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetDeptMailCount(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetDeptMailCount";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetDeptMailCount(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetDeptMailCount异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
+
+        private string GetUserMailCount(HttpContext context)
+        {
+            string strJsonResult = string.Empty;
+            string userAccount = string.Empty;
+            ErrorCodeInfo error = new ErrorCodeInfo();
+            Guid transactionid = Guid.NewGuid();
+            string funname = "GetUserMailCount";
+            try
+            {
+                do
+                {
+                    string strAccesstoken = context.Request["accessToken"];
+                    //判断AccessToken
+                    if (string.IsNullOrEmpty(strAccesstoken))
+                    {
+                        error.Code = ErrorCode.TokenEmpty;
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    AdminInfo admin = new AdminInfo();
+                    if (!TokenManager.ValidateUserToken(transactionid, strAccesstoken, out admin, out error))
+                    {
+                        strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+                        LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                        break;
+                    }
+
+                    userAccount = admin.UserAccount;
+
+                    SystemReportManager manager = new SystemReportManager(ClientIP);
+                    manager.GetUserMailCount(transactionid, admin, out strJsonResult);
+
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                error.Code = ErrorCode.Exception;
+                LoggerHelper.Error("SystemReport.ashx调用接口GetUserMailCount异常", context.Request.RawUrl, ex.ToString(), transactionid);
+                LoggerHelper.Info(userAccount, funname, context.Request.RawUrl, Convert.ToString(error.Code), false, transactionid);
+                strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
+            }
+
+            return strJsonResult;
+        }
         public bool IsReusable
         {
             get

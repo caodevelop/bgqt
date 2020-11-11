@@ -34,6 +34,7 @@ namespace Manager
                     List<NodeInfo> list = new List<NodeInfo>();
                     if (!commonProvider.GetCommonTreeData(nodeID, admin, SearchType.AllNoHab, out list, out errormsg))
                     {
+                        error.Code = ErrorCode.ParentNotExist;
                         strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                         LoggerHelper.Error("TreeNodeManager调用GetCompanyTree异常", paramstr, errormsg, transactionid);
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, errormsg, false, transactionid);
@@ -155,6 +156,7 @@ namespace Manager
                     List<NodeInfo> list = new List<NodeInfo>();
                     if (!commonProvider.GetCommonTreeData(nodeID, admin, SearchType.Ou, out list, out errormsg))
                     {
+                        error.Code = ErrorCode.ParentNotExist;
                         strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;
@@ -541,6 +543,7 @@ namespace Manager
                     List<NodeInfo> list = new List<NodeInfo>();
                     if (!commonProvider.GetCommonTreeData(nodeID, admin, SearchType.GroupTreeNoHab, out list, out errormsg))
                     {
+                        error.Code = ErrorCode.ParentNotExist;
                         strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;
@@ -779,6 +782,7 @@ namespace Manager
                     List<NodeInfo> list = new List<NodeInfo>();
                     if (!commonProvider.GetCommonTreeData(nodeID, admin, SearchType.MailUser, out list, out errormsg))
                     {
+                        error.Code = ErrorCode.ParentNotExist;
                         strJsonResult = JsonHelper.ReturnJson(false, Convert.ToInt32(error.Code), error.Info);
                         LoggerHelper.Info(admin.UserAccount, funname, paramstr, Convert.ToString(error.Code), false, transactionid);
                         result = false;

@@ -57,6 +57,8 @@ namespace SyncADControl
                 return false;
             }
 
+            SyncUserMailSize();
+
             SyncSystemMailCount();
 
             SyncUserMailCount();
@@ -386,8 +388,7 @@ namespace SyncADControl
         {
             return (long)(((ulong)value.HighPart << 32) + (ulong)value.LowPart);
         }
-
-        #region 暂时废弃
+        
         /// <summary>
         /// 同步系统邮件个数
         /// </summary>
@@ -413,8 +414,7 @@ namespace SyncADControl
             {
                 Log4netHelper.Error("获取系统邮件个数, Exception:" + ex.ToString());
             }
-
-
+            
             try
             {
                 CParameters parameters = new CParameters();
@@ -457,7 +457,7 @@ namespace SyncADControl
             try
             {
                 //读取ad user
-                string strsql = "select sAMAccountName,UserPrincipalName from dbo.tb_ADUser";
+                string strsql = "select sAMAccountName,UserPrincipalName,Mail from dbo.T_Base_ADUser";
 
                 if (!m_db.ExcuteByDataAdapter(strsql, out ds, out strError))
                 {
@@ -496,6 +496,8 @@ namespace SyncADControl
                         CParameters parameters = new CParameters();
                         SqlParameter parasAMAccountName = new SqlParameter("@sAMAccountName", Convert.ToString(ds.Tables[0].Rows[i]["sAMAccountName"]));
                         parameters.Add(parasAMAccountName);
+                        SqlParameter parasMail = new SqlParameter("@Mail", Convert.ToString(ds.Tables[0].Rows[i]["Mail"]));
+                        parameters.Add(parasMail);
                         SqlParameter paraDateTime = new SqlParameter("@TotalDate", startTime);
                         parameters.Add(paraDateTime);
                         SqlParameter paraSendCount = new SqlParameter("@SendMailCount", iSendMailCount);
@@ -523,8 +525,74 @@ namespace SyncADControl
             }
         }
 
-        #endregion
+        private void SyncUserMailSize()
+        {
+            ExchangeWebservice.ManagerWebService service = new ExchangeWebservice.ManagerWebService();
+            service.Timeout = -1;
+            string strError = string.Empty;
+            DataSet ds = new DataSet();
 
+            try
+            {
+                do
+                {
+                    //读取ad user
+                    string strsql = "select sAMAccountName,UserPrincipalName from dbo.T_Base_ADUser";
+
+                    if (!m_db.ExcuteByDataAdapter(strsql, out ds, out strError))
+                    {
+                        Log4netHelper.Error("获取User信息失败, Error:" + strError);
+                        break;
+                    }
+
+                    //循环调用接口同步用户邮件个数
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            //GB
+                            long mailSize = 0;
+                            long usedMailSize = 0;
+                            string databaseName = string.Empty;
+                            string sizename = string.Empty;
+                            string usedsizename = string.Empty;
+
+                            if (!service.GetUserMailSize(Convert.ToString(ds.Tables[0].Rows[i]["UserPrincipalName"]), out sizename, out mailSize, out usedsizename, out usedMailSize, out databaseName, out strError))
+                            {
+                                Log4netHelper.Error(string.Format("获取用户邮箱空间, sAMAccountName:{0} UserPrincipalName:{1} error:{2}", Convert.ToString(ds.Tables[0].Rows[i]["sAMAccountName"]), Convert.ToString(ds.Tables[0].Rows[i]["UserPrincipalName"]), strError));
+                                continue;
+                            }
+                            //添加到数据库 
+                            CParameters parameters = new CParameters();
+                            SqlParameter parasAMAccountName = new SqlParameter("@sAMAccountName", Convert.ToString(ds.Tables[0].Rows[i]["sAMAccountName"]));
+                            parameters.Add(parasAMAccountName);
+                            SqlParameter paraSizeName = new SqlParameter("@sizename", sizename);
+                            parameters.Add(paraSizeName);
+                            SqlParameter paraMailSize = new SqlParameter("@mailSize", mailSize);
+                            parameters.Add(paraMailSize);
+                            SqlParameter paraUsedSizeName = new SqlParameter("@usedsizename", usedsizename);
+                            parameters.Add(paraUsedSizeName);
+                            SqlParameter paraUsedMailSize = new SqlParameter("@usedMailSize", usedMailSize);
+                            parameters.Add(paraUsedMailSize);
+                            SqlParameter paraDatabaseName = new SqlParameter("@databaseName", databaseName);
+                            parameters.Add(paraDatabaseName);
+
+                            int iResult = 1;
+                            if (!m_db.ExcuteByTransaction(parameters, "dbo.prc_UpdateADUserMailSize", out iResult, out strError))
+                            {
+                                Log4netHelper.Error(string.Format("用户已用空间存入数据库, sAMAccountName:{0} UserPrincipalName:{1} error:{2}", Convert.ToString(ds.Tables[0].Rows[i]["sAMAccountName"]), Convert.ToString(ds.Tables[0].Rows[i]["UserPrincipalName"]), strError));
+                                continue;
+                            }
+                        }
+                    }
+                } while (false);
+            }
+            catch (Exception ex)
+            {
+                Log4netHelper.Error($"同步用户已用空间异常, Exception：{ex.ToString()}");
+            }
+        }
+        
         /// <summary>
         /// 截取用户的公司/部门属性
         /// </summary>

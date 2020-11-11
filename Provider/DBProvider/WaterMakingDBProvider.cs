@@ -69,6 +69,7 @@ namespace Provider.DBProvider
                             info.Priority = Convert.ToInt32(sdr["Priority"]);
                             info.PDFCondition.From = Convert.ToString(sdr["From"]);
                             info.PDFCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
+                            info.PDFCondition.ExcludeFroms = Convert.ToString(sdr["ExcludeFroms"]);
                             info.PDFCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                             info.PDFCondition.Subject = Convert.ToString(sdr["Subject"]);
                             info.PDFCondition.PDFName = Convert.ToString(sdr["PDFName"]);
@@ -146,6 +147,7 @@ namespace Provider.DBProvider
                                         info.Priority = Convert.ToInt32(sdr["Priority"]);
                                         info.PDFCondition.From = Convert.ToString(sdr["From"]);
                                         info.PDFCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
+                                        info.PDFCondition.ExcludeFroms = Convert.ToString(sdr["ExcludeFroms"]);
                                         info.PDFCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                                         info.PDFCondition.Subject = Convert.ToString(sdr["Subject"]);
                                         info.PDFCondition.PDFName = Convert.ToString(sdr["PDFName"]);
@@ -202,6 +204,7 @@ namespace Provider.DBProvider
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.PDFCondition.From}";
             paramstr += $"||IsAllFrom:{waterMakingInfo.PDFCondition.IsAllFrom}";
+            paramstr += $"||ExcludeFroms:{waterMakingInfo.PDFCondition.ExcludeFroms}";
             paramstr += $"||Recipients:{waterMakingInfo.PDFCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
@@ -218,6 +221,8 @@ namespace Provider.DBProvider
                 paras.Add(paraFrom);
                 SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.PDFCondition.IsAllFrom);
                 paras.Add(paraIsAllFrom);
+                SqlParameter paraExcludeFroms = new SqlParameter("@ExcludeFroms", waterMakingInfo.PDFCondition.ExcludeFroms);
+                paras.Add(paraExcludeFroms);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.PDFCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.PDFCondition.Subject);
@@ -315,6 +320,7 @@ namespace Provider.DBProvider
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.PDFCondition.From}";
             paramstr += $"||IsAllFrom:{waterMakingInfo.PDFCondition.IsAllFrom}";
+            paramstr += $"||ExcludeFroms:{waterMakingInfo.PDFCondition.ExcludeFroms}";
             paramstr += $"||Recipients:{waterMakingInfo.PDFCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.PDFCondition.Subject}";
             paramstr += $"||PDFName:{waterMakingInfo.PDFCondition.PDFName}";
@@ -333,6 +339,8 @@ namespace Provider.DBProvider
                 paras.Add(paraFrom);
                 SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.PDFCondition.IsAllFrom);
                 paras.Add(paraIsAllFrom);
+                SqlParameter paraExcludeFroms = new SqlParameter("@ExcludeFroms", waterMakingInfo.PDFCondition.ExcludeFroms);
+                paras.Add(paraExcludeFroms);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.PDFCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.PDFCondition.Subject);
@@ -689,6 +697,7 @@ namespace Provider.DBProvider
                             info.RoleID = Guid.Parse(Convert.ToString(sdr["RoleID"]));
                             info.BodyCondition.From = Convert.ToString(sdr["From"]);
                             info.BodyCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
+                            info.BodyCondition.ExcludeFroms = Convert.ToString(sdr["ExcludeFroms"]);
                             info.BodyCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                             info.BodyCondition.Subject = Convert.ToString(sdr["Subject"]);
                             info.BodyCondition.IsContainsAttachment = Convert.ToBoolean(sdr["IsContainsAttachment"]);
@@ -767,6 +776,7 @@ namespace Provider.DBProvider
                                         info.Priority = Convert.ToInt32(sdr["Priority"]);
                                         info.BodyCondition.From = Convert.ToString(sdr["From"]);
                                         info.BodyCondition.IsAllFrom = Convert.ToBoolean(sdr["IsAllFrom"]);
+                                        info.BodyCondition.ExcludeFroms = Convert.ToString(sdr["ExcludeFroms"]);
                                         info.BodyCondition.Recipients = Convert.ToString(sdr["Recipients"]);
                                         info.BodyCondition.Subject = Convert.ToString(sdr["Subject"]);
                                         info.BodyCondition.IsContainsAttachment = Convert.ToBoolean(sdr["IsContainsAttachment"]);
@@ -824,6 +834,7 @@ namespace Provider.DBProvider
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.BodyCondition.From}";
             paramstr += $"||IsAllFrom:{waterMakingInfo.BodyCondition.IsAllFrom}";
+            paramstr += $"||ExcludeFroms:{waterMakingInfo.BodyCondition.ExcludeFroms}";
             paramstr += $"||Recipients:{waterMakingInfo.BodyCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.BodyCondition.Subject}";
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
@@ -841,6 +852,8 @@ namespace Provider.DBProvider
                 paras.Add(paraFrom);
                 SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.BodyCondition.IsAllFrom);
                 paras.Add(paraIsAllFrom);
+                SqlParameter paraExcludeFroms = new SqlParameter("@ExcludeFroms", waterMakingInfo.BodyCondition.ExcludeFroms);
+                paras.Add(paraExcludeFroms);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.BodyCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.BodyCondition.Subject);
@@ -939,6 +952,7 @@ namespace Provider.DBProvider
             paramstr += $"||Name:{waterMakingInfo.Name}";
             paramstr += $"||From:{waterMakingInfo.BodyCondition.From}";
             paramstr += $"||IsAllFrom:{waterMakingInfo.BodyCondition.IsAllFrom}";
+            paramstr += $"||ExcludeFroms:{waterMakingInfo.BodyCondition.ExcludeFroms}";
             paramstr += $"||Recipients:{waterMakingInfo.BodyCondition.Recipients}";
             paramstr += $"||Subject:{waterMakingInfo.BodyCondition.Subject}";
             paramstr += $"||IsContainsAttachment:{waterMakingInfo.BodyCondition.IsContainsAttachment}";
@@ -958,6 +972,8 @@ namespace Provider.DBProvider
                 paras.Add(paraFrom);
                 SqlParameter paraIsAllFrom = new SqlParameter("@IsAllFrom", waterMakingInfo.BodyCondition.IsAllFrom);
                 paras.Add(paraIsAllFrom);
+                SqlParameter paraExcludeFroms = new SqlParameter("@ExcludeFroms", waterMakingInfo.BodyCondition.ExcludeFroms);
+                paras.Add(paraExcludeFroms);
                 SqlParameter paraRecipients = new SqlParameter("@Recipients", waterMakingInfo.BodyCondition.Recipients);
                 paras.Add(paraRecipients);
                 SqlParameter paraSubject = new SqlParameter("@Subject", waterMakingInfo.BodyCondition.Subject);

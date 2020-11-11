@@ -114,6 +114,7 @@
             $scope.WaterMakingName = '';
             $scope.From = '';
             $scope.IsAllFrom = false;
+            $scope.ExcludeFroms = '';
             $scope.Recipients = '';
             $scope.Subject = '';
             $scope.IsContainsAttachment = false;
@@ -144,6 +145,7 @@
         var BodyConditionObj = {
             "From": $scope.From,
             "IsAllFrom": $scope.IsAllFrom,
+            "ExcludeFroms": $scope.ExcludeFroms,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "IsContainsAttachment": $scope.IsContainsAttachment,
@@ -199,6 +201,7 @@
         var BodyConditionObj = {
             "From": $scope.From,
             "IsAllFrom": $scope.IsAllFrom,
+            "ExcludeFroms": $scope.ExcludeFroms,
             "Recipients": $scope.Recipients,
             "Subject": $scope.Subject,
             "IsContainsAttachment": $scope.IsContainsAttachment,
@@ -284,6 +287,7 @@
                 $scope.WaterMakingName = ListData.data.Name;
                 $scope.From = ListData.data.BodyCondition.From;
                 $scope.IsAllFrom = ListData.data.BodyCondition.IsAllFrom;
+                $scope.ExcludeFroms = ListData.data.BodyCondition.ExcludeFroms;
                 $scope.Recipients = ListData.data.BodyCondition.Recipients;
                 $scope.Subject = ListData.data.BodyCondition.Subject;
                 $scope.IsContainsAttachment = ListData.data.BodyCondition.IsContainsAttachment;
@@ -316,6 +320,9 @@
     $scope.CheckAllFrom = function ($event) {
         if ($scope.IsAllFrom == true) {
             $scope.From = "";
+        }
+        else {
+            $scope.ExcludeFroms = "";
         }
     };
 
